@@ -1,0 +1,6 @@
+git init
+git add index.html
+git commit -m "Ajout index.html - page de citation"
+git branch -M main
+git remote add origin https://github.com/<ton-nom-utilisateur>/<nom-du-repo>.git
+git push -u origin main
