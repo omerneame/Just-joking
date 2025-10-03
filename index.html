@@ -7,10 +7,10 @@
   <style>
     :root {
       --bg: #f6fbff;
-      --card: #ffffff; /* Arrière-plan blanc pur pour la section citation */
+      --card: #ffffff;
       --accent: #1e6fb8;
-      --text: #000000; /* Couleur noire pour les citations et auteur */
-      --muted: #000000; /* Couleur noire pour l'auteur */
+      --text: #000000;
+      --muted: #000000;
       --radius: 14px;
       --maxw: 760px;
     }
@@ -18,9 +18,9 @@
     @media (prefers-color-scheme: dark) {
       :root {
         --bg: #1a2a44;
-        --card: #ffffff; /* Maintien du blanc en mode sombre */
-        --text: #000000; /* Maintien du noir pour les citations */
-        --muted: #000000; /* Maintien du noir pour l'auteur */
+        --card: #ffffff;
+        --text: #000000;
+        --muted: #000000;
       }
     }
 
@@ -29,7 +29,6 @@
     }
 
     html, body {
-      height: 100%;
       margin: 0;
       font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       background: linear-gradient(180deg, var(--bg), #eaf5ff);
@@ -37,7 +36,6 @@
       animation: gradientShift 10s ease infinite;
     }
 
-    /* Animation d'arrière-plan dégradé */
     @keyframes gradientShift {
       0% { background: linear-gradient(180deg, var(--bg), #eaf5ff); }
       50% { background: linear-gradient(180deg, #eaf5ff, #d6eaff); }
@@ -58,7 +56,7 @@
     }
 
     .wrap {
-      min-height: calc(100% - 120px);
+      min-height: calc(100vh - 160px);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -135,9 +133,85 @@
       color: var(--muted);
     }
 
+    .motivation-section {
+      max-width: var(--maxw);
+      margin: 40px auto;
+      padding: 20px;
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: 0 8px 30px rgba(17, 40, 60, 0.08);
+      text-align: center;
+    }
+
+    .motivation-section h2 {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+      color: var(--text);
+    }
+
+    .motivation-section p {
+      font-size: 1rem;
+      margin-bottom: 20px;
+      color: var(--muted);
+    }
+
+    .motivation-section form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .motivation-section textarea {
+      width: 100%;
+      max-width: 600px;
+      min-height: 100px;
+      margin-bottom: 10px;
+      padding: 10px;
+      border: 1px solid var(--muted);
+      border-radius: var(--radius);
+      font-family: inherit;
+      font-size: 1rem;
+      resize: vertical;
+    }
+
+    .motivation-section button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: var(--radius);
+      background: var(--accent);
+      color: var(--card);
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .motivation-section button:hover {
+      background: #155a9a;
+    }
+
+    .motivation-list {
+      margin-top: 20px;
+      text-align: left;
+    }
+
+    .motivation-list ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .motivation-list li {
+      background: #f9f9f9;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: var(--radius);
+      font-size: 1rem;
+      color: var(--text);
+    }
+
     @media (max-width: 420px) {
-      .card { padding: 22px; }
+      .card, .motivation-section { padding: 22px; }
       header h1 { font-size: 1.5rem; }
+      .motivation-section textarea { width: 100%; }
     }
   </style>
 </head>
@@ -157,6 +231,17 @@
   <footer>
     Chaque jour, une nouvelle inspiration pour avancer.
   </footer>
+  <section class="motivation-section" role="region" aria-label="Soumettre une lettre de motivation">
+    <h2>Partagez Votre Lettre de Motivation</h2>
+    <p>Ajoutez votre lettre de motivation ci-dessous, et elle sera ajoutée à la liste des inspirations partagées !</p>
+    <form id="motivation-form">
+      <textarea id="motivation-text" placeholder="Écrivez votre lettre de motivation ici..." maxlength="500" aria-label="Votre lettre de motivation"></textarea>
+      <button type="submit" aria-label="Soumettre la lettre">Soumettre</button>
+    </form>
+    <div class="motivation-list">
+      <ul id="motivation-list"></ul>
+    </div>
+  </section>
 
   <script>
     const quotes = [
@@ -263,7 +348,11 @@
     const quoteElement = document.querySelector(".quote");
     const authorElement = document.querySelector(".author");
     const refreshButton = document.querySelector(".btn-refresh");
+    const motivationForm = document.getElementById("motivation-form");
+    const motivationText = document.getElementById("motivation-text");
+    const motivationList = document.getElementById("motivation-list");
 
+    // Gestion des citations
     function displayRandomQuote() {
       quoteElement.classList.add("fade-out");
       authorElement.classList.add("fade-out");
@@ -293,6 +382,32 @@
     const { text, author } = quotes[randomIndex];
     quoteElement.textContent = `« ${text} »`;
     authorElement.textContent = `— ${author}`;
+
+    // Gestion des lettres de motivation
+    function loadMotivations() {
+      const motivations = JSON.parse(localStorage.getItem("motivations") || "[]");
+      motivationList.innerHTML = "";
+      motivations.forEach(motivation => {
+        const li = document.createElement("li");
+        li.textContent = motivation;
+        motivationList.appendChild(li);
+      });
+    }
+
+    motivationForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const motivation = motivationText.value.trim();
+      if (motivation) {
+        const motivations = JSON.parse(localStorage.getItem("motivations") || "[]");
+        motivations.push(motivation);
+        localStorage.setItem("motivations", JSON.stringify(motivations));
+        motivationText.value = "";
+        loadMotivations();
+      }
+    });
+
+    // Charger les lettres au démarrage
+    loadMotivations();
   </script>
 </body>
 </html>
