@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ma Citation Motivée</title>
+  <title>Inspiration: You Will Never Walk Alone</title>
   <style>
     :root {
       --bg: #f6fbff;
-      --card: #ffffff;
+      --card: #ffffff; /* Arrière-plan blanc pur pour la section citation */
       --accent: #1e6fb8;
-      --text: #000000;
-      --muted: #000000;
+      --text: #000000; /* Couleur noire pour les citations et auteur */
+      --muted: #000000; /* Couleur noire pour l'auteur */
       --radius: 14px;
       --maxw: 760px;
     }
@@ -18,9 +18,9 @@
     @media (prefers-color-scheme: dark) {
       :root {
         --bg: #1a2a44;
-        --card: #ffffff;
-        --text: #000000;
-        --muted: #000000;
+        --card: #ffffff; /* Maintien du blanc en mode sombre */
+        --text: #000000; /* Maintien du noir pour les citations */
+        --muted: #000000; /* Maintien du noir pour l'auteur */
       }
     }
 
@@ -112,7 +112,7 @@
       transform: translateY(0);
     }
 
-    .btn-refresh, .btn-share {
+    .btn-refresh {
       margin-top: 20px;
       padding: 10px 20px;
       border: none;
@@ -122,17 +122,10 @@
       font-weight: 600;
       cursor: pointer;
       transition: background 0.3s ease;
-      margin-right: 10px;
     }
 
-    .btn-refresh:hover, .btn-share:hover {
+    .btn-refresh:hover {
       background: #155a9a;
-    }
-
-    .counter {
-      margin-top: 10px;
-      font-size: 14px;
-      color: var(--muted);
     }
 
     footer {
@@ -150,7 +143,7 @@
 </head>
 <body>
   <header>
-    <h1>Citations pour Inspirer</h1>
+    <h1>Inspiration: You Will Never Walk Alone</h1>
   </header>
   <div class="wrap">
     <div class="card" role="region" aria-label="Citation motivante">
@@ -158,9 +151,7 @@
       <div class="author"></div>
       <div>
         <button class="btn-refresh" aria-label="Changer de citation">Citation Suivante</button>
-        <button class="btn-share" aria-label="Partager la citation">Partager</button>
       </div>
-      <div class="counter"></div>
     </div>
   </div>
   <footer>
@@ -272,20 +263,16 @@
     const quoteElement = document.querySelector(".quote");
     const authorElement = document.querySelector(".author");
     const refreshButton = document.querySelector(".btn-refresh");
-    const shareButton = document.querySelector(".btn-share");
-    const counterElement = document.querySelector(".counter");
-    let currentQuoteIndex = 0;
 
     function displayRandomQuote() {
       quoteElement.classList.add("fade-out");
       authorElement.classList.add("fade-out");
 
       setTimeout(() => {
-        currentQuoteIndex = Math.floor(Math.random() * quotes.length);
-        const { text, author } = quotes[currentQuoteIndex];
+        const randomIndex = Math.floor(Math.random() * quotes.length);
+        const { text, author } = quotes[randomIndex];
         quoteElement.textContent = `« ${text} »`;
         authorElement.textContent = `— ${author}`;
-        counterElement.textContent = `Citation ${currentQuoteIndex + 1}/${quotes.length}`;
 
         quoteElement.classList.remove("fade-out");
         authorElement.classList.remove("fade-out");
@@ -301,15 +288,11 @@
 
     refreshButton.addEventListener("click", displayRandomQuote);
 
-    shareButton.addEventListener("click", () => {
-      const { text, author } = quotes[currentQuoteIndex];
-      const shareText = encodeURIComponent(`"${text}" — ${author}`);
-      const shareUrl = `https://twitter.com/intent/tweet?text=${shareText}`;
-      window.open(shareUrl, "_blank");
-    });
-
     // Afficher une citation au chargement
-    displayRandomQuote();
+    const randomIndex = Math.floor(Math.random() * quotes.length);
+    const { text, author } = quotes[randomIndex];
+    quoteElement.textContent = `« ${text} »`;
+    authorElement.textContent = `— ${author}`;
   </script>
 </body>
 </html>
