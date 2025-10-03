@@ -1,12 +1,11 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Ma citation</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ma Citation Motivée</title>
   <style>
-    /* Styles simples, bleu & blanc comme tu aimes */
-    :root{
+    :root {
       --bg: #f6fbff;
       --card: #ffffff;
       --accent: #1e6fb8;
@@ -16,78 +15,139 @@
       --maxw: 760px;
     }
 
-    html,body{
-      height:100%;
-      margin:0;
-      font-family: Inter, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      background: linear-gradient(180deg,var(--bg),#eaf5ff);
-      color:var(--text);
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #1a2a44;
+        --card: #2b3a55;
+        --text: #e6f0ff;
+        --muted: #a0b3c1;
+      }
     }
 
-    .wrap{
-      min-height:100%;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:40px 20px;
+    *, *::before, *::after {
+      box-sizing: border-box;
     }
 
-    .card{
-      background:var(--card);
-      border-radius:var(--radius);
-      box-shadow: 0 8px 30px rgba(17,40,60,0.08);
-      padding:36px;
-      max-width:var(--maxw);
-      width:100%;
-      text-align:center;
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: linear-gradient(180deg, var(--bg), #eaf5ff);
+      color: var(--text);
     }
 
-    .quote{
-      font-size:clamp(18px, 3.6vw, 28px);
-      line-height:1.45;
-      margin:0 0 18px 0;
-      font-style:italic;
+    .wrap {
+      min-height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
     }
 
-    .author{
-      color:var(--muted);
-      font-weight:600;
-      letter-spacing:0.6px;
-      margin-bottom:10px;
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: 0 8px 30px rgba(17, 40, 60, 0.08);
+      padding: 36px;
+      max-width: var(--maxw);
+      width: 100%;
+      text-align: center;
+      transition: transform 0.3s ease;
     }
 
-    .small{
-      font-size:13px;
-      color:var(--muted);
+    .card:hover {
+      transform: translateY(-4px);
     }
 
-    .brand{
-      display:inline-block;
-      margin-top:18px;
-      padding:8px 14px;
-      border-radius:999px;
-      background:rgba(30,111,184,0.08);
-      color:var(--accent);
-      font-weight:600;
-      text-decoration:none;
+    .quote {
+      font-size: clamp(18px, 3.6vw, 28px);
+      line-height: 1.45;
+      margin: 0 0 18px;
+      font-style: italic;
     }
 
-    /* Responsive padding */
-    @media (max-width:420px){
-      .card{ padding:22px; }
+    .author {
+      color: var(--muted);
+      font-weight: 600;
+      letter-spacing: 0.6px;
+      margin-bottom: 10px;
+    }
+
+    .brand {
+      display: inline-block;
+      margin-top: 18px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(30, 111, 184, 0.08);
+      color: var(--accent);
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    .brand:hover {
+      background: var(--accent);
+      color: var(--card);
+    }
+
+    .btn-refresh {
+      margin-top: 20px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: var(--radius);
+      background: var(--accent);
+      color: var(--card);
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .btn-refresh:hover {
+      background: #155a9a;
+    }
+
+    @media (max-width: 420px) {
+      .card { padding: 22px; }
     }
   </style>
 </head>
 <body>
   <div class="wrap">
-    <div class="card">
-      <!-- Change la citation ici -->
-      <p class="quote">« Le succès, c'est tomber sept fois, se relever huit. »</p>
-      <div class="author">— Proverbe japonais</div>
-
-
-      <a class="brand" href="#" aria-hidden="true"> have a good day ;)</a>
+    <div class="card" role="region" aria-label="Citation motivante">
+      <blockquote class="quote" lang="fr"></blockquote>
+      <div class="author"></div>
+      <button class="btn-refresh" aria-label="Changer de citation">Nouvelle Citation</button>
+      <a class="brand" href="#">have a good day ;)</a>
     </div>
   </div>
+
+  <script>
+    const quotes = [
+      { text: "Le succès, c'est tomber sept fois, se relever huit.", author: "Proverbe japonais" },
+      { text: "N'ayez pas peur de la perfection, vous ne l'atteindrez jamais, mais cherchez-la toujours.", author: "Salvador Dalí" },
+      { text: "Le seul moyen de faire du bon travail est d'aimer ce que vous faites.", author: "Steve Jobs" },
+      { text: "Chaque jour est une nouvelle chance de changer votre vie.", author: "Anonyme" },
+      { text: "Les obstacles sont ces choses effrayantes que vous voyez lorsque vous détournez les yeux de votre objectif.", author: "Henry Ford" },
+      { text: "Crois en toi, et le reste viendra.", author: "Anonyme" },
+      { text: "Le plus grand échec est de ne pas avoir le courage d’essayer.", author: "Proverbe" },
+      { text: "La persévérance transforme les rêves en réalité.", author: "Anonyme" }
+    ];
+
+    const quoteElement = document.querySelector(".quote");
+    const authorElement = document.querySelector(".author");
+    const refreshButton = document.querySelector(".btn-refresh");
+
+    function displayRandomQuote() {
+      const randomIndex = Math.floor(Math.random() * quotes.length);
+      const { text, author } = quotes[randomIndex];
+      quoteElement.textContent = `« ${text} »`;
+      authorElement.textContent = `— ${author}`;
+    }
+
+    refreshButton.addEventListener("click", displayRandomQuote);
+
+    // Afficher une citation au chargement de la page
+    displayRandomQuote();
+  </script>
 </body>
 </html>
