@@ -7,10 +7,10 @@
   <style>
     :root {
       --bg: #f6fbff;
-      --card: #ffffff;
+      --card: #ffffff; /* Arrière-plan blanc pur pour la section citation */
       --accent: #1e6fb8;
-      --text: #12324a;
-      --muted: #6b7c86;
+      --text: #000000; /* Couleur noire pour les citations et auteur */
+      --muted: #000000; /* Couleur noire pour l'auteur */
       --radius: 14px;
       --maxw: 760px;
     }
@@ -18,9 +18,9 @@
     @media (prefers-color-scheme: dark) {
       :root {
         --bg: #1a2a44;
-        --card: #2b3a55;
-        --text: #e6f0ff;
-        --muted: #a0b3c1;
+        --card: #ffffff; /* Maintien du blanc en mode sombre */
+        --text: #000000; /* Maintien du noir pour les citations */
+        --muted: #000000; /* Maintien du noir pour l'auteur */
       }
     }
 
@@ -64,6 +64,10 @@
       line-height: 1.45;
       margin: 0 0 18px;
       font-style: italic;
+      color: var(--text);
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.3s ease, transform 0.3s ease;
     }
 
     .author {
@@ -71,23 +75,20 @@
       font-weight: 600;
       letter-spacing: 0.6px;
       margin-bottom: 10px;
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.3s ease, transform 0.3s ease;
     }
 
-    .brand {
-      display: inline-block;
-      margin-top: 18px;
-      padding: 8px 14px;
-      border-radius: 999px;
-      background: rgba(30, 111, 184, 0.08);
-      color: var(--accent);
-      font-weight: 600;
-      text-decoration: none;
-      transition: background 0.3s ease, color 0.3s ease;
+    /* Classe pour l'animation de fondu et glissement */
+    .fade-out {
+      opacity: 0;
+      transform: translateY(10px);
     }
 
-    .brand:hover {
-      background: var(--accent);
-      color: var(--card);
+    .fade-in {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     .btn-refresh {
@@ -117,7 +118,6 @@
       <blockquote class="quote" lang="fr"></blockquote>
       <div class="author"></div>
       <button class="btn-refresh" aria-label="Changer de citation">Citation Suivante</button>
-      <a class="brand" href="#">Inspiration Quotidienne</a>
     </div>
   </div>
 
@@ -228,16 +228,38 @@
     const refreshButton = document.querySelector(".btn-refresh");
 
     function displayRandomQuote() {
-      const randomIndex = Math.floor(Math.random() * quotes.length);
-      const { text, author } = quotes[randomIndex];
-      quoteElement.textContent = `« ${text} »`;
-      authorElement.textContent = `— ${author}`;
+      // Ajouter la classe pour l'animation de sortie
+      quoteElement.classList.add("fade-out");
+      authorElement.classList.add("fade-out");
+
+      // Attendre la fin de l'animation avant de changer le texte
+      setTimeout(() => {
+        const randomIndex = Math.floor(Math.random() * quotes.length);
+        const { text, author } = quotes[randomIndex];
+        quoteElement.textContent = `« ${text} »`;
+        authorElement.textContent = `— ${author}`;
+
+        // Réappliquer l'animation d'entrée
+        quoteElement.classList.remove("fade-out");
+        authorElement.classList.remove("fade-out");
+        quoteElement.classList.add("fade-in");
+        authorElement.classList.add("fade-in");
+
+        // Supprimer la classe fade-in après l'animation pour éviter les conflits
+        setTimeout(() => {
+          quoteElement.classList.remove("fade-in");
+          authorElement.classList.remove("fade-in");
+        }, 300);
+      }, 300); // Délai correspondant à la durée de l'animation
     }
 
     refreshButton.addEventListener("click", displayRandomQuote);
 
-    // Afficher une citation au chargement de la page
-    displayRandomQuote();
+    // Afficher une citation au chargement de la page sans animation initiale
+    const randomIndex = Math.floor(Math.random() * quotes.length);
+    const { text, author } = quotes[randomIndex];
+    quoteElement.textContent = `« ${text} »`;
+    authorElement.textContent = `— ${author}`;
   </script>
 </body>
 </html>
