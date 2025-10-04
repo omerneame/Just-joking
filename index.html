@@ -4,6 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>You Will Never Walk Alone</title>
+  <!-- Intégration du script EmailJS -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script>
+    // Initialiser EmailJS avec votre Public Key
+    (function(){
+      emailjs.init("YOUR_PUBLIC_KEY"); // Remplacez par votre Public Key d'EmailJS
+    })();
+  </script>
   <style>
     :root {
       --bg: #f6fbff;
@@ -189,6 +197,20 @@
       background: #155a9a;
     }
 
+    .motivation-section .success-message {
+      color: green;
+      font-size: 1rem;
+      margin-top: 10px;
+      display: none;
+    }
+
+    .motivation-section .error-message {
+      color: red;
+      font-size: 1rem;
+      margin-top: 10px;
+      display: none;
+    }
+
     .motivation-list {
       margin-top: 20px;
       text-align: left;
@@ -237,6 +259,8 @@
     <form id="motivation-form">
       <textarea id="motivation-text" placeholder="Écrivez votre lettre de motivation ici..." maxlength="500" aria-label="Votre lettre de motivation"></textarea>
       <button type="submit" aria-label="Soumettre la lettre">Soumettre</button>
+      <p class="success-message" id="success-message">Citation envoyée avec succès !</p>
+      <p class="error-message" id="error-message">Veuillez entrer une citation avant de soumettre.</p>
     </form>
     <div class="motivation-list">
       <ul id="motivation-list"></ul>
@@ -351,6 +375,8 @@
     const motivationForm = document.getElementById("motivation-form");
     const motivationText = document.getElementById("motivation-text");
     const motivationList = document.getElementById("motivation-list");
+    const successMessage = document.getElementById("success-message");
+    const errorMessage = document.getElementById("error-message");
 
     // Gestion des citations
     function displayRandomQuote() {
@@ -397,13 +423,41 @@
     motivationForm.addEventListener("submit", (e) => {
       e.preventDefault();
       const motivation = motivationText.value.trim();
-      if (motivation) {
+      
+      if (!motivation) {
+        errorMessage.style.display = "block";
+        successMessage.style.display = "none";
+        return;
+      }
+
+      // Envoi de l'e-mail via EmailJS
+      emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", {
+        message: motivation,
+        to_email: "neameomar@gmail.com"
+      })
+      .then(() => {
+        // Enregistrer dans localStorage
         const motivations = JSON.parse(localStorage.getItem("motivations") || "[]");
         motivations.push(motivation);
         localStorage.setItem("motivations", JSON.stringify(motivations));
+        
+        // Réinitialiser le formulaire et afficher le message de succès
         motivationText.value = "";
+        successMessage.style.display = "block";
+        errorMessage.style.display = "none";
         loadMotivations();
-      }
+        
+        // Cacher le message de succès après 3 secondes
+        setTimeout(() => {
+          successMessage.style.display = "none";
+        }, 3000);
+      })
+      .catch((error) => {
+        console.error("Erreur lors de l'envoi de l'e-mail :", error);
+        errorMessage.textContent = "Erreur lors de l'envoi. Veuillez réessayer.";
+        errorMessage.style.display = "block";
+        successMessage.style.display = "none";
+      });
     });
 
     // Charger les lettres au démarrage
