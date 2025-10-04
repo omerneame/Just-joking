@@ -1,55 +1,47 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>You Will Never Walk Alone</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ma Citation Motivée</title>
   <style>
     :root {
       --bg: #f6fbff;
-      --card: #fff;
+      --card: #ffffff; /* Arrière-plan blanc pur pour la section citation */
       --accent: #1e6fb8;
-      --text: #000;
+      --text: #000000; /* Couleur noire pour les citations et auteur */
+      --muted: #000000; /* Couleur noire pour l'auteur */
       --radius: 14px;
       --maxw: 760px;
     }
 
     @media (prefers-color-scheme: dark) {
-      :root { --bg: #1a2a44; }
+      :root {
+        --bg: #1a2a44;
+        --card: #ffffff; /* Maintien du blanc en mode sombre */
+        --text: #000000; /* Maintien du noir pour les citations */
+        --muted: #000000; /* Maintien du noir pour l'auteur */
+      }
     }
 
-    * { box-sizing: border-box; }
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
 
-    body {
+    html, body {
+      height: 100%;
       margin: 0;
-      font-family: system-ui, -apple-system, sans-serif;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       background: linear-gradient(180deg, var(--bg), #eaf5ff);
       color: var(--text);
-      animation: gradientShift 10s ease infinite;
-    }
-
-    @keyframes gradientShift {
-      50% { background: linear-gradient(180deg, #eaf5ff, #d6eaff); }
-      100% { background: linear-gradient(180deg, var(--bg), #eaf5ff); }
-    }
-
-    header {
-      text-align: center;
-      padding: 20px;
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(5px);
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 2rem;
     }
 
     .wrap {
+      min-height: 100%;
       display: flex;
+      align-items: center;
       justify-content: center;
       padding: 40px 20px;
-      min-height: calc(100vh - 160px);
     }
 
     .card {
@@ -60,12 +52,11 @@
       max-width: var(--maxw);
       width: 100%;
       text-align: center;
-      animation: zoomIn 0.5s ease;
+      transition: transform 0.3s ease;
     }
 
-    @keyframes zoomIn {
-      from { transform: scale(0.8); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
+    .card:hover {
+      transform: translateY(-4px);
     }
 
     .quote {
@@ -73,20 +64,35 @@
       line-height: 1.45;
       margin: 0 0 18px;
       font-style: italic;
+      color: var(--text);
+      opacity: 1;
+      transform: translateY(0);
       transition: opacity 0.3s ease, transform 0.3s ease;
     }
 
     .author {
+      color: var(--muted);
       font-weight: 600;
       letter-spacing: 0.6px;
       margin-bottom: 10px;
+      opacity: 1;
+      transform: translateY(0);
       transition: opacity 0.3s ease, transform 0.3s ease;
     }
 
-    .fade-out { opacity: 0; transform: translateY(10px); }
-    .fade-in { opacity: 1; transform: translateY(0); }
+    /* Classe pour l'animation de fondu et glissement */
+    .fade-out {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    .fade-in {
+      opacity: 1;
+      transform: translateY(0);
+    }
 
     .btn-refresh {
+      margin-top: 20px;
       padding: 10px 20px;
       border: none;
       border-radius: var(--radius);
@@ -97,24 +103,16 @@
       transition: background 0.3s ease;
     }
 
-    .btn-refresh:hover { background: #155a9a; }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      font-size: 14px;
+    .btn-refresh:hover {
+      background: #155a9a;
     }
 
     @media (max-width: 420px) {
       .card { padding: 22px; }
-      header h1 { font-size: 1.5rem; }
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>You Will Never Walk Alone</h1>
-  </header>
   <div class="wrap">
     <div class="card" role="region" aria-label="Citation motivante">
       <blockquote class="quote" lang="fr"></blockquote>
@@ -122,9 +120,6 @@
       <button class="btn-refresh" aria-label="Changer de citation">Citation Suivante</button>
     </div>
   </div>
-  <footer>
-    Chaque jour, une nouvelle inspiration pour avancer.
-  </footer>
 
   <script>
     const quotes = [
@@ -228,30 +223,43 @@
       { text: "Chaque pas compte, alors continue d’avancer.", author: "Anonyme" }
     ];
 
-    const quote = document.querySelector(".quote");
-    const author = document.querySelector(".author");
-    const btn = document.querySelector(".btn-refresh");
+    const quoteElement = document.querySelector(".quote");
+    const authorElement = document.querySelector(".author");
+    const refreshButton = document.querySelector(".btn-refresh");
 
-    function showQuote() {
-      quote.classList.add("fade-out");
-      author.classList.add("fade-out");
+    function displayRandomQuote() {
+      // Ajouter la classe pour l'animation de sortie
+      quoteElement.classList.add("fade-out");
+      authorElement.classList.add("fade-out");
+
+      // Attendre la fin de l'animation avant de changer le texte
       setTimeout(() => {
-        const { text, author: auth } = quotes[Math.floor(Math.random() * quotes.length)];
-        quote.textContent = `« ${text} »`;
-        author.textContent = `— ${auth}`;
-        quote.classList.remove("fade-out");
-        author.classList.add("fade-in");
-        author.classList.remove("fade-out");
-        quote.classList.add("fade-in");
+        const randomIndex = Math.floor(Math.random() * quotes.length);
+        const { text, author } = quotes[randomIndex];
+        quoteElement.textContent = `« ${text} »`;
+        authorElement.textContent = `— ${author}`;
+
+        // Réappliquer l'animation d'entrée
+        quoteElement.classList.remove("fade-out");
+        authorElement.classList.remove("fade-out");
+        quoteElement.classList.add("fade-in");
+        authorElement.classList.add("fade-in");
+
+        // Supprimer la classe fade-in après l'animation pour éviter les conflits
         setTimeout(() => {
-          quote.classList.remove("fade-in");
-          author.classList.remove("fade-in");
+          quoteElement.classList.remove("fade-in");
+          authorElement.classList.remove("fade-in");
         }, 300);
-      }, 300);
+      }, 300); // Délai correspondant à la durée de l'animation
     }
 
-    btn.addEventListener("click", showQuote);
-    showQuote();
+    refreshButton.addEventListener("click", displayRandomQuote);
+
+    // Afficher une citation au chargement de la page sans animation initiale
+    const randomIndex = Math.floor(Math.random() * quotes.length);
+    const { text, author } = quotes[randomIndex];
+    quoteElement.textContent = `« ${text} »`;
+    authorElement.textContent = `— ${author}`;
   </script>
 </body>
 </html>
