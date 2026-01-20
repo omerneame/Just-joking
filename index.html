@@ -1,298 +1,68 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>You Will Never Walk Alone</title>
-  <style>
-    :root {
-      --bg: #f6fbff;
-      --card: #ffffff; /* Arrière-plan blanc pur pour la section citation */
-      --accent: #1e6fb8;
-      --text: #000000; /* Couleur noire pour les citations et auteur */
-      --muted: #000000; /* Couleur noire pour l'auteur */
-      --radius: 14px;
-      --maxw: 760px;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #1a2a44;
-        --card: #ffffff; /* Maintien du blanc en mode sombre */
-        --text: #000000; /* Maintien du noir pour les citations */
-        --muted: #000000; /* Maintien du noir pour l'auteur */
-      }
-    }
-
-    *, *::before, *::after {
-      box-sizing: border-box;
-    }
-
-    html, body {
-      height: 100%;
-      margin: 0;
-      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      background: linear-gradient(180deg, var(--bg), #eaf5ff);
-      color: var(--text);
-      animation: gradientShift 10s ease infinite;
-    }
-
-    /* Animation d'arrière-plan dégradé */
-    @keyframes gradientShift {
-      0% { background: linear-gradient(180deg, var(--bg), #eaf5ff); }
-      50% { background: linear-gradient(180deg, #eaf5ff, #d6eaff); }
-      100% { background: linear-gradient(180deg, var(--bg), #eaf5ff); }
-    }
-
-    header {
-      text-align: center;
-      padding: 20px;
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(5px);
-    }
-
-    header h1 {
-      margin: 0;
-      font-size: 2rem;
-      color: var(--text);
-    }
-
-    .wrap {
-      min-height: calc(100% - 120px);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 40px 20px;
-    }
-
-    .card {
-      background: var(--card);
-      border-radius: var(--radius);
-      box-shadow: 0 8px 30px rgba(17, 40, 60, 0.08);
-      padding: 36px;
-      max-width: var(--maxw);
-      width: 100%;
-      text-align: center;
-      animation: zoomIn 0.5s ease;
-    }
-
-    @keyframes zoomIn {
-      0% { transform: scale(0.8); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
-    }
-
-    .quote {
-      font-size: clamp(18px, 3.6vw, 28px);
-      line-height: 1.45;
-      margin: 0 0 18px;
-      font-style: italic;
-      color: var(--text);
-      opacity: 1;
-      transform: translateY(0);
-      transition: opacity 0.3s ease, transform 0.3s ease;
-    }
-
-    .author {
-      color: var(--muted);
-      font-weight: 600;
-      letter-spacing: 0.6px;
-      margin-bottom: 10px;
-      opacity: 1;
-      transform: translateY(0);
-      transition: opacity 0.3s ease, transform 0.3s ease;
-    }
-
-    .fade-out {
-      opacity: 0;
-      transform: translateY(10px);
-    }
-
-    .fade-in {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .btn-refresh {
-      margin-top: 20px;
-      padding: 10px 20px;
-      border: none;
-      border-radius: var(--radius);
-      background: var(--accent);
-      color: var(--card);
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    .btn-refresh:hover {
-      background: #155a9a;
-    }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      font-size: 14px;
-      color: var(--muted);
-    }
-
-    @media (max-width: 420px) {
-      .card { padding: 22px; }
-      header h1 { font-size: 1.5rem; }
-    }
-  </style>
+  <meta charset="UTF-8">
+  <title>Plans d'entraînement au gym</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <h1>You Will Never Walk Alone</h1>
-  </header>
-  <div class="wrap">
-    <div class="card" role="region" aria-label="Citation motivante">
-      <blockquote class="quote" lang="fr"></blockquote>
-      <div class="author"></div>
-      <div>
-        <button class="btn-refresh" aria-label="Changer de citation">Citation Suivante</button>
-      </div>
-    </div>
-  </div>
-  <footer>
-    Chaque jour, une nouvelle inspiration pour avancer.
-  </footer>
 
-  <script>
-    const quotes = [
-      { text: "Le succès, c'est tomber sept fois, se relever huit.", author: "Proverbe japonais" },
-      { text: "N'ayez pas peur de la perfection, vous ne l'atteindrez jamais, mais cherchez-la toujours.", author: "Salvador Dalí" },
-      { text: "Le seul moyen de faire du bon travail est d'aimer ce que vous faites.", author: "Steve Jobs" },
-      { text: "Chaque jour est une nouvelle chance de changer votre vie.", author: "Anonyme" },
-      { text: "Les obstacles sont ces choses effrayantes que vous voyez lorsque vous détournez les yeux de votre objectif.", author: "Henry Ford" },
-      { text: "Crois en toi, et le reste viendra.", author: "Anonyme" },
-      { text: "Le plus grand échec est de ne pas avoir le courage d’essayer.", author: "Proverbe" },
-      { text: "La persévérance transforme les rêves en réalité.", author: "Anonyme" },
-      { text: "Rien n'est impossible à celui qui croit en ses rêves.", author: "Anonyme" },
-      { text: "Le voyage de mille lieues commence par un pas.", author: "Lao-Tseu" },
-      { text: "Le succès n’est pas final, l’échec n’est pas fatal : c’est le courage de continuer qui compte.", author: "Winston Churchill" },
-      { text: "Ne laisse pas tes peurs prendre la place de tes rêves.", author: "Anonyme" },
-      { text: "La seule limite à notre épanouissement de demain sera nos doutes d’aujourd’hui.", author: "Franklin D. Roosevelt" },
-      { text: "Chaque pas que tu fais te rapproche de ton but.", author: "Anonyme" },
-      { text: "Le courage n’est pas l’absence de peur, mais la capacité de la surmonter.", author: "Nelson Mandela" },
-      { text: "Les rêves sont gratuits, mais la route pour les atteindre demande du travail.", author: "Anonyme" },
-      { text: "Ne regarde pas en arrière, ce n’est pas là que tu vas.", author: "Anonyme" },
-      { text: "Fais de chaque jour une opportunité de grandir.", author: "Anonyme" },
-      { text: "La vie est un mystère qu’il faut vivre, et non un problème à résoudre.", author: "Gandhi" },
-      { text: "Le succès appartient à ceux qui osent essayer.", author: "Anonyme" },
-      { text: "Ne crains pas d’avancer lentement, crains seulement de t’arrêter.", author: "Proverbe chinois" },
-      { text: "Le bonheur ne se trouve pas au sommet de la montagne, mais dans la façon de la gravir.", author: "Confucius" },
-      { text: "Chaque effort compte, même les plus petits.", author: "Anonyme" },
-      { text: "La seule façon de faire un travail formidable est d’aimer ce que vous faites.", author: "Steve Jobs" },
-      { text: "Le futur appartient à ceux qui croient en la beauté de leurs rêves.", author: "Eleanor Roosevelt" },
-      { text: "Ne baisse jamais les bras, car les plus belles victoires viennent après les plus dures batailles.", author: "Anonyme" },
-      { text: "L’échec est une occasion de recommencer de manière plus intelligente.", author: "Henry Ford" },
-      { text: "Le succès, c’est d’aller d’échec en échec sans perdre son enthousiasme.", author: "Winston Churchill" },
-      { text: "Fais ce que tu peux, avec ce que tu as, là où tu es.", author: "Theodore Roosevelt" },
-      { text: "Le courage, c’est de continuer même quand on a peur.", author: "Anonyme" },
-      { text: "Les grandes choses ne viennent pas du confort, mais du défi.", author: "Anonyme" },
-      { text: "Crois en tes rêves, car ils te mèneront loin.", author: "Anonyme" },
-      { text: "Le succès n’est pas la clé du bonheur. Le bonheur est la clé du succès.", author: "Albert Schweitzer" },
-      { text: "Tout ce que tu peux imaginer est réel.", author: "Pablo Picasso" },
-      { text: "La vie est comme une bicyclette, il faut avancer pour ne pas perdre l’équilibre.", author: "Albert Einstein" },
-      { text: "Chaque jour est une nouvelle page de ton histoire, écris-la bien.", author: "Anonyme" },
-      { text: "Les opportunités ne frappent pas toujours à la porte, parfois il faut la construire.", author: "Anonyme" },
-      { text: "Le talent, c’est 1 % d’inspiration et 99 % de transpiration.", author: "Thomas Edison" },
-      { text: "Ne laisse jamais la peur de l’échec t’arrêter.", author: "Anonyme" },
-      { text: "Les petites actions d’aujourd’hui mènent aux grandes réussites de demain.", author: "Anonyme" },
-      { text: "La vie récompense ceux qui osent.", author: "Anonyme" },
-      { text: "Un rêve sans action reste un souhait.", author: "Anonyme" },
-      { text: "Le succès, c’est la somme de petits efforts répétés jour après jour.", author: "Robert Collier" },
-      { text: "Il n’y a pas de raccourci vers un endroit qui en vaut la peine.", author: "Beverly Sills" },
-      { text: "Le meilleur moment pour planter un arbre était il y a 20 ans. Le deuxième meilleur moment est maintenant.", author: "Proverbe chinois" },
-      { text: "Le seul moyen de découvrir les limites du possible est de les dépasser.", author: "Arthur C. Clarke" },
-      { text: "Rêve grand, travaille dur, reste concentré.", author: "Anonyme" },
-      { text: "Le chemin du succès est pavé de persévérance.", author: "Anonyme" },
-      { text: "Les grandes réalisations naissent des petits commencements.", author: "Lao-Tseu" },
-      { text: "La discipline est le pont entre les rêves et la réalité.", author: "Anonyme" },
-      { text: "Ne te compare pas aux autres, sois la meilleure version de toi-même.", author: "Anonyme" },
-      { text: "Le succès n’est pas un accident, c’est un choix.", author: "Anonyme" },
-      { text: "Chaque pas compte, même les plus petits mènent loin.", author: "Anonyme" },
-      { text: "La patience et la persévérance transforment l’impossible en possible.", author: "Anonyme" },
-      { text: "Le courage, c’est de faire ce qui est juste, même quand c’est difficile.", author: "Anonyme" },
-      { text: "Les rêves sont le carburant de l’avenir.", author: "Anonyme" },
-      { text: "Le succès commence là où la peur s’arrête.", author: "Anonyme" },
-      { text: "Tout commence par un premier pas, fais-le aujourd’hui.", author: "Anonyme" },
-      { text: "La vie est ce que tu en fais, alors fais-en quelque chose de grand.", author: "Anonyme" },
-      { text: "Les échecs sont les fondations du succès.", author: "Anonyme" },
-      { text: "Crois en toi, même quand personne d’autre n’y croit.", author: "Anonyme" },
-      { text: "Le succès, c’est se relever une fois de plus que l’on est tombé.", author: "Anonyme" },
-      { text: "Chaque défi est une opportunité déguisée.", author: "Anonyme" },
-      { text: "La détermination transforme les rêves en réalisations.", author: "Anonyme" },
-      { text: "Le courage est la première étape vers la victoire.", author: "Anonyme" },
-      { text: "Ne laisse pas le doute éteindre ton feu intérieur.", author: "Anonyme" },
-      { text: "Les grandes choses arrivent à ceux qui n’abandonnent jamais.", author: "Anonyme" },
-      { text: "La seule limite est celle que tu te fixes.", author: "Anonyme" },
-      { text: "Le succès est un voyage, pas une destination.", author: "Anonyme" },
-      { text: "Chaque jour est une nouvelle chance de briller.", author: "Anonyme" },
-      { text: "La persévérance est la clé qui ouvre toutes les portes.", author: "Anonyme" },
-      { text: "Ne cherche pas à être parfait, cherche à être meilleur chaque jour.", author: "Anonyme" },
-      { text: "Les rêves deviennent réalité quand tu agis.", author: "Anonyme" },
-      { text: "Le courage, c’est avancer malgré l’incertitude.", author: "Anonyme" },
-      { text: "Chaque échec est une leçon pour réussir.", author: "Anonyme" },
-      { text: "Le succès est la récompense de l’effort constant.", author: "Anonyme" },
-      { text: "Ne laisse pas les obstacles définir ton chemin.", author: "Anonyme" },
-      { text: "La vie est un puzzle, chaque effort est une pièce.", author: "Anonyme" },
-      { text: "Les rêves ne s’éteignent que si tu abandonnes.", author: "Anonyme" },
-      { text: "Le succès, c’est transformer les échecs en tremplins.", author: "Anonyme" },
-      { text: "Chaque pas te rapproche de la meilleure version de toi.", author: "Anonyme" },
-      { text: "La persévérance surpasse le talent.", author: "Anonyme" },
-      { text: "Rêve grand, mais commence petit.", author: "Anonyme" },
-      { text: "Le succès n’attend pas, alors commence maintenant.", author: "Anonyme" },
-      { text: "Les petites victoires mènent aux grandes réussites.", author: "Anonyme" },
-      { text: "Le courage est la lumière dans l’obscurité.", author: "Anonyme" },
-      { text: "Ne laisse pas le passé voler ton avenir.", author: "Anonyme" },
-      { text: "Le succès, c’est l’art de continuer là où les autres s’arrêtent.", author: "Anonyme" },
-      { text: "Chaque jour est une opportunité de grandir.", author: "Anonyme" },
-      { text: "La vie récompense ceux qui persévèrent.", author: "Anonyme" },
-      { text: "Le courage transforme les rêves en réalité.", author: "Anonyme" },
-      { text: "Ne crains pas l’échec, crains l’inaction.", author: "Anonyme" },
-      { text: "Le succès, c’est la somme de tes efforts quotidiens.", author: "Anonyme" },
-      { text: "Chaque défi est une chance de prouver ce dont tu es capable.", author: "Anonyme" },
-      { text: "La persévérance est la clé du succès.", author: "Anonyme" },
-      { text: "Rêve, planifie, agis, réussis.", author: "Anonyme" },
-      { text: "Le succès est un marathon, pas un sprint.", author: "Anonyme" },
-      { text: "Chaque pas compte, alors continue d’avancer.", author: "Anonyme" }
-    ];
+<header>
+  <h1>Plans d'entraînement au gym</h1>
+  <p>Choisis ton nombre de jours et entraîne tout ton corps efficacement</p>
+</header>
 
-    const quoteElement = document.querySelector(".quote");
-    const authorElement = document.querySelector(".author");
-    const refreshButton = document.querySelector(".btn-refresh");
+<section class="plan">
+  <h2>🏋️ Plan 2 jours / semaine – Full Body</h2>
 
-    function displayRandomQuote() {
-      quoteElement.classList.add("fade-out");
-      authorElement.classList.add("fade-out");
+  <h3>Jour 1</h3>
+  <ul>
+    <li>
+      Squat – 3×8–12  
+      <a href="https://www.youtube.com/watch?v=eMYjBnIVb_A" target="_blank">📺 Voir la vidéo</a>
+    </li>
+    <li>
+      Développé couché – 3×8–12  
+      <a href="https://www.youtube.com/watch?v=rT7DgCr-3pg" target="_blank">📺 Voir la vidéo</a>
+    </li>
+    <li>
+      Tirage vertical – 3×10  
+      <a href="https://www.youtube.com/watch?v=SALxEARiMkw" target="_blank">📺 Voir la vidéo</a>
+    </li>
+    <li>
+      Élévations latérales – 3×15  
+      <a href="https://www.youtube.com/watch?v=kDqklk1ZESo" target="_blank">📺 Voir la vidéo</a>
+    </li>
+    <li>
+      Gainage – 3×40 sec  
+      <a href="https://www.youtube.com/watch?v=pSHjTRCQxIw" target="_blank">📺 Voir la vidéo</a>
+    </li>
+  </ul>
 
-      setTimeout(() => {
-        const randomIndex = Math.floor(Math.random() * quotes.length);
-        const { text, author } = quotes[randomIndex];
-        quoteElement.textContent = `« ${text} »`;
-        authorElement.textContent = `— ${author}`;
+  <h3>Jour 2</h3>
+  <ul>
+    <li>
+      Soulevé de terre – 3×8  
+      <a href="https://www.youtube.com/watch?v=ytGaGIn3SjE" target="_blank">📺 Voir la vidéo</a>
+    </li>
+    <li>
+      Développé épaules – 3×10  
+      <a href="https://www.youtube.com/watch?v=B-aVuyhvLHU" target="_blank">📺 Voir la vidéo</a>
+    </li>
+    <li>
+      Rowing barre – 3×10  
+      <a href="https://www.youtube.com/watch?v=vT2GjY_Umpw" target="_blank">📺 Voir la vidéo</a>
+    </li>
+    <li>
+      Curl biceps – 3×12  
+      <a href="https://www.youtube.com/watch?v=ykJmrZ5v0Oo" target="_blank">📺 Voir la vidéo</a>
+    </li>
+    <li>
+      Extension triceps – 3×12  
+      <a href="https://www.youtube.com/watch?v=2-LAMcpzODU" target="_blank">📺 Voir la vidéo</a>
+    </li>
+  </ul>
+</section>
 
-        quoteElement.classList.remove("fade-out");
-        authorElement.classList.remove("fade-out");
-        quoteElement.classList.add("fade-in");
-        authorElement.classList.add("fade-in");
-
-        setTimeout(() => {
-          quoteElement.classList.remove("fade-in");
-          authorElement.classList.remove("fade-in");
-        }, 300);
-      }, 300);
-    }
-
-    refreshButton.addEventListener("click", displayRandomQuote);
-
-    // Afficher une citation au chargement
-    const randomIndex = Math.floor(Math.random() * quotes.length);
-    const { text, author } = quotes[randomIndex];
-    quoteElement.textContent = `« ${text} »`;
-    authorElement.textContent = `— ${author}`;
-  </script>
 </body>
 </html>
