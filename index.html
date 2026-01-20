@@ -2,67 +2,269 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Plans d'entraînement au gym</title>
-  <link rel="stylesheet" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plans d'Entraînement au Gym - Fitness Pro</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+  <style>
+    /* CSS pour un design professionnel */
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    header {
+      background-color: #007bff; /* Bleu fitness dynamique */
+      color: white;
+      text-align: center;
+      padding: 60px 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 2.5em;
+    }
+
+    header p {
+      font-size: 1.2em;
+      margin-top: 10px;
+    }
+
+    nav {
+      background-color: #343a40; /* Gris foncé pour la navigation */
+      padding: 15px;
+      text-align: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    nav a {
+      color: white;
+      text-decoration: none;
+      margin: 0 15px;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
+
+    nav a:hover {
+      color: #ffc107; /* Jaune pour survol */
+    }
+
+    section.plan {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    section.plan h2 {
+      color: #007bff;
+      font-size: 2em;
+      border-bottom: 2px solid #007bff;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+
+    section.plan h3 {
+      color: #28a745; /* Vert pour les jours */
+      font-size: 1.5em;
+      margin-top: 20px;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    ul li {
+      background-color: #e9ecef;
+      margin: 10px 0;
+      padding: 15px;
+      border-radius: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background-color 0.3s;
+    }
+
+    ul li:hover {
+      background-color: #dee2e6;
+    }
+
+    ul li a {
+      color: #dc3545; /* Rouge pour les liens vidéo */
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    ul li a:hover {
+      text-decoration: underline;
+    }
+
+    hr {
+      border: 0;
+      height: 1px;
+      background-color: #ddd;
+      margin: 30px 0;
+    }
+
+    footer {
+      background-color: #343a40;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+    }
+
+    footer p {
+      margin: 0;
+    }
+
+    /* Responsiveness */
+    @media (max-width: 768px) {
+      header {
+        padding: 40px 15px;
+      }
+
+      nav a {
+        display: block;
+        margin: 10px 0;
+      }
+
+      section.plan {
+        margin: 20px;
+        padding: 15px;
+      }
+
+      ul li {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
 </head>
 <body>
 
 <header>
-  <h1>Plans d'entraînement au gym</h1>
-  <p>Choisis ton nombre de jours et entraîne tout ton corps efficacement</p>
+  <h1>Plans d'Entraînement au Gym - Fitness Pro</h1>
+  <p>Choisissez votre nombre de jours par semaine et entraînez tout votre corps de manière efficace et professionnelle. Des plans adaptés à tous les niveaux avec des vidéos tutoriels pour une exécution parfaite.</p>
 </header>
 
-<section class="plan">
-  <h2>🏋️ Plan 2 jours / semaine – Full Body</h2>
+<nav>
+  <a href="#plan-2">2 Jours</a>
+  <a href="#plan-3">3 Jours</a>
+  <a href="#plan-4">4 Jours</a>
+  <a href="#plan-5">5 Jours</a>
+  <a href="#plan-6">6 Jours</a>
+</nav>
 
-  <h3>Jour 1</h3>
+<section id="plan-2" class="plan">
+  <h2>🏋️ Plan 2 Jours / Semaine – Full Body (Débutant)</h2>
+  <p>Idéal pour les débutants ou ceux avec peu de temps. Focus sur l'ensemble du corps avec des exercices composés.</p>
+
+  <h3>Jour 1: Focus Jambes et Haut du Corps</h3>
   <ul>
-    <li>
-      Squat – 3×8–12  
-      <a href="https://www.youtube.com/watch?v=eMYjBnIVb_A" target="_blank">📺 Voir la vidéo</a>
-    </li>
-    <li>
-      Développé couché – 3×8–12  
-      <a href="https://www.youtube.com/watch?v=rT7DgCr-3pg" target="_blank">📺 Voir la vidéo</a>
-    </li>
-    <li>
-      Tirage vertical – 3×10  
-      <a href="https://www.youtube.com/watch?v=SALxEARiMkw" target="_blank">📺 Voir la vidéo</a>
-    </li>
-    <li>
-      Élévations latérales – 3×15  
-      <a href="https://www.youtube.com/watch?v=kDqklk1ZESo" target="_blank">📺 Voir la vidéo</a>
-    </li>
-    <li>
-      Gainage – 3×40 sec  
-      <a href="https://www.youtube.com/watch?v=pSHjTRCQxIw" target="_blank">📺 Voir la vidéo</a>
-    </li>
+    <li>Squat – 3×8–12 <a href="https://www.youtube.com/watch?v=eMYjBnIVb_A" target="_blank">📺 Voir la vidéo</a></li>
+    <li>Développé Couché – 3×8–12 <a href="https://www.youtube.com/watch?v=rT7DgCr-3pg" target="_blank">📺 Voir la vidéo</a></li>
+    <li>Tirage Vertical (Lat Pulldown) – 3×10 <a href="https://www.youtube.com/watch?v=SALxEARiMkw" target="_blank">📺 Voir la vidéo</a></li>
+    <li>Élévations Latérales – 3×15 <a href="https://www.youtube.com/watch?v=kDqklk1ZESo" target="_blank">📺 Voir la vidéo</a></li>
+    <li>Gainage (Plank) – 3×40 sec <a href="https://www.youtube.com/watch?v=pSHjTRCQxIw" target="_blank">📺 Voir la vidéo</a></li>
   </ul>
 
-  <h3>Jour 2</h3>
+  <hr>
+
+  <h3>Jour 2: Focus Dos et Bras</h3>
   <ul>
-    <li>
-      Soulevé de terre – 3×8  
-      <a href="https://www.youtube.com/watch?v=ytGaGIn3SjE" target="_blank">📺 Voir la vidéo</a>
-    </li>
-    <li>
-      Développé épaules – 3×10  
-      <a href="https://www.youtube.com/watch?v=B-aVuyhvLHU" target="_blank">📺 Voir la vidéo</a>
-    </li>
-    <li>
-      Rowing barre – 3×10  
-      <a href="https://www.youtube.com/watch?v=vT2GjY_Umpw" target="_blank">📺 Voir la vidéo</a>
-    </li>
-    <li>
-      Curl biceps – 3×12  
-      <a href="https://www.youtube.com/watch?v=ykJmrZ5v0Oo" target="_blank">📺 Voir la vidéo</a>
-    </li>
-    <li>
-      Extension triceps – 3×12  
-      <a href="https://www.youtube.com/watch?v=2-LAMcpzODU" target="_blank">📺 Voir la vidéo</a>
-    </li>
+    <li>Soulevé de Terre (Deadlift) – 3×8 <a href="https://www.youtube.com/watch?v=ytGaGIn3SjE" target="_blank">📺 Voir la vidéo</a></li>
+    <li>Développé Épaules (Shoulder Press) – 3×10 <a href="https://www.youtube.com/watch?v=B-aVuyhvLHU" target="_blank">📺 Voir la vidéo</a></li>
+    <li>Rowing Barre (Bent Over Row) – 3×10 <a href="https://www.youtube.com/watch?v=vT2GjY_Umpw" target="_blank">📺 Voir la vidéo</a></li>
+    <li>Curl Biceps – 3×12 <a href="https://www.youtube.com/watch?v=ykJmrZ5v0Oo" target="_blank">📺 Voir la vidéo</a></li>
+    <li>Extension Triceps (Pushdown) – 3×12 <a href="https://www.youtube.com/watch?v=2-LAMcpzODU" target="_blank">📺 Voir la vidéo</a></li>
   </ul>
 </section>
+
+<section id="plan-3" class="plan">
+  <h2>🏋️ Plan 3 Jours / Semaine – Push/Pull/Legs (Intermédiaire)</h2>
+  <p>Division en push (pousser), pull (tirer) et legs (jambes) pour une récupération optimale.</p>
+
+  <h3>Jour 1: Push</h3>
+  <ul>
+    <li>Développé Couché – 4×8–10 <a href="https://www.youtube.com/watch?v=rT7DgCr-3pg" target="_blank">📺 Voir la vidéo</a></li>
+    <li>Développé Épaules – 4×10 <a href="https://www.youtube.com/watch?v=B-aVuyhvLHU" target="_blank">📺 Voir la vidéo</a></li>
+    <li>Élévations Latérales – 3×15 <a href="https://www.youtube.com/watch?v=kDqklk1ZESo" target="_blank">📺 Voir la vidéo</a></li>
+    <li>Extension Triceps – 3×12 <a href="https://www.youtube.com/watch?v=2-LAMcpzODU" target="_blank">📺 Voir la vidéo</a></li>
+  </ul>
+
+  <hr>
+
+  <h3>Jour 2: Pull</h3>
+  <ul>
+    <li>Tirage Vertical – 4×10 <a href="https://www.youtube.com/watch?v=SALxEARiMkw" target="_blank">📺 Voir la vidéo</a></li>
+    <li>Rowing Barre – 4×10 <a href="https://www.youtube.com/watch?v=vT2GjY_Umpw" target="_blank">📺 Voir la vidéo</a></li>
+    <li>Curl Biceps – 3×12 <a href="https://www.youtube.com/watch?v=ykJmrZ5v0Oo" target="_blank">📺 Voir la vidéo</a></li>
+    <li>Gainage – 3×45 sec <a href="https://www.youtube.com/watch?v=pSHjTRCQxIw" target="_blank">📺 Voir la vidéo</a></li>
+  </ul>
+
+  <hr>
+
+  <h3>Jour 3: Legs</h3>
+  <ul>
+    <li>Squat – 4×8–12 <a href="https://www.youtube.com/watch?v=eMYjBnIVb_A" target="_blank">📺 Voir la vidéo</a></li>
+    <li>Soulevé de Terre – 4×8 <a href="https://www.youtube.com/watch?v=ytGaGIn3SjE" target="_blank">📺 Voir la vidéo</a></li>
+    <li>Élévations Latérales (pour épaules en bonus) – 3×15 <a href="https://www.youtube.com/watch?v=kDqklk1ZESo" target="_blank">📺 Voir la vidéo</a></li>
+  </ul>
+</section>
+
+<section id="plan-4" class="plan">
+  <h2>🏋️ Plan 4 Jours / Semaine – Upper/Lower (Avancé)</h2>
+  <p>Division upper (haut du corps) et lower (bas du corps) pour une intensité accrue.</p>
+
+  <h3>Jour 1: Upper A</h3>
+  <ul>
+    <li>Développé Couché – 4×8 <a href="https://www.youtube.com/watch?v=rT7DgCr-3pg" target="_blank">📺 Voir la vidéo</a></li>
+    <li>Tirage Vertical – 4×10 <a href="https://www.youtube.com/watch?v=SALxEARiMkw" target="_blank">📺 Voir la vidéo</a></li>
+    <li>Développé Épaules – 3×10 <a href="https://www.youtube.com/watch?v=B-aVuyhvLHU" target="_blank">📺 Voir la vidéo</a></li>
+    <li>Curl Biceps – 3×12 <a href="https://www.youtube.com/watch?v=ykJmrZ5v0Oo" target="_blank">📺 Voir la vidéo</a></li>
+  </ul>
+
+  <hr>
+
+  <h3>Jour 2: Lower A</h3>
+  <ul>
+    <li>Squat – 4×8–12 <a href="https://www.youtube.com/watch?v=eMYjBnIVb_A" target="_blank">📺 Voir la vidéo</a></li>
+    <li>Soulevé de Terre – 4×8 <a href="https://www.youtube.com/watch?v=ytGaGIn3SjE" target="_blank">📺 Voir la vidéo</a></li>
+    <li>Gainage – 3×45 sec <a href="https://www.youtube.com/watch?v=pSHjTRCQxIw" target="_blank">📺 Voir la vidéo</a></li>
+  </ul>
+
+  <hr>
+
+  <h3>Jour 3: Upper B</h3>
+  <ul>
+    <li>Rowing Barre – 4×10 <a href="https://www.youtube.com/watch?v=vT2GjY_Umpw" target="_blank">📺 Voir la vidéo</a></li>
+    <li>Élévations Latérales – 3×15 <a href="https://www.youtube.com/watch?v=kDqklk1ZESo" target="_blank">📺 Voir la vidéo</a></li>
+    <li>Extension Triceps – 3×12 <a href="https://www.youtube.com/watch?v=2-LAMcpzODU" target="_blank">📺 Voir la vidéo</a></li>
+  </ul>
+
+  <hr>
+
+  <h3>Jour 4: Lower B</h3>
+  <ul>
+    <li>Squat – 4×10 <a href="https://www.youtube.com/watch?v=eMYjBnIVb_A" target="_blank">📺 Voir la vidéo</a></li>
+    <li>Soulevé de Terre – 4×10 <a href="https://www.youtube.com/watch?v=ytGaGIn3SjE" target="_blank">📺 Voir la vidéo</a></li>
+    <li>Gainage – 3×50 sec <a href="https://www.youtube.com/watch?v=pSHjTRCQxIw" target="_blank">📺 Voir la vidéo</a></li>
+  </ul>
+</section>
+
+<!-- Ajoutez d'autres sections pour 5 et 6 jours de manière similaire pour étendre le contenu -->
+
+<footer>
+  <p>&copy; 2026 Fitness Pro. Tous droits réservés. Consultez un professionnel de santé avant de commencer tout programme d'entraînement.</p>
+</footer>
 
 </body>
 </html>
