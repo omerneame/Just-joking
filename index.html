@@ -1,453 +1,102 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Plans d'Entraînement au Gym - Fitness</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
-  <style>
-    /* CSS amélioré pour un design professionnel et beau */
-    body {
-      font-family: 'Roboto', sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f8f9fa;
-      color: #333;
-      line-height: 1.6;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shineautomobile</title>
 
-    header {
-      background-color: #007bff; /* Bleu dynamique */
-      color: white;
-      text-align: center;
-      padding: 50px 20px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
+<script src="https://js.stripe.com/v3/"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=TA_GOOGLE_KEY&libraries=places"></script>
 
-    header h1 {
-      margin: 0;
-      font-size: 2.5em;
-    }
+<style>
+body {
+  margin:0;
+  font-family: 'Helvetica Neue', sans-serif;
+  background: black;
+  color: white;
+}
 
-    header p {
-      font-size: 1.2em;
-      margin-top: 10px;
-    }
+/* HERO */
+.hero {
+  height: 100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+}
 
-    nav {
-      background-color: #343a40; /* Gris foncé */
-      padding: 15px;
-      text-align: center;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
+.hero h1 {
+  font-size:50px;
+  letter-spacing:2px;
+}
 
-    nav a {
-      color: white;
-      text-decoration: none;
-      margin: 0 15px;
-      font-weight: bold;
-      transition: color 0.3s;
-    }
+.hero p {
+  color:#aaa;
+}
 
-    nav a:hover {
-      color: #ffc107; /* Jaune survol */
-    }
+/* FORM */
+.form {
+  max-width:400px;
+  margin:auto;
+}
 
-    .accordion {
-      max-width: 1200px;
-      margin: 40px auto;
-      padding: 0 20px;
-    }
+input, select {
+  width:100%;
+  padding:12px;
+  margin:10px 0;
+  border-radius:6px;
+  border:none;
+}
 
-    .accordion-item {
-      margin-bottom: 15px;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      overflow: hidden;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-      transition: box-shadow 0.3s;
-    }
+button {
+  width:100%;
+  padding:15px;
+  background:linear-gradient(90deg,#007BFF,#00D4FF);
+  border:none;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+}
 
-    .accordion-item:hover {
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .accordion-label {
-      display: block;
-      background-color: #e9ecef;
-      padding: 15px;
-      cursor: pointer;
-      font-size: 1.5em;
-      font-weight: bold;
-      color: #007bff;
-      transition: background-color 0.3s;
-    }
-
-    .accordion-label:hover {
-      background-color: #dee2e6;
-    }
-
-    .accordion-content {
-      display: none;
-      padding: 20px;
-      background-color: white;
-    }
-
-    .accordion-checkbox {
-      display: none;
-    }
-
-    .accordion-checkbox:checked + .accordion-label + .accordion-content {
-      display: block;
-    }
-
-    .accordion-content p {
-      margin-bottom: 20px;
-      font-style: italic;
-    }
-
-    h3 {
-      color: #28a745; /* Vert pour les jours */
-      font-size: 1.4em;
-      margin-top: 20px;
-    }
-
-    ul {
-      list-style-type: none;
-      padding: 0;
-    }
-
-    ul li {
-      background-color: #f1f3f5;
-      margin: 10px 0;
-      padding: 15px;
-      border-radius: 5px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      transition: background-color 0.3s;
-    }
-
-    ul li:hover {
-      background-color: #e2e6ea;
-    }
-
-    ul li a {
-      color: #007bff; /* Bleu pour les liens */
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    ul li a:hover {
-      text-decoration: underline;
-    }
-
-    .warmup, .cooldown {
-      background-color: #fff3cd;
-      padding: 15px;
-      border-radius: 5px;
-      margin-bottom: 20px;
-      border: 1px solid #ffeeba;
-    }
-
-    hr {
-      border: 0;
-      height: 1px;
-      background-color: #ddd;
-      margin: 20px 0;
-    }
-
-    footer {
-      background-color: #343a40;
-      color: white;
-      text-align: center;
-      padding: 20px;
-      margin-top: 40px;
-    }
-
-    footer p {
-      margin: 0;
-    }
-
-    /* Responsiveness */
-    @media (max-width: 768px) {
-      header {
-        padding: 40px 15px;
-      }
-
-      nav a {
-        display: block;
-        margin: 10px 0;
-      }
-
-      .accordion {
-        padding: 0 15px;
-      }
-
-      ul li {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-    }
-  </style>
+.total {
+  text-align:center;
+  font-size:22px;
+}
+</style>
 </head>
+
 <body>
 
-<header>
-  <h1>Plans d'Entraînement au Gym - Fitness Pro</h1>
-  <p>Choisissez votre plan d'entraînement adapté à votre emploi du temps. Cliquez sur un plan pour afficher les détails, avec échauffement, exercices et retour au calme. Des exemples vidéos pour une exécution parfaite.</p>
-</header>
-  
-</nav>
+<div class="hero">
+  <h1>Shineautomobile</h1>
+  <p>Lavage automobile haut de gamme à domicile</p>
+</div>
 
-<div class="accordion">
+<div class="form">
 
-  <div class="accordion-item" id="plan-2">
-    <input type="checkbox" id="accordion-2" class="accordion-checkbox">
-    <label for="accordion-2" class="accordion-label">🏋️ Plan 2 Jours / Semaine – Full Body (Débutant)</label>
-    <div class="accordion-content">
-      <p>Idéal pour les débutants ou ceux avec peu de temps. Focus sur l'ensemble du corps avec des exercices composés. Repos conseillé entre séries : 60-90 secondes.</p>
+<select id="service">
+  <option value="30">Intérieur - 30$</option>
+  <option value="25">Extérieur - 25$</option>
+  <option value="50">Complet - 50$</option>
+</select>
 
-      <h3>Jour 1: Focus Jambes et Haut du Corps</h3>
-      <div class="warmup">
-        <strong>Échauffement :</strong> 5-10 minutes de cardio léger (marche rapide ou vélo) + mobilité articulaire (cercles d'épaules, rotations de hanches). Temps total : 10 minutes.
-      </div>
-      <ul>
-        <li>Squat – 3×8–12 <a href="https://www.youtube.com/watch?v=eMYjBnIVb_A" target="_blank">Clique ici pour voir un exemple</a></li>
-        <li>Développé Couché – 3×8–12 <a href="https://www.youtube.com/watch?v=rT7DgCr-3pg" target="_blank">Clique ici pour voir un exemple</a></li>
-        <li>Tirage Vertical (Lat Pulldown) – 3×10 <a href="https://www.youtube.com/watch?v=SALxEARiMkw" target="_blank">Clique ici pour voir un exemple</a></li>
-        <li>Élévations Latérales – 3×15 <a href="https://www.youtube.com/watch?v=kDqklk1ZESo" target="_blank">Clique ici pour voir un exemple</a></li>
-        <li>Gainage (Plank) – 3×40 sec <a href="https://www.youtube.com/watch?v=pSHjTRCQxIw" target="_blank">Clique ici pour voir un exemple</a></li>
-      </ul>
-      <div class="cooldown">
-        <strong>Retour au calme :</strong> Étirements statiques pour les jambes, dos et épaules (tenir 20-30 sec par étirement). Temps total : 5 minutes.
-      </div>
+<select id="vehicle">
+  <option value="0">Voiture</option>
+  <option value="10">SUV (+10$)</option>
+</select>
 
-      <hr>
+<input id="address" placeholder="Adresse">
+<input id="date" type="date">
+<input id="time" type="time">
+<input id="phone" placeholder="Téléphone">
 
-      <h3>Jour 2: Focus Dos et Bras</h3>
-      <div class="warmup">
-        <strong>Échauffement :</strong> 5-10 minutes de cardio léger + mobilité articulaire. Temps total : 10 minutes.
-      </div>
-      <ul>
-        <li>Soulevé de Terre (Deadlift) – 3×8 <a href="https://www.youtube.com/watch?v=ytGaGIn3SjE" target="_blank">Clique ici pour voir un exemple</a></li>
-        <li>Développé Épaules (Shoulder Press) – 3×10 <a href="https://www.youtube.com/watch?v=B-aVuyhvLHU" target="_blank">Clique ici pour voir un exemple</a></li>
-        <li>Rowing Barre (Bent Over Row) – 3×10 <a href="https://www.youtube.com/watch?v=vT2GjY_Umpw" target="_blank">Clique ici pour voir un exemple</a></li>
-        <li>Curl Biceps – 3×12 <a href="https://www.youtube.com/watch?v=ykJmrZ5v0Oo" target="_blank">Clique ici pour voir un exemple</a></li>
-        <li>Extension Triceps (Pushdown) – 3×12 <a href="https://www.youtube.com/watch?v=2-LAMcpzODU" target="_blank">Clique ici pour voir un exemple</a></li>
-      </ul>
-      <div class="cooldown">
-        <strong>Retour au calme :</strong> Étirements statiques pour le dos, bras et épaules. Temps total : 5 minutes.
-      </div>
-    </div>
-  </div>
+<div class="total">Total : <span id="total">30</span>$</div>
 
-  <div class="accordion-item" id="plan-3">
-    <input type="checkbox" id="accordion-3" class="accordion-checkbox">
-    <label for="accordion-3" class="accordion-label">🏋️ Plan 3 Jours / Semaine – Push/Pull/Legs (Intermédiaire)</label>
-    <div class="accordion-content">
-      <p>Division en push, pull et legs pour une récupération optimale. Repos conseillé entre séries : 90-120 secondes.</p>
-
-      <h3>Jour 1: Push</h3>
-      <div class="warmup">
-        <strong>Échauffement :</strong> 5-10 minutes de cardio + mobilité. Temps total : 10 minutes.
-      </div>
-      <ul>
-        <li>Développé Couché – 4×8–10 <a href="https://www.youtube.com/watch?v=rT7DgCr-3pg" target="_blank">Clique ici pour voir un exemple</a></li>
-        <li>Développé Épaules – 4×10 <a href="https://www.youtube.com/watch?v=B-aVuyhvLHU" target="_blank">Clique ici pour voir un exemple</a></li>
-        <li>Élévations Latérales – 3×15 <a href="https://www.youtube.com/watch?v=kDqklk1ZESo" target="_blank">Clique ici pour voir un exemple</a></li>
-        <li>Extension Triceps – 3×12 <a href="https://www.youtube.com/watch?v=2-LAMcpzODU" target="_blank">Clique ici pour voir un exemple</a></li>
-      </ul>
-      <div class="cooldown">
-        <strong>Retour au calme :</strong> Étirements pour le haut du corps. Temps total : 5 minutes.
-      </div>
-
-      <hr>
-
-      <h3>Jour 2: Pull</h3>
-      <div class="warmup">
-        <strong>Échauffement :</strong> 5-10 minutes de cardio + mobilité. Temps total : 10 minutes.
-      </div>
-      <ul>
-        <li>Tirage Vertical – 4×10 <a href="https://www.youtube.com/watch?v=SALxEARiMkw" target="_blank">Clique ici pour voir un exemple</a></li>
-        <li>Rowing Barre – 4×10 <a href="https://www.youtube.com/watch?v=vT2GjY_Umpw" target="_blank">Clique ici pour voir un exemple</a></li>
-        <li>Curl Biceps – 3×12 <a href="https://www.youtube.com/watch?v=ykJmrZ5v0Oo" target="_blank">Clique ici pour voir un exemple</a></li>
-        <li>Gainage – 3×45 sec <a href="https://www.youtube.com/watch?v=pSHjTRCQxIw" target="_blank">Clique ici pour voir un exemple</a></li>
-      </ul>
-      <div class="cooldown">
-        <strong>Retour au calme :</strong> Étirements pour le dos et bras. Temps total : 5 minutes.
-      </div>
-
-      <hr>
-
-      <h3>Jour 3: Legs</h3>
-      <div class="warmup">
-        <strong>Échauffement :</strong> 5-10 minutes de cardio + mobilité. Temps total : 10 minutes.
-      </div>
-      <ul>
-        <li>Squat – 4×8–12 <a href="https://www.youtube.com/watch?v=eMYjBnIVb_A" target="_blank">Clique ici pour voir un exemple</a></li>
-        <li>Soulevé de Terre – 4×8 <a href="https://www.youtube.com/watch?v=ytGaGIn3SjE" target="_blank">Clique ici pour voir un exemple</a></li>
-        <li>Élévations Latérales – 3×15 <a href="https://www.youtube.com/watch?v=kDqklk1ZESo" target="_blank">Clique ici pour voir un exemple</a></li>
-      </ul>
-      <div class="cooldown">
-        <strong>Retour au calme :</strong> Étirements pour les jambes. Temps total : 5 minutes.
-      </div>
-    </div>
-  </div>
-
-  <div class="accordion-item" id="plan-4">
-    <input type="checkbox" id="accordion-4" class="accordion-checkbox">
-    <label for="accordion-4" class="accordion-label">🏋️ Plan 4 Jours / Semaine – Upper/Lower (Avancé)</label>
-    <div class="accordion-content">
-      <p>Division upper et lower pour une intensité accrue. Repos conseillé entre séries : 120 secondes.</p>
-
-      <h3>Jour 1: Upper A</h3>
-      <div class="warmup">
-        <strong>Échauffement :</strong> 5-10 minutes de cardio + mobilité. Temps total : 10 minutes.
-      </div>
-      <ul>
-        <li>Développé Couché – 4×8 <a href="https://www.youtube.com/watch?v=rT7DgCr-3pg" target="_blank">Clique ici pour voir un exemple</a></li>
-        <li>Tirage Vertical – 4×10 <a href="https://www.youtube.com/watch?v=SALxEARiMkw" target="_blank">Clique ici pour voir un exemple</a></li>
-        <li>Développé Épaules – 3×10 <a href="https://www.youtube.com/watch?v=B-aVuyhvLHU" target="_blank">Clique ici pour voir un exemple</a></li>
-        <li>Curl Biceps – 3×12 <a href="https://www.youtube.com/watch?v=ykJmrZ5v0Oo" target="_blank">Clique ici pour voir un exemple</a></li>
-      </ul>
-      <div class="cooldown">
-        <strong>Retour au calme :</strong> Étirements pour le haut du corps. Temps total : 5 minutes.
-      </div>
-
-      <hr>
-
-      <h3>Jour 2: Lower A</h3>
-      <div class="warmup">
-        <strong>Échauffement :</strong> 5-10 minutes de cardio + mobilité. Temps total : 10 minutes.
-      </div>
-      <ul>
-        <li>Squat – 4×8–12 <a href="https://www.youtube.com/watch?v=eMYjBnIVb_A" target="_blank">Clique ici pour voir un exemple</a></li>
-        <li>Soulevé de Terre – 4×8 <a href="https://www.youtube.com/watch?v=ytGaGIn3SjE" target="_blank">Clique ici pour voir un exemple</a></li>
-        <li>Gainage – 3×45 sec <a href="https://www.youtube.com/watch?v=pSHjTRCQxIw" target="_blank">Clique ici pour voir un exemple</a></li>
-      </ul>
-      <div class="cooldown">
-        <strong>Retour au calme :</strong> Étirements pour les jambes. Temps total : 5 minutes.
-      </div>
-
-      <hr>
-
-      <h3>Jour 3: Upper B</h3>
-      <div class="warmup">
-        <strong>Échauffement :</strong> 5-10 minutes de cardio + mobilité. Temps total : 10 minutes.
-      </div>
-      <ul>
-        <li>Rowing Barre – 4×10 <a href="https://www.youtube.com/watch?v=vT2GjY_Umpw" target="_blank">Clique ici pour voir un exemple</a></li>
-        <li>Élévations Latérales – 3×15 <a href="https://www.youtube.com/watch?v=kDqklk1ZESo" target="_blank">Clique ici pour voir un exemple</a></li>
-        <li>Extension Triceps – 3×12 <a href="https://www.youtube.com/watch?v=2-LAMcpzODU" target="_blank">Clique ici pour voir un exemple</a></li>
-      </ul>
-      <div class="cooldown">
-        <strong>Retour au calme :</strong> Étirements pour le haut du corps. Temps total : 5 minutes.
-      </div>
-
-      <hr>
-
-      <h3>Jour 4: Lower B</h3>
-      <div class="warmup">
-        <strong>Échauffement :</strong> 5-10 minutes de cardio + mobilité. Temps total : 10 minutes.
-      </div>
-      <ul>
-        <li>Squat – 4×10 <a href="https://www.youtube.com/watch?v=eMYjBnIVb_A" target="_blank">Clique ici pour voir un exemple</a></li>
-        <li>Soulevé de Terre – 4×10 <a href="https://www.youtube.com/watch?v=ytGaGIn3SjE" target="_blank">Clique ici pour voir un exemple</a></li>
-        <li>Gainage – 3×50 sec <a href="https://www.youtube.com/watch?v=pSHjTRCQxIw" target="_blank">Clique ici pour voir un exemple</a></li>
-      </ul>
-      <div class="cooldown">
-        <strong>Retour au calme :</strong> Étirements pour les jambes. Temps total : 5 minutes.
-      </div>
-    </div>
-  </div>
-
-  <div class="accordion-item" id="plan-5">
-    <input type="checkbox" id="accordion-5" class="accordion-checkbox">
-    <label for="accordion-5" class="accordion-label">🏋️ Plan 5 Jours / Semaine – Bodybuilding Split (Expert)</label>
-    <div class="accordion-content">
-      <p>Division par groupe musculaire pour un entraînement intensif. Repos conseillé entre séries : 90-120 secondes.</p>
-
-      <h3>Jour 1: Poitrine et Triceps</h3>
-      <div class="warmup">
-        <strong>Échauffement :</strong> 5-10 minutes de cardio + mobilité. Temps total : 10 minutes.
-      </div>
-      <ul>
-        <li>Développé Couché – 4×8–10 <a href="https://www.youtube.com/watch?v=rT7DgCr-3pg" target="_blank">Clique ici pour voir un exemple</a></li>
-        <li>Élévations Latérales – 3×15 <a href="https://www.youtube.com/watch?v=kDqklk1ZESo" target="_blank">Clique ici pour voir un exemple</a></li>
-        <li>Extension Triceps – 3×12 <a href="https://www.youtube.com/watch?v=2-LAMcpzODU" target="_blank">Clique ici pour voir un exemple</a></li>
-      </ul>
-      <div class="cooldown">
-        <strong>Retour au calme :</strong> Étirements pour la poitrine et triceps. Temps total : 5 minutes.
-      </div>
-
-      <hr>
-
-      <h3>Jour 2: Dos et Biceps</h3>
-      <div class="warmup">
-        <strong>Échauffement :</strong> 5-10 minutes de cardio + mobilité. Temps total : 10 minutes.
-      </div>
-      <ul>
-        <li>Tirage Vertical – 4×10 <a href="https://www.youtube.com/watch?v=SALxEARiMkw" target="_blank">Clique ici pour voir un exemple</a></li>
-        <li>Rowing Barre – 4×10 <a href="https://www.youtube.com/watch?v=vT2GjY_Umpw" target="_blank">Clique ici pour voir un exemple</a></li>
-        <li>Curl Biceps – 3×12 <a href="https://www.youtube.com/watch?v=ykJmrZ5v0Oo" target="_blank">Clique ici pour voir un exemple</a></li>
-      </ul>
-      <div class="cooldown">
-        <strong>Retour au calme :</strong> Étirements pour le dos et biceps. Temps total : 5 minutes.
-      </div>
-
-      <hr>
-
-      <h3>Jour 3: Jambes</h3>
-      <div class="warmup">
-        <strong>Échauffement :</strong> 5-10 minutes de cardio + mobilité. Temps total : 10 minutes.
-      </div>
-      <ul>
-        <li>Squat – 4×8–12 <a href="https://www.youtube.com/watch?v=eMYjBnIVb_A" target="_blank">Clique ici pour voir un exemple</a></li>
-        <li>Soulevé de Terre – 4×8 <a href="https://www.youtube.com/watch?v=ytGaGIn3SjE" target="_blank">Clique ici pour voir un exemple</a></li>
-        <li>Gainage – 3×45 sec <a href="https://www.youtube.com/watch?v=pSHjTRCQxIw" target="_blank">Clique ici pour voir un exemple</a></li>
-      </ul>
-      <div class="cooldown">
-        <strong>Retour au calme :</strong> Étirements pour les jambes. Temps total : 5 minutes.
-      </div>
-
-      <hr>
-
-      <h3>Jour 4: Épaules et Abs</h3>
-      <div class="warmup">
-        <strong>Échauffement :</strong> 5-10 minutes de cardio + mobilité. Temps total : 10 minutes.
-      </div>
-      <ul>
-        <li>Développé Épaules – 4×10 <a href="https://www.youtube.com/watch?v=B-aVuyhvLHU" target="_blank">Clique ici pour voir un exemple</a></li>
-        <li>Élévations Latérales – 3×15 <a href="https://www.youtube.com/watch?v=kDqklk1ZESo" target="_blank">Clique ici pour voir un exemple</a></li>
-        <li>Gainage – 3×50 sec <a href="https://www.youtube.com/watch?v=pSHjTRCQxIw" target="_blank">Clique ici pour voir un exemple</a></li>
-      </ul>
-      <div class="cooldown">
-        <strong>Retour au calme :</strong> Étirements pour les épaules et abs. Temps total : 5 minutes.
-      </div>
-
-      <hr>
-
-      <h3>Jour 5: Full Body ou Récupération Active</h3>
-      <div class="warmup">
-        <strong>Échauffement :</strong> 5-10 minutes de cardio + mobilité. Temps total : 10 minutes.
-      </div>
-      <ul>
-        <li>Squat – 3×10 <a href="https://www.youtube.com/watch?v=eMYjBnIVb_A" target="_blank">Clique ici pour voir un exemple</a></li>
-        <li>Développé Couché – 3×10 <a href="https://www.youtube.com/watch?v=rT7DgCr-3pg" target="_blank">Clique ici pour voir un exemple</a></li>
-        <li>Rowing Barre – 3×10 <a href="https://www.youtube.com/watch?v=vT2GjY_Umpw" target="_blank">Clique ici pour voir un exemple</a></li>
-      </ul>
-      <div class="cooldown">
-        <strong>Retour au calme :</strong> Étirements complets. Temps total : 5 minutes.
-      </div>
-    </div>
-  </div>
+<button id="pay">Payer maintenant</button>
 
 </div>
 
-<footer>
-  <p>&copy; 2026 Fitness Pro. Tous droits réservés. Consultez un professionnel de santé avant de commencer tout programme d'entraînement.</p>
-</footer>
-
+<script src="script.js"></script>
 </body>
 </html>
