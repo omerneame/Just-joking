@@ -1477,7 +1477,32 @@ footer {
     </div>
   </div>
 </section>
+<!-- ════════════════ SECTION MÉTÉO DYNAMIQUE ════════════════ -->
+<section class="weather-section" id="meteo">
+  <div class="wrap">
+    <div class="fade-up">
+      <div class="s-eye">Conditions Optimales</div>
+      <h2 class="s-title">MÉTÉO & <em>RECOMMANDATION IA</em></h2>
+      <p class="s-body">Analyse en temps réel pour Sherbrooke et environs.</p>
+    </div>
 
+    <!-- Recommandation IA -->
+    <div class="ai-reco">
+      <div class="ai-badge">✦ INTELLIGENCE ARTIFICIELLE SHINE</div>
+      <div class="ai-content">
+        <strong>Meilleur jour recommandé :</strong><br>
+        <span class="ai-day" id="ai-day">Chargement...</span>
+        <span class="ai-reason" id="ai-reason"></span>
+      </div>
+    </div>
+
+    <div class="weather-grid" id="weather-grid"></div>
+
+    <div class="weather-note">
+      Données fournies par OpenWeatherMap • Mis à jour automatiquement
+    </div>
+  </div>
+</section>
 <!-- FORFAITS -->
 <section id="forfaits" class="forfaits-section">
   <div class="ff-header reveal">
@@ -1799,6 +1824,88 @@ document.querySelectorAll('.veh-card').forEach(card => {
     if(img) img.style.transform = '';
   });
 });
+// ==================== MÉTÉO DYNAMIQUE ====================
+const API_KEY = "c23a73717b8c4e49a19222057260205";   // ← Ta nouvelle clé
+const LAT = 45.40;
+const LON = -71.89;
+
+async function loadWeather() {
+  try {
+    const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${LAT}&lon=${LON}&appid=${API_KEY}&units=metric&lang=fr`;
+    
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (!data.list) throw new Error("Données non reçues");
+
+    const daily = groupByDay(data.list);
+    
+    renderWeatherCards(daily);
+    renderAIRecommendation(daily);
+
+  } catch (error) {
+    console.error(error);
+    document.getElementById('ai-reason').textContent = "Impossible de charger la météo pour le moment.";
+  }
+}
+
+function groupByDay(list) {
+  const days = {};
+  list.forEach(item => {
+    const date = new Date(item.dt * 1000);
+    const dayKey = date.toISOString().split('T')[0];
+
+    if (!days[dayKey]) {
+      days[dayKey] = {
+        dayName: date.toLocaleDateString('fr-CA', {weekday: 'short'}),
+        date: date,
+        icon: item.weather[0].icon,
+        temp: Math.round(item.main.temp),
+        rain: item.pop ? Math.round(item.pop * 100) : 0,
+        description: item.weather[0].description
+      };
+    }
+  });
+  return Object.values(days).slice(0, 6);
+}
+
+function renderWeatherCards(days) {
+  const container = document.getElementById('weather-grid');
+  container.innerHTML = '';
+
+  days.forEach(day => {
+    const isBest = day.rain < 20 && day.temp >= 15;
+    const card = document.createElement('div');
+    card.className = `weather-card ${isBest ? 'best' : ''}`;
+    card.innerHTML = `
+      <div class="weather-day">${day.dayName}</div>
+      <div class="weather-icon"><img src="https://openweathermap.org/img/wn/${day.icon}@2x.png" alt="${day.description}" style="width:50px;"></div>
+      <div class="weather-temp">${day.temp}°C</div>
+      <div class="weather-rain">💧 ${day.rain}%</div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function renderAIRecommendation(days) {
+  let bestDay = days[0];
+  days.forEach(day => {
+    const score = (100 - day.rain) + (day.temp * 2);
+    const bestScore = (100 - bestDay.rain) + (bestDay.temp * 2);
+    if (score > bestScore) bestDay = day;
+  });
+
+  const dayName = bestDay.date.toLocaleDateString('fr-CA', { 
+    weekday: 'long', month: 'long', day: 'numeric' 
+  });
+
+  document.getElementById('ai-day').innerHTML = `${dayName} • <strong>${bestDay.temp}°C</strong>`;
+  document.getElementById('ai-reason').textContent = bestDay.rain < 15 
+    ? `Conditions excellentes : faible risque de pluie et température idéale.` 
+    : `Bonne journée pour un lavage complet.`;
+}
+
+document.addEventListener('DOMContentLoaded', loadWeather);
 </script>
 </body>
 </html>
