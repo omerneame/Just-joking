@@ -1,100 +1,1739 @@
 <!DOCTYPE html>
+
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Test Météo Shine</title>
-  <style>
-    body { font-family: Arial, sans-serif; background: #0a0a0a; color: white; padding: 40px; }
-    .weather-section { max-width: 1100px; margin: 0 auto; }
-    .ai-reco {
-      background: linear-gradient(135deg, #22d3f2, #a3f542); 
-      color: black; padding: 25px; border-radius: 12px; text-align: center; margin: 30px 0;
-    }
-    .weather-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-      gap: 15px;
-    }
-    .weather-card {
-      background: #1a1a1a; padding: 20px; border-radius: 10px; text-align: center;
-    }
-    .best { border: 2px solid #a3f542; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SHINE — Lavage Auto Sherbrooke · À partir de 40$</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --blk: #0a0a0a;
+  --wht: #f5f0e8;
+  --yel: #d4f000;
+  --red: #ff2d2d;
+  --grn: #00e87a;
+  --gry: #888;
+  --anton: 'Anton', sans-serif;
+  --bask: 'Libre Baskerville', serif;
+  --mono: 'IBM Plex Mono', monospace;
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; overflow-x:hidden; }
+
+body {
+  background: var(--wht);
+  color: var(--blk);
+  font-family: var(--bask);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+a { text-decoration: none; color: inherit; }
+button { font-family: inherit; cursor: none; }
+img { display: block; }
+
+/* ─── CURSOR ─── */
+#dot {
+  position: fixed; z-index: 9999; pointer-events: none;
+  width: 12px; height: 12px;
+  background: var(--blk);
+  border-radius: 50%;
+  transform: translate(-50%,-50%);
+  transition: transform .1s, background .2s, width .2s, height .2s;
+  mix-blend-mode: multiply;
+}
+#dot.big { width: 60px; height: 60px; background: var(--yel); }
+
+/* ─── NOISE ─── */
+body::after {
+  content: '';
+  position: fixed; inset: 0; z-index: 9000;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  opacity: 0.6;
+}
+
+/* ─── LOADER ─── */
+#ldr {
+  position: fixed; inset: 0; z-index: 8000;
+  background: var(--blk);
+  display: flex; align-items: center; justify-content: center;
+  transition: clip-path .8s cubic-bezier(.77,0,.18,1);
+  clip-path: inset(0 0 0 0);
+}
+#ldr.out { clip-path: inset(0 0 100% 0); }
+.ldr-inner { text-align: center; }
+.ldr-pct { font-family: var(--anton); font-size: clamp(100px,20vw,200px); color: var(--wht); line-height: 1; letter-spacing:-.02em; transition: all .05s; }
+.ldr-label { font-family: var(--mono); font-size: 11px; letter-spacing: .3em; color: var(--yel); margin-top: 8px; }
+.ldr-bar { width: 200px; height: 2px; background: rgba(255,255,255,.1); margin: 20px auto 0; }
+.ldr-fill { height: 100%; background: var(--yel); width: 0%; transition: width .05s; }
+
+/* ─── URGENCY BANNER ─── */
+.urgency-bar {
+  background: var(--red);
+  color: var(--wht);
+  text-align: center;
+  padding: 10px 20px;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .25em;
+  position: relative; z-index: 600;
+  display: flex; align-items: center; justify-content: center; gap: 16px;
+  flex-wrap: wrap;
+}
+.urgency-bar .pulse {
+  display: inline-block;
+  width: 8px; height: 8px;
+  background: var(--wht);
+  border-radius: 50%;
+  animation: pulse 1.2s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.6);opacity:.5} }
+
+/* ─── MARQUEE ─── */
+.marquee-wrap {
+  background: var(--blk); overflow: hidden; position: relative; z-index: 10;
+  border-bottom: 4px solid var(--yel);
+}
+.marquee-inner { display: flex; width: max-content; animation: mq 18s linear infinite; }
+.mq-item { font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: .25em; color: var(--wht); padding: 13px 40px; white-space: nowrap; }
+.mq-sep { color: var(--yel); }
+@keyframes mq { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+/* ─── NAV ─── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+  display: flex; align-items: stretch;
+  border-bottom: 2px solid var(--blk);
+  background: var(--wht);
+  transition: top .4s;
+}
+nav.hidden { top: -100px; }
+.nav-brand { display: flex; align-items: center; padding: 0 32px; border-right: 2px solid var(--blk); background: var(--blk); }
+.nav-brand-txt { font-family: var(--anton); font-size: 22px; letter-spacing: .1em; color: var(--wht); line-height: 1; }
+.nav-brand-txt span { color: var(--yel); }
+.nav-links { display: flex; border-right: 2px solid var(--blk); }
+.nlink { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .2em; color: var(--blk); padding: 0 20px; display: flex; align-items: center; border-right: 1px solid rgba(0,0,0,.12); transition: background .2s, color .2s; }
+.nlink:last-child { border-right: none; }
+.nlink:hover { background: var(--blk); color: var(--yel); }
+
+/* Price in nav */
+.nav-price {
+  font-family: var(--mono); font-size: 10px; font-weight: 700;
+  letter-spacing: .1em; color: var(--gry);
+  padding: 0 20px; display: flex; align-items: center;
+  border-right: 1px solid rgba(0,0,0,.12);
+}
+.nav-price strong { color: var(--blk); font-size: 13px; }
+
+.nav-cta { margin-left: auto; display: flex; align-items: center; }
+.nav-tel { font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: .1em; color: var(--blk); padding: 0 24px; border-left: 2px solid var(--blk); display: flex; align-items: center; height: 100%; transition: background .2s; }
+.nav-tel:hover { background: var(--yel); }
+.nav-sms {
+  font-family: var(--mono); font-size: 10px; font-weight: 700;
+  letter-spacing: .1em; color: var(--blk);
+  padding: 0 20px; border-left: 2px solid var(--blk);
+  display: flex; align-items: center; height: 100%;
+  background: rgba(0,232,122,.12); transition: background .2s;
+  gap: 6px;
+}
+.nav-sms:hover { background: var(--grn); }
+.nav-book { font-family: var(--anton); font-size: 14px; letter-spacing: .1em; color: var(--blk); background: var(--yel); padding: 0 32px; display: flex; align-items: center; border-left: 2px solid var(--blk); height: 100%; transition: background .2s, color .2s; }
+.nav-book:hover { background: var(--blk); color: var(--yel); }
+#mob-btn { display: none; background: none; border: none; font-size: 22px; padding: 0 20px; }
+#mob-menu { display: none; position: absolute; top: 100%; left: 0; right: 0; background: var(--blk); border-bottom: 4px solid var(--yel); flex-direction: column; }
+#mob-menu.open { display: flex; }
+#mob-menu .nlink { color: var(--wht); border-right: none; border-bottom: 1px solid rgba(255,255,255,.08); padding: 20px 32px; font-size: 13px; }
+#mob-menu .nlink:hover { background: var(--yel); color: var(--blk); }
+
+/* ─── STICKY CTA MOBILE ─── */
+.sticky-mobile-cta {
+  display: none;
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 7000;
+  background: var(--blk);
+  border-top: 3px solid var(--yel);
+  padding: 0;
+}
+.sticky-mobile-inner {
+  display: grid; grid-template-columns: 1fr 1fr;
+}
+.smc-btn {
+  font-family: var(--anton); font-size: 15px; letter-spacing: .1em;
+  padding: 18px 16px; text-align: center;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: opacity .2s;
+}
+.smc-btn:active { opacity: .7; }
+.smc-call { background: var(--yel); color: var(--blk); border-right: 2px solid var(--blk); }
+.smc-book { background: var(--wht); color: var(--blk); }
+
+/* ─── HERO ─── */
+.hero { padding-top: 60px; min-height: 100vh; display: grid; grid-template-rows: 1fr auto; position: relative; overflow: hidden; border-bottom: 4px solid var(--blk); }
+.hero-split { display: grid; grid-template-columns: 1fr 1fr; min-height: calc(100vh - 60px - 80px); position: relative; }
+.hero-split::after { content: ''; position: absolute; top: 0; bottom: 0; left: 50%; width: 4px; background: var(--blk); transform: rotate(4deg) scaleY(1.1); transform-origin: top; z-index: 2; }
+
+.hero-left { padding: 60px 56px 60px 72px; display: flex; flex-direction: column; justify-content: center; position: relative; z-index: 1; background: var(--wht); }
+.hero-kicker { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .4em; color: var(--gry); margin-bottom: 32px; display: flex; align-items: center; gap: 12px; }
+.hero-kicker::before { content: ''; display: block; width: 32px; height: 2px; background: var(--blk); }
+
+/* Live availability badge */
+.avail-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--blk); color: var(--grn);
+  font-family: var(--mono); font-size: 9px; font-weight: 700;
+  letter-spacing: .2em; padding: 7px 14px;
+  border: 2px solid var(--grn);
+  margin-bottom: 20px;
+}
+.avail-dot { width: 7px; height: 7px; background: var(--grn); border-radius: 50%; animation: pulse 1.2s ease-in-out infinite; }
+
+.hero-h1 { font-family: var(--anton); font-size: clamp(80px,11vw,160px); line-height: .88; letter-spacing: -.01em; color: var(--blk); }
+.hero-h1 .outline { -webkit-text-stroke: 2px var(--blk); color: transparent; }
+.hero-h1 .yel { color: var(--yel); -webkit-text-stroke: 0; background: var(--blk); padding: 0 8px; }
+
+/* Price hook */
+.hero-price-hook {
+  display: inline-flex; align-items: center; gap: 12px;
+  margin-top: 28px;
+  background: var(--yel);
+  border: 3px solid var(--blk);
+  padding: 12px 20px;
+  position: relative;
+}
+.hero-price-hook::after {
+  content: ''; position: absolute; bottom: -4px; right: -4px;
+  width: 100%; height: 100%; border: 3px solid var(--blk); z-index: -1;
+}
+.hero-price-from { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .2em; color: var(--blk); }
+.hero-price-val { font-family: var(--anton); font-size: 40px; color: var(--blk); line-height: 1; }
+.hero-price-tag { font-family: var(--mono); font-size: 9px; letter-spacing: .2em; color: rgba(0,0,0,.5); }
+
+.hero-sub { font-family: var(--bask); font-size: 16px; font-style: italic; color: var(--gry); line-height: 1.8; max-width: 360px; margin-top: 24px; }
+
+.hero-actions { display: flex; gap: 12px; margin-top: 36px; flex-wrap: wrap; }
+.btn-solid { font-family: var(--anton); font-size: 14px; letter-spacing: .12em; color: var(--blk); background: var(--yel); padding: 18px 40px; border: 3px solid var(--blk); display: inline-flex; align-items: center; gap: 12px; transition: all .2s; position: relative; }
+.btn-solid::after { content: ''; position: absolute; bottom: -5px; right: -5px; width: 100%; height: 100%; border: 3px solid var(--blk); background: transparent; z-index: -1; transition: all .2s; }
+.btn-solid:hover { transform: translate(-3px,-3px); }
+.btn-solid:hover::after { transform: translate(3px,3px); }
+.btn-ghost { font-family: var(--anton); font-size: 14px; letter-spacing: .12em; color: var(--blk); padding: 18px 40px; border: 3px solid var(--blk); display: inline-flex; align-items: center; gap: 12px; transition: all .2s; position: relative; background: transparent; }
+.btn-ghost::after { content: ''; position: absolute; bottom: -5px; right: -5px; width: 100%; height: 100%; border: 3px solid var(--blk); background: transparent; z-index: -1; transition: all .2s; }
+.btn-ghost:hover { background: var(--blk); color: var(--yel); transform: translate(-3px,-3px); }
+.btn-ghost:hover::after { transform: translate(3px,3px); }
+
+/* SMS in 30s button */
+.btn-sms {
+  font-family: var(--anton); font-size: 13px; letter-spacing: .1em;
+  color: var(--blk); background: var(--grn);
+  padding: 18px 32px; border: 3px solid var(--blk);
+  display: inline-flex; align-items: center; gap: 10px;
+  transition: all .2s; position: relative;
+}
+.btn-sms::after { content: ''; position: absolute; bottom: -5px; right: -5px; width: 100%; height: 100%; border: 3px solid var(--blk); background: transparent; z-index: -1; transition: all .2s; }
+.btn-sms:hover { transform: translate(-3px,-3px); }
+.btn-sms:hover::after { transform: translate(3px,3px); }
+
+.hero-right { position: relative; overflow: hidden; background: #111; }
+.hero-photo { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.1); opacity: .6; transform: scale(1.03); animation: slow-zoom 20s ease-out forwards; }
+@keyframes slow-zoom { to { transform: scale(1); } }
+.hero-photo-overlay { position: absolute; inset: 0; background: linear-gradient(135deg, rgba(212,240,0,.15) 0%, transparent 60%); mix-blend-mode: screen; }
+.hero-tag { position: absolute; top: 40px; left: -2px; background: var(--yel); border: 3px solid var(--blk); padding: 14px 24px; z-index: 5; }
+.hero-tag-num { font-family: var(--anton); font-size: 36px; color: var(--blk); line-height: 1; }
+.hero-tag-label { font-family: var(--mono); font-size: 8px; font-weight: 700; letter-spacing: .25em; color: var(--blk); }
+.hero-tag2 { position: absolute; bottom: 40px; right: -2px; background: var(--blk); border: 3px solid var(--blk); padding: 14px 24px; z-index: 5; text-align: right; }
+.hero-tag2 .hero-tag-num { color: var(--yel); }
+.hero-tag2 .hero-tag-label { color: rgba(255,255,255,.6); }
+/* Fast delivery tag */
+.hero-tag3 { position: absolute; top: 50%; transform: translateY(-50%); right: -2px; background: var(--red); border: 3px solid var(--blk); padding: 12px 20px; z-index: 5; text-align: right; }
+.hero-tag3 .hero-tag-num { color: var(--wht); font-size: 28px; }
+.hero-tag3 .hero-tag-label { color: rgba(255,255,255,.7); }
+.scan-line { position: absolute; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--yel), transparent); opacity: .4; animation: scan 5s ease-in-out infinite; z-index: 4; }
+@keyframes scan { 0%{top:-2px;opacity:0} 10%{opacity:.4} 90%{opacity:.4} 100%{top:100%;opacity:0} }
+
+.hero-stats { display: grid; grid-template-columns: repeat(4,1fr); border-top: 4px solid var(--blk); }
+.hst { padding: 20px 32px; border-right: 3px solid var(--blk); display: flex; align-items: center; gap: 16px; transition: background .2s; }
+.hst:last-child { border-right: none; }
+.hst:hover { background: var(--blk); }
+.hst:hover .hst-n, .hst:hover .hst-l { color: var(--yel); }
+.hst-n { font-family: var(--anton); font-size: 36px; line-height: 1; letter-spacing: -.01em; transition: color .2s; }
+.hst-l { font-family: var(--mono); font-size: 9px; font-weight: 700; letter-spacing: .2em; color: var(--gry); line-height: 1.4; transition: color .2s; }
+
+/* ─── QUICK RESERVE STRIP ─── */
+.quick-reserve {
+  background: var(--blk);
+  border-bottom: 4px solid var(--yel);
+  padding: 0;
+}
+.qr-inner {
+  display: grid; grid-template-columns: auto 1fr auto auto;
+  align-items: stretch;
+  min-height: 80px;
+}
+.qr-label {
+  padding: 0 40px;
+  display: flex; align-items: center;
+  font-family: var(--mono); font-size: 9px; font-weight: 700;
+  letter-spacing: .3em; color: var(--yel);
+  border-right: 2px solid rgba(255,255,255,.1);
+  white-space: nowrap;
+}
+.qr-text {
+  padding: 0 40px;
+  display: flex; align-items: center;
+  font-family: var(--bask); font-size: 15px; font-style: italic;
+  color: rgba(255,255,255,.6);
+}
+.qr-text strong { color: var(--wht); font-style: normal; }
+.qr-sms {
+  padding: 0 32px;
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--anton); font-size: 13px; letter-spacing: .1em;
+  color: var(--blk); background: var(--grn);
+  border-left: 2px solid rgba(255,255,255,.1);
+  transition: background .2s;
+  text-decoration: none;
+}
+.qr-sms:hover { background: #00cc6a; }
+.qr-book {
+  padding: 0 40px;
+  display: flex; align-items: center; gap: 10px;
+  font-family: var(--anton); font-size: 14px; letter-spacing: .1em;
+  color: var(--blk); background: var(--yel);
+  border-left: 2px solid rgba(255,255,255,.1);
+  transition: background .2s;
+  text-decoration: none;
+}
+.qr-book:hover { background: #bdd700; }
+
+/* ─── SECTION BASE ─── */
+section { position: relative; }
+.container { max-width: 1400px; margin: 0 auto; padding: 0 72px; }
+.s-label { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .4em; color: var(--gry); display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+.s-label::before { content: attr(data-n); font-family: var(--mono); font-size: 9px; background: var(--blk); color: var(--yel); padding: 3px 8px; }
+.s-title { font-family: var(--anton); font-size: clamp(52px,6.5vw,100px); line-height: .88; letter-spacing: -.01em; color: var(--blk); }
+.s-title .yel { color: var(--yel); background: var(--blk); padding: 0 8px; }
+.s-title .outline { -webkit-text-stroke: 2px var(--blk); color: transparent; }
+.s-body { font-family: var(--bask); font-size: 15px; font-style: italic; color: var(--gry); line-height: 1.9; max-width: 500px; margin-top: 20px; }
+
+/* ─── REVEAL ─── */
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1); }
+.reveal.in { opacity: 1; transform: none; }
+.reveal-l { opacity: 0; transform: translateX(-40px); transition: opacity .8s, transform .8s cubic-bezier(.16,1,.3,1); }
+.reveal-l.in { opacity: 1; transform: none; }
+.reveal-r { opacity: 0; transform: translateX(40px); transition: opacity .8s, transform .8s cubic-bezier(.16,1,.3,1); }
+.reveal-r.in { opacity: 1; transform: none; }
+
+/* ─── SOCIAL PROOF STRIP ─── */
+.social-proof {
+  display: grid; grid-template-columns: repeat(4,1fr);
+  border-bottom: 4px solid var(--blk);
+  background: var(--blk);
+}
+.sp-item {
+  padding: 28px 32px;
+  border-right: 2px solid rgba(255,255,255,.07);
+  display: flex; align-items: center; gap: 16px;
+}
+.sp-item:last-child { border-right: none; }
+.sp-ico { font-size: 28px; }
+.sp-text { }
+.sp-val { font-family: var(--anton); font-size: 26px; color: var(--yel); line-height: 1; }
+.sp-label { font-family: var(--mono); font-size: 8px; font-weight: 700; letter-spacing: .2em; color: rgba(255,255,255,.35); margin-top: 3px; }
+
+/* ─── PROCESS ─── */
+.process-section { padding: 0; border-bottom: 4px solid var(--blk); }
+.process-head { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 4px solid var(--blk); }
+.ph-left { padding: 80px 72px; border-right: 4px solid var(--blk); }
+.ph-right { padding: 80px 72px; display: flex; align-items: flex-end; }
+.process-grid { display: grid; grid-template-columns: repeat(4,1fr); }
+.step-box { padding: 56px 40px; border-right: 3px solid var(--blk); position: relative; overflow: hidden; transition: background .25s; opacity: 0; transform: translateY(20px); transition: opacity .6s, transform .6s, background .25s; }
+.step-box.in { opacity: 1; transform: none; }
+.step-box:last-child { border-right: none; }
+.step-box:hover { background: var(--blk); }
+.step-box:hover .step-num, .step-box:hover .step-name, .step-box:hover .step-desc { color: var(--wht); }
+.step-num { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .3em; color: var(--gry); margin-bottom: 24px; }
+.step-ico { font-size: 48px; margin-bottom: 24px; display: block; }
+.step-name { font-family: var(--anton); font-size: 20px; letter-spacing: .05em; color: var(--blk); margin-bottom: 12px; }
+.step-desc { font-family: var(--bask); font-size: 13px; font-style: italic; color: var(--gry); line-height: 1.7; }
+.step-box-bg { position: absolute; bottom: -30px; right: -10px; font-family: var(--anton); font-size: 120px; color: rgba(0,0,0,.04); line-height: 1; pointer-events: none; }
+.step-box:hover .step-box-bg { color: rgba(255,255,255,.04); }
+
+/* ─── PROMO ─── */
+.promo-section { background: var(--blk); border-bottom: 4px solid var(--yel); overflow: hidden; position: relative; }
+.promo-inner { display: grid; grid-template-columns: 1fr auto; align-items: center; }
+.promo-text { padding: 60px 72px; }
+.promo-eyebrow { font-family: var(--mono); font-size: 9px; font-weight: 700; letter-spacing: .4em; color: var(--yel); margin-bottom: 16px; }
+.promo-headline { font-family: var(--anton); font-size: clamp(36px,4.5vw,68px); line-height: .9; letter-spacing: -.01em; color: var(--wht); }
+.promo-headline em { color: var(--yel); font-style: normal; }
+/* Countdown */
+.promo-countdown {
+  display: flex; align-items: center; gap: 4px; margin-top: 16px;
+  font-family: var(--mono); font-size: 10px; letter-spacing: .15em; color: rgba(255,255,255,.4);
+}
+.countdown-unit {
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.1);
+  padding: 8px 14px; text-align: center;
+}
+.countdown-num { font-family: var(--anton); font-size: 28px; color: var(--yel); display: block; line-height: 1; }
+.countdown-lbl { font-size: 7px; letter-spacing: .2em; color: rgba(255,255,255,.3); display: block; margin-top: 2px; }
+.countdown-sep { font-family: var(--anton); font-size: 24px; color: var(--yel); padding: 0 4px; }
+.promo-code-block { background: var(--yel); padding: 60px 72px; display: flex; flex-direction: column; gap: 16px; align-items: flex-start; border-left: 4px solid var(--yel); position: relative; }
+.promo-code-label { font-family: var(--mono); font-size: 9px; font-weight: 700; letter-spacing: .35em; color: var(--blk); opacity: .6; }
+.promo-code-val { font-family: var(--anton); font-size: 52px; letter-spacing: .06em; color: var(--blk); line-height: 1; }
+.promo-code-btn { font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: .2em; color: var(--blk); background: transparent; border: 2px solid var(--blk); padding: 10px 24px; cursor: none; transition: all .2s; }
+.promo-code-btn:hover { background: var(--blk); color: var(--yel); }
+.promo-confirm { font-family: var(--mono); font-size: 10px; color: var(--blk); opacity: 0; transition: opacity .3s; letter-spacing: .15em; }
+.promo-confirm.on { opacity: 1; }
+.promo-bg-text { position: absolute; top: 50%; transform: translateY(-50%); left: 0; right: 0; font-family: var(--anton); font-size: 200px; color: rgba(255,255,255,.025); white-space: nowrap; letter-spacing: -.02em; pointer-events: none; animation: drift 20s linear infinite; }
+@keyframes drift { from{transform:translateY(-50%) translateX(0)} to{transform:translateY(-50%) translateX(-30%)} }
+
+/* ─── VEHICLES ─── */
+.vehicles-section { border-bottom: 4px solid var(--blk); }
+.veh-header { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 4px solid var(--blk); }
+.veh-hl { padding: 80px 72px; border-right: 4px solid var(--blk); }
+.veh-hr { padding: 80px 72px; display: flex; flex-direction: column; justify-content: flex-end; }
+.veh-grid { display: grid; grid-template-columns: repeat(4,1fr); }
+.veh-card { position: relative; aspect-ratio: 3/4; overflow: hidden; border-right: 3px solid var(--blk); display: block; text-decoration: none; background: #111; cursor: none; }
+.veh-card:last-child { border-right: none; }
+.veh-img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) contrast(1.15); transition: transform .8s cubic-bezier(.16,1,.3,1), filter .6s; }
+.veh-card:hover .veh-img { transform: scale(1.08); filter: grayscale(.4) contrast(1.1); }
+.veh-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,.95) 0%, rgba(0,0,0,.2) 50%, transparent 100%); }
+.veh-card:hover .veh-overlay { background: linear-gradient(to top, rgba(10,10,10,.98) 0%, rgba(212,240,0,.06) 100%); }
+.veh-line { position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--yel); transform: scaleX(0); transform-origin: left; transition: transform .5s cubic-bezier(.16,1,.3,1); }
+.veh-card:hover .veh-line { transform: scaleX(1); }
+.veh-info { position: absolute; bottom: 0; left: 0; right: 0; padding: 32px 28px; }
+.veh-cat { font-family: var(--mono); font-size: 8px; font-weight: 700; letter-spacing: .35em; color: var(--yel); margin-bottom: 8px; opacity: 0; transform: translateY(8px); transition: opacity .35s, transform .35s; }
+.veh-card:hover .veh-cat { opacity: 1; transform: none; }
+.veh-name { font-family: var(--anton); font-size: 36px; letter-spacing: .02em; color: var(--wht); line-height: 1; }
+.veh-sub { font-family: var(--mono); font-size: 10px; color: rgba(255,255,255,.4); margin-top: 6px; letter-spacing: .1em; }
+/* Price on card */
+.veh-price {
+  position: absolute; top: 20px; left: 20px;
+  background: var(--yel); border: 2px solid var(--blk);
+  padding: 6px 14px;
+  font-family: var(--anton); font-size: 18px; color: var(--blk);
+  letter-spacing: .05em; line-height: 1;
+  opacity: 0; transform: translateY(-6px);
+  transition: opacity .35s, transform .35s;
+}
+.veh-card:hover .veh-price { opacity: 1; transform: none; }
+.veh-price span { font-family: var(--mono); font-size: 8px; font-weight: 700; letter-spacing: .15em; display: block; }
+.veh-arrow { position: absolute; top: 20px; right: 20px; width: 40px; height: 40px; border: 2px solid rgba(255,255,255,.2); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,.3); font-size: 16px; transition: all .35s; }
+.veh-card:hover .veh-arrow { border-color: var(--yel); color: var(--yel); background: rgba(212,240,0,.1); transform: rotate(-45deg); }
+
+.veh-mob { display: none; }
+.veh-mob-card { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 3px solid var(--blk); text-decoration: none; overflow: hidden; position: relative; min-height: 180px; background: #111; }
+.veh-mob-card img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1); opacity: .6; }
+.veh-mob-info { padding: 28px 28px; display: flex; flex-direction: column; justify-content: flex-end; background: var(--blk); }
+.veh-mob-name { font-family: var(--anton); font-size: 28px; color: var(--wht); }
+.veh-mob-sub { font-family: var(--mono); font-size: 9px; color: rgba(255,255,255,.4); letter-spacing: .12em; margin-top: 4px; }
+.veh-mob-price { font-family: var(--anton); font-size: 20px; color: var(--yel); margin-top: 8px; }
+
+/* ─── BEFORE/AFTER ─── */
+.ba-section {
+  border-bottom: 4px solid var(--blk);
+  background: var(--blk);
+}
+.ba-header { padding: 80px 72px; border-bottom: 4px solid rgba(255,255,255,.08); }
+.ba-header .s-title { color: var(--wht); }
+.ba-grid { display: grid; grid-template-columns: repeat(3,1fr); }
+.ba-card {
+  border-right: 3px solid rgba(255,255,255,.08);
+  position: relative; overflow: hidden;
+  aspect-ratio: 4/3;
+  cursor: none;
+}
+.ba-card:last-child { border-right: none; }
+.ba-card:hover .ba-after { clip-path: inset(0 0% 0 0); }
+.ba-before, .ba-after {
+  position: absolute; inset: 0;
+  display: flex; align-items: flex-end;
+}
+.ba-after {
+  clip-path: inset(0 50% 0 0);
+  transition: clip-path .6s cubic-bezier(.16,1,.3,1);
+}
+.ba-before-bg { width: 100%; height: 100%; position: absolute; inset: 0; object-fit: cover; filter: grayscale(1) brightness(.5); }
+.ba-after-bg { width: 100%; height: 100%; position: absolute; inset: 0; object-fit: cover; filter: brightness(.7) saturate(1.2); }
+.ba-label-before, .ba-label-after {
+  position: absolute; top: 20px;
+  font-family: var(--mono); font-size: 9px; font-weight: 700; letter-spacing: .25em;
+  padding: 6px 14px; border: 2px solid rgba(255,255,255,.3);
+  color: rgba(255,255,255,.7);
+  z-index: 2;
+}
+.ba-label-before { left: 20px; }
+.ba-label-after { right: 20px; background: var(--yel); color: var(--blk); border-color: var(--yel); }
+.ba-car { position: absolute; bottom: 20px; left: 20px; z-index: 2; font-family: var(--mono); font-size: 9px; font-weight: 700; letter-spacing: .2em; color: rgba(255,255,255,.5); }
+.ba-divider {
+  position: absolute; top: 0; bottom: 0; left: 50%; width: 3px;
+  background: var(--yel); z-index: 3;
+  transition: left .6s cubic-bezier(.16,1,.3,1);
+}
+.ba-card:hover .ba-divider { left: 100%; }
+.ba-hint {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: linear-gradient(to top, rgba(0,0,0,.8), transparent);
+  padding: 20px; text-align: center;
+  font-family: var(--mono); font-size: 8px; font-weight: 700;
+  letter-spacing: .2em; color: rgba(255,255,255,.4); z-index: 2;
+}
+
+/* ─── URGENCES ─── */
+.urgences-section { border-bottom: 4px solid var(--blk); }
+.urg-header { padding: 80px 72px; border-bottom: 4px solid var(--blk); display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: end; }
+.urg-grid { display: grid; grid-template-columns: 1fr 1fr; }
+.urg-card { padding: 72px 72px; border-right: 4px solid var(--blk); position: relative; overflow: hidden; opacity: 0; transform: translateY(20px); transition: opacity .7s, transform .7s, background .25s; }
+.urg-card.in { opacity: 1; transform: none; }
+.urg-card:last-child { border-right: none; }
+.urg-card:hover { background: var(--blk); }
+.urg-card:hover .urg-title, .urg-card:hover .urg-desc, .urg-card:hover .urg-num { color: var(--wht); }
+.urg-card:hover .urg-price { color: var(--yel); }
+.urg-card:hover .urg-btn { background: var(--yel); color: var(--blk); border-color: var(--yel); }
+.urg-big-num { position: absolute; top: -20px; right: 32px; font-family: var(--anton); font-size: 180px; color: rgba(0,0,0,.04); line-height: 1; pointer-events: none; transition: color .25s; }
+.urg-card:hover .urg-big-num { color: rgba(255,255,255,.04); }
+.urg-ico { font-size: 60px; margin-bottom: 28px; display: block; }
+.urg-num { font-family: var(--mono); font-size: 9px; font-weight: 700; letter-spacing: .35em; color: var(--gry); margin-bottom: 16px; }
+.urg-title { font-family: var(--anton); font-size: 22px; letter-spacing: .04em; color: var(--blk); margin-bottom: 20px; line-height: 1.1; }
+.urg-price { font-family: var(--anton); font-size: 96px; letter-spacing: -.03em; line-height: .9; color: var(--blk); margin-bottom: 24px; transition: color .25s; }
+.urg-desc { font-family: var(--bask); font-size: 14px; font-style: italic; color: var(--gry); line-height: 1.9; margin-bottom: 40px; max-width: 320px; }
+.urg-btn { display: inline-flex; align-items: center; gap: 12px; font-family: var(--anton); font-size: 14px; letter-spacing: .1em; color: var(--blk); background: transparent; border: 3px solid var(--blk); padding: 16px 32px; transition: all .25s; position: relative; }
+.urg-btn::after { content: ''; position: absolute; bottom: -4px; right: -4px; width: 100%; height: 100%; border: 3px solid var(--blk); z-index: -1; transition: all .25s; }
+.urg-btn:hover::after { transform: translate(4px,4px); }
+/* ETA badge on urgency */
+.urg-eta {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--mono); font-size: 9px; font-weight: 700; letter-spacing: .2em;
+  color: var(--red); border: 2px solid var(--red);
+  padding: 5px 12px; margin-bottom: 24px;
+}
+
+/* ─── FORFAITS ─── */
+.forfaits-section { border-bottom: 4px solid var(--blk); }
+.ff-header { padding: 80px 72px; border-bottom: 4px solid var(--blk); }
+.ff-table { display: grid; grid-template-columns: 1fr 1fr; }
+.ff-col { border-right: 4px solid var(--blk); opacity: 0; transform: translateY(20px); transition: opacity .7s, transform .7s; }
+.ff-col.in { opacity: 1; transform: none; }
+.ff-col:last-child { border-right: none; }
+.ff-col-head { padding: 40px 56px; border-bottom: 3px solid var(--blk); background: var(--blk); }
+.ff-type { font-family: var(--mono); font-size: 9px; font-weight: 700; letter-spacing: .3em; color: var(--yel); margin-bottom: 8px; }
+.ff-name { font-family: var(--anton); font-size: 20px; color: var(--wht); letter-spacing: .04em; }
+.ff-row { display: flex; align-items: center; justify-content: space-between; padding: 28px 56px; border-bottom: 1px solid rgba(0,0,0,.08); gap: 16px; flex-wrap: wrap; transition: background .2s; }
+.ff-row:last-child { border-bottom: none; }
+.ff-row:hover { background: rgba(212,240,0,.15); }
+.ff-tier { font-family: var(--mono); font-size: 12px; letter-spacing: .1em; color: var(--gry); }
+.ff-right { display: flex; align-items: center; gap: 20px; }
+.ff-price { font-family: var(--anton); font-size: 40px; color: var(--blk); letter-spacing: -.01em; }
+.ff-price sub { font-family: var(--mono); font-size: 10px; color: var(--gry); }
+.ff-pick { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .15em; color: var(--blk); background: var(--yel); border: 2px solid var(--blk); padding: 10px 20px; white-space: nowrap; transition: all .2s; }
+.ff-pick:hover { background: var(--blk); color: var(--yel); }
+.ff-footnote { font-family: var(--mono); font-size: 9px; font-weight: 700; letter-spacing: .25em; color: var(--gry); text-align: center; padding: 24px; border-top: 3px solid var(--blk); }
+
+/* ─── LOYALTY ─── */
+.loyalty-section {
+  background: var(--yel);
+  border-bottom: 4px solid var(--blk);
+}
+.ly-inner {
+  display: grid; grid-template-columns: 1fr 1fr;
+}
+.ly-left {
+  padding: 80px 72px;
+  border-right: 4px solid var(--blk);
+}
+.ly-left .s-title { color: var(--blk); }
+.ly-steps {
+  margin-top: 40px;
+  display: flex; flex-direction: column; gap: 0;
+  border: 3px solid var(--blk);
+}
+.ly-step {
+  display: flex; align-items: center; gap: 24px;
+  padding: 20px 28px;
+  border-bottom: 2px solid var(--blk);
+  background: var(--wht); transition: background .2s;
+}
+.ly-step:last-child { border-bottom: none; }
+.ly-step:hover { background: var(--blk); color: var(--wht); }
+.ly-step:hover .ly-step-num, .ly-step:hover .ly-step-txt { color: var(--yel); }
+.ly-step-num { font-family: var(--anton); font-size: 36px; color: var(--blk); line-height: 1; min-width: 48px; transition: color .2s; }
+.ly-step-txt { font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: .15em; color: var(--blk); transition: color .2s; }
+.ly-right {
+  padding: 80px 72px;
+  display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 24px;
+}
+.ly-reward-badge {
+  background: var(--blk); color: var(--yel);
+  padding: 40px 48px;
+  border: 3px solid var(--blk);
+  position: relative;
+}
+.ly-reward-badge::after {
+  content: ''; position: absolute; bottom: -6px; right: -6px;
+  width: 100%; height: 100%; border: 3px solid var(--blk); z-index: -1;
+}
+.ly-reward-val { font-family: var(--anton); font-size: 80px; color: var(--yel); line-height: .9; letter-spacing: -.02em; }
+.ly-reward-label { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .25em; color: rgba(255,255,255,.5); margin-top: 12px; }
+.ly-reward-desc { font-family: var(--bask); font-size: 14px; font-style: italic; color: rgba(255,255,255,.6); margin-top: 12px; max-width: 260px; line-height: 1.7; }
+
+/* ─── WHY ─── */
+.why-section { border-bottom: 4px solid var(--blk); background: var(--blk); }
+.why-header { padding: 80px 72px; border-bottom: 4px solid rgba(255,255,255,.08); }
+.why-header .s-title { color: var(--wht); }
+.why-grid { display: grid; grid-template-columns: repeat(3,1fr); }
+.why-card { padding: 64px 56px; border-right: 3px solid rgba(255,255,255,.08); text-align: left; position: relative; overflow: hidden; transition: background .3s; }
+.why-card:last-child { border-right: none; }
+.why-card:hover { background: rgba(212,240,0,.06); }
+.why-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--yel); transform: scaleX(0); transform-origin: left; transition: transform .4s cubic-bezier(.16,1,.3,1); }
+.why-card:hover::before { transform: scaleX(1); }
+.why-ico { font-size: 56px; margin-bottom: 32px; display: block; }
+.why-t { font-family: var(--anton); font-size: 22px; letter-spacing: .06em; color: var(--wht); margin-bottom: 16px; }
+.why-d { font-family: var(--bask); font-size: 14px; font-style: italic; color: rgba(255,255,255,.45); line-height: 1.85; }
+
+/* ─── ABOUT ─── */
+.about-section { border-bottom: 4px solid var(--blk); }
+.about-inner { display: grid; grid-template-columns: 1fr 1fr; }
+.about-left { padding: 100px 72px; border-right: 4px solid var(--blk); }
+.about-feats { margin-top: 48px; border: 3px solid var(--blk); }
+.ab-feat { display: flex; align-items: center; gap: 16px; padding: 18px 24px; border-bottom: 2px solid var(--blk); transition: background .2s; }
+.ab-feat:last-child { border-bottom: none; }
+.ab-feat:hover { background: var(--yel); }
+.ab-ico { font-size: 18px; }
+.ab-txt { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; color: var(--blk); }
+.ab-val { margin-left: auto; font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: .1em; color: var(--blk); }
+.about-right { display: grid; grid-template-rows: 1fr 1fr; }
+.ab-stat { padding: 80px 64px; border-bottom: 4px solid var(--blk); display: flex; flex-direction: column; justify-content: center; transition: background .25s; }
+.ab-stat:last-child { border-bottom: none; }
+.ab-stat:hover { background: var(--blk); }
+.ab-stat:hover .ab-stat-val, .ab-stat:hover .ab-stat-label { color: var(--yel); }
+.ab-stat-val { font-family: var(--anton); font-size: 88px; letter-spacing: -.03em; line-height: .9; color: var(--blk); transition: color .25s; }
+.ab-stat-label { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .3em; color: var(--gry); margin-top: 16px; transition: color .25s; }
+
+/* ─── REVIEWS ─── */
+.reviews-section { border-bottom: 4px solid var(--blk); background: var(--wht); }
+.rv-header { padding: 80px 72px; border-bottom: 4px solid var(--blk); }
+.rv-grid { display: grid; grid-template-columns: repeat(3,1fr); }
+.rv-card { padding: 56px 48px; border-right: 3px solid var(--blk); opacity: 0; transform: translateY(20px); transition: opacity .7s, transform .7s, background .25s; }
+.rv-card.in { opacity: 1; transform: none; }
+.rv-card:last-child { border-right: none; }
+.rv-card:hover { background: var(--blk); }
+.rv-card:hover .rv-quote, .rv-card:hover .rv-author { color: var(--wht); }
+.rv-stars { display: flex; gap: 4px; margin-bottom: 16px; }
+.rv-star { font-size: 18px; color: var(--yel); }
+.rv-verified { font-family: var(--mono); font-size: 8px; font-weight: 700; letter-spacing: .2em; color: var(--grn); margin-bottom: 16px; }
+.rv-quote { font-family: var(--bask); font-size: 15px; font-style: italic; color: #444; line-height: 1.85; margin-bottom: 32px; transition: color .25s; }
+.rv-quote::before { content: '"'; font-size: 40px; line-height: 0; vertical-align: -14px; color: var(--yel); margin-right: 4px; font-style: normal; }
+.rv-author { font-family: var(--mono); font-size: 9px; font-weight: 700; letter-spacing: .3em; color: var(--gry); transition: color .25s; }
+
+/* ─── PARTNER ─── */
+.partner-section { border-bottom: 4px solid var(--blk); background: var(--blk); }
+.partner-inner { display: grid; grid-template-columns: 1fr 1fr; }
+.partner-left { padding: 100px 72px; border-right: 4px solid rgba(255,255,255,.08); }
+.partner-left .s-title { color: var(--wht); }
+.partner-left .s-title .yel { background: var(--yel); color: var(--blk); }
+.partner-left .s-body { color: rgba(255,255,255,.45); }
+.partner-right { display: flex; align-items: center; justify-content: center; padding: 80px; }
+.partner-card { display: flex; flex-direction: column; align-items: center; gap: 28px; border: 3px solid rgba(255,255,255,.1); padding: 56px 48px; text-decoration: none; transition: all .35s; position: relative; }
+.partner-card::after { content: ''; position: absolute; bottom: -5px; right: -5px; width: 100%; height: 100%; border: 3px solid var(--yel); z-index: -1; transition: all .3s; }
+.partner-card:hover::after { transform: translate(6px,6px); }
+.partner-card:hover { border-color: var(--yel); }
+.partner-card img { height: 80px; width: auto; filter: brightness(.9); }
+.partner-desc { font-family: var(--bask); font-size: 13px; font-style: italic; color: rgba(255,255,255,.45); line-height: 1.8; text-align: center; max-width: 320px; }
+.partner-desc strong { color: var(--wht); font-style: normal; }
+.partner-link { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .2em; color: var(--blk); background: var(--yel); padding: 12px 28px; border: 2px solid var(--yel); transition: all .2s; }
+.partner-link:hover { background: transparent; color: var(--yel); }
+
+/* ─── CONTACT ─── */
+.contact-section { border-bottom: 4px solid var(--blk); }
+.ct-header { padding: 80px 72px; border-bottom: 4px solid var(--blk); }
+.ct-grid { display: grid; grid-template-columns: repeat(4,1fr); }
+.ct-card { padding: 48px 32px; border-right: 3px solid var(--blk); display: flex; flex-direction: column; align-items: flex-start; gap: 16px; text-decoration: none; transition: background .2s; opacity: 0; transform: translateY(20px); transition: opacity .7s, transform .7s, background .2s; }
+.ct-card.in { opacity: 1; transform: none; }
+.ct-card:last-child { border-right: none; }
+.ct-card:hover { background: var(--blk); }
+.ct-card:hover .ct-label, .ct-card:hover .ct-hint { color: var(--wht); }
+.ct-card:hover .ct-ico-wrap { border-color: var(--yel); background: var(--yel); }
+.ct-ico-wrap { width: 60px; height: 60px; border: 3px solid var(--blk); display: flex; align-items: center; justify-content: center; font-size: 24px; transition: all .25s; }
+.ct-label { font-family: var(--anton); font-size: 18px; letter-spacing: .06em; color: var(--blk); transition: color .2s; }
+.ct-hint { font-family: var(--mono); font-size: 9px; letter-spacing: .12em; color: var(--gry); transition: color .2s; }
+/* Highlighted SMS card */
+.ct-card.sms-featured {
+  background: rgba(0,232,122,.07);
+  border-color: var(--grn);
+}
+.ct-card.sms-featured .ct-ico-wrap { border-color: var(--grn); background: rgba(0,232,122,.1); }
+.ct-card.sms-featured .ct-badge {
+  display: inline-block;
+  font-family: var(--mono); font-size: 8px; font-weight: 700; letter-spacing: .2em;
+  background: var(--grn); color: var(--blk);
+  padding: 4px 10px;
+}
+
+/* ─── MAP ─── */
+.map-section { border-bottom: 4px solid var(--blk); background: var(--blk); }
+.map-head { display: flex; align-items: center; justify-content: space-between; padding: 24px 72px; border-bottom: 3px solid rgba(255,255,255,.08); }
+.map-title { font-family: var(--anton); font-size: 16px; letter-spacing: .15em; color: var(--wht); }
+.map-tag { font-family: var(--mono); font-size: 9px; font-weight: 700; letter-spacing: .25em; color: var(--yel); }
+.map-frame { filter: grayscale(1) invert(0.9) hue-rotate(180deg) brightness(.65); opacity: .75; }
+
+/* ─── ZONES ─── */
+.zone-section { padding: 32px 72px 48px; border-bottom: 4px solid var(--blk); background: var(--blk); }
+.zone-pills { display: flex; flex-wrap: wrap; gap: 6px; }
+.zpill { font-family: var(--mono); font-size: 9px; font-weight: 700; letter-spacing: .18em; color: rgba(255,255,255,.4); border: 1px solid rgba(255,255,255,.12); padding: 7px 16px; transition: all .2s; cursor: default; }
+.zpill:hover { border-color: var(--yel); color: var(--yel); background: rgba(212,240,0,.05); }
+
+/* ─── SMS FLOAT ─── */
+.sms-float { position: fixed; bottom: 24px; right: 24px; z-index: 8000; width: 60px; height: 60px; background: var(--yel); color: var(--blk); border: 3px solid var(--blk); display: flex; align-items: center; justify-content: center; font-size: 26px; text-decoration: none; transition: all .25s; box-shadow: 4px 4px 0 var(--blk); }
+.sms-float:hover { transform: translate(-3px,-3px); box-shadow: 7px 7px 0 var(--blk); background: var(--blk); color: var(--yel); }
+
+/* ─── FOOTER ─── */
+footer { background: var(--blk); border-top: 4px solid var(--yel); }
+.footer-top { display: grid; grid-template-columns: 1fr 1fr 1fr; border-bottom: 3px solid rgba(255,255,255,.06); }
+.ft-col { padding: 64px 56px; border-right: 3px solid rgba(255,255,255,.06); }
+.ft-col:last-child { border-right: none; }
+.footer-brand { font-family: var(--anton); font-size: 28px; letter-spacing: .18em; color: var(--wht); margin-bottom: 8px; }
+.footer-tag { font-family: var(--mono); font-size: 8px; letter-spacing: .22em; color: rgba(255,255,255,.25); }
+.footer-phone { font-family: var(--anton); font-size: 40px; letter-spacing: .04em; color: var(--yel); display: block; margin-top: 8px; }
+.footer-links { display: flex; flex-direction: column; gap: 12px; padding-top: 0; }
+.flink { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .22em; color: rgba(255,255,255,.3); transition: color .2s; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,.04); }
+.flink:hover { color: var(--yel); }
+.footer-copy { display: flex; justify-content: space-between; align-items: center; padding: 24px 56px; flex-wrap: wrap; gap: 12px; }
+.footer-copy span { font-family: var(--mono); font-size: 9px; letter-spacing: .22em; color: rgba(255,255,255,.2); }
+.footer-copy span.hi { color: var(--yel); }
+
+/* ─── WEATHER ─── */
+.weather-section { border-bottom: 4px solid var(--blk); }
+.weather-section .wrap { max-width: 1400px; margin: 0 auto; padding: 0; }
+.weather-section .s-eye { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .4em; color: var(--gry); margin-bottom: 24px; padding: 80px 72px 0; }
+.weather-section .s-title { font-family: var(--anton); font-size: clamp(40px,5vw,80px); line-height: .88; padding: 0 72px; }
+.weather-section .s-title em { color: var(--yel); background: var(--blk); padding: 0 8px; font-style: normal; }
+.weather-section .s-body { padding: 16px 72px 40px; font-family: var(--bask); font-style: italic; color: var(--gry); font-size: 15px; }
+.ai-reco { background: var(--blk); margin: 0 72px 32px; padding: 28px 32px; border: 3px solid var(--blk); position: relative; }
+.ai-reco::after { content: ''; position: absolute; bottom: -5px; right: -5px; width: 100%; height: 100%; border: 3px solid var(--blk); z-index: -1; }
+.ai-badge { font-family: var(--mono); font-size: 8px; font-weight: 700; letter-spacing: .3em; color: var(--yel); margin-bottom: 12px; }
+.ai-content { font-family: var(--bask); font-size: 15px; font-style: italic; color: rgba(255,255,255,.7); line-height: 1.6; }
+.ai-day { color: var(--yel); font-style: normal; font-family: var(--anton); font-size: 20px; }
+.ai-reason { display: block; margin-top: 8px; font-size: 13px; color: rgba(255,255,255,.4); }
+.weather-grid { display: grid; grid-template-columns: repeat(6, 1fr); border-top: 3px solid var(--blk); border-bottom: 3px solid var(--blk); }
+.weather-card { padding: 32px 24px; border-right: 2px solid var(--blk); text-align: center; transition: background .2s; }
+.weather-card:last-child { border-right: none; }
+.weather-card.best { background: rgba(212,240,0,.1); }
+.weather-card:hover { background: var(--blk); }
+.weather-day { font-family: var(--mono); font-size: 10px; font-weight: 700; letter-spacing: .25em; color: var(--gry); margin-bottom: 12px; text-transform: uppercase; }
+.weather-card.best .weather-day { color: var(--yel); }
+.weather-temp { font-family: var(--anton); font-size: 28px; color: var(--blk); margin-top: 8px; }
+.weather-card:hover .weather-temp, .weather-card:hover .weather-day, .weather-card:hover .weather-rain { color: var(--yel); }
+.weather-rain { font-family: var(--mono); font-size: 10px; color: var(--gry); margin-top: 6px; letter-spacing: .1em; }
+.weather-note { font-family: var(--mono); font-size: 8px; letter-spacing: .2em; color: var(--gry); text-align: right; padding: 16px 72px; }
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 1100px) {
+  .quick-reserve { display: none; }
+  .sticky-mobile-cta { display: block; }
+  nav .nav-links, .nav-price, .nav-sms { display: none; }
+  #mob-btn { display: flex; align-items: center; }
+  .hero-split { grid-template-columns: 1fr; }
+  .hero-split::after { display: none; }
+  .hero-right { min-height: 50vw; }
+  .hero-stats { grid-template-columns: 1fr 1fr; }
+  .social-proof { grid-template-columns: 1fr 1fr; }
+  .process-head { grid-template-columns: 1fr; }
+  .ph-left { border-right: none; border-bottom: 4px solid var(--blk); }
+  .process-grid { grid-template-columns: 1fr 1fr; }
+  .veh-header { grid-template-columns: 1fr; }
+  .veh-hl { border-right: none; border-bottom: 4px solid var(--blk); }
+  .veh-grid { display: none; }
+  .veh-mob { display: block; }
+  .ba-grid { grid-template-columns: 1fr; }
+  .ba-card { border-right: none; border-bottom: 3px solid rgba(255,255,255,.08); }
+  .urg-header { grid-template-columns: 1fr; gap: 32px; }
+  .urg-grid { grid-template-columns: 1fr; }
+  .urg-card { border-right: none; border-bottom: 4px solid var(--blk); }
+  .urg-card:last-child { border-bottom: none; }
+  .ff-table { grid-template-columns: 1fr; }
+  .ff-col { border-right: none; border-bottom: 4px solid var(--blk); }
+  .ly-inner { grid-template-columns: 1fr; }
+  .ly-left { border-right: none; border-bottom: 4px solid var(--blk); }
+  .why-grid { grid-template-columns: 1fr; }
+  .why-card { border-right: none; border-bottom: 3px solid rgba(255,255,255,.08); }
+  .about-inner { grid-template-columns: 1fr; }
+  .about-left { border-right: none; border-bottom: 4px solid var(--blk); }
+  .about-right { grid-template-rows: auto auto; grid-template-columns: 1fr 1fr; }
+  .ab-stat { border-bottom: none; border-right: 4px solid var(--blk); }
+  .ab-stat:last-child { border-right: none; }
+  .rv-grid { grid-template-columns: 1fr; }
+  .rv-card { border-right: none; border-bottom: 3px solid var(--blk); }
+  .partner-inner { grid-template-columns: 1fr; }
+  .partner-left { border-right: none; border-bottom: 4px solid rgba(255,255,255,.08); }
+  .ct-grid { grid-template-columns: 1fr 1fr; }
+  .ct-card:nth-child(2) { border-right: none; }
+  .ct-card:nth-child(3) { border-top: 3px solid var(--blk); }
+  .ct-card:nth-child(4) { border-top: 3px solid var(--blk); border-right: none; }
+  .footer-top { grid-template-columns: 1fr; }
+  .ft-col { border-right: none; border-bottom: 3px solid rgba(255,255,255,.06); padding: 48px 40px; }
+  .promo-inner { grid-template-columns: 1fr; }
+  .promo-code-block { border-left: none; border-top: 4px solid var(--yel); }
+  .footer-copy { padding: 24px 40px; }
+  .map-head, .zone-section { padding-left: 40px; padding-right: 40px; }
+  .weather-section .s-eye, .weather-section .s-title, .weather-section .s-body { padding-left: 40px; padding-right: 40px; }
+  .ai-reco, .weather-note { margin-left: 40px; margin-right: 40px; }
+  .weather-grid { grid-template-columns: repeat(3,1fr); }
+  .weather-card:nth-child(3) { border-right: none; }
+  .hero-left { padding: 40px; }
+  .urg-header, .ff-header, .rv-header, .about-left, .partner-left, .ct-header, .promo-text, .promo-code-block, .ph-left, .ph-right, .veh-hl, .veh-hr, .why-header, .ba-header, .ly-left, .ly-right { padding-left: 40px; padding-right: 40px; }
+  body { padding-bottom: 70px; }
+}
+@media (max-width: 600px) {
+  .hero-stats { grid-template-columns: 1fr; }
+  .hero-actions { flex-direction: column; }
+  .process-grid { grid-template-columns: 1fr; }
+  .ab-stat-val { font-size: 64px; }
+  .about-right { grid-template-columns: 1fr; }
+  .ab-stat { border-right: none; border-bottom: 4px solid var(--blk); }
+  .ct-grid { grid-template-columns: 1fr; }
+  .ct-card { border-right: none; border-bottom: 3px solid var(--blk); }
+  .social-proof { grid-template-columns: 1fr 1fr; }
+  .weather-grid { grid-template-columns: repeat(2,1fr); }
+  .weather-card:nth-child(2n) { border-right: none; }
+  .urgency-bar { font-size: 9px; padding: 9px 12px; gap: 8px; }
+}
+</style>
+
 </head>
 <body>
 
-  <div class="weather-section">
-    <h1>MÉTÉO & RECOMMANDATION IA</h1>
-    <p>Analyse en temps réel pour Sherbrooke</p>
+<div id="dot"></div>
 
-    <div class="ai-reco">
-      <strong>✦ INTELLIGENCE ARTIFICIELLE SHINE</strong><br><br>
-      <strong>Meilleur jour recommandé :</strong><br>
-      <span id="ai-day" style="font-size:24px;">Chargement...</span><br>
-      <span id="ai-reason"></span>
-    </div>
+<!-- LOADER -->
 
-    <div class="weather-grid" id="weather-grid"></div>
+<div id="ldr">
+  <div class="ldr-inner">
+    <div class="ldr-pct" id="ldr-pct">0</div>
+    <div class="ldr-label">SYSTÈME EN LIGNE</div>
+    <div class="ldr-bar"><div class="ldr-fill" id="ldr-fill"></div></div>
   </div>
+</div>
 
-  <script>
-    const API_KEY = "c23a73717b8c4e49a19222057260205";
-    const LAT = 45.40;
-    const LON = -71.89;
+<!-- URGENCY BANNER -->
 
-    async function loadWeather() {
-      try {
-        const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${LAT}&lon=${LON}&appid=${API_KEY}&units=metric&lang=fr`;
-        const res = await fetch(url);
-        const data = await res.json();
+<div class="urgency-bar">
+  <span class="pulse"></span>
+  DISPONIBLE AUJOURD'HUI — INTERVENTION EN MOINS DE 60 MIN — PROMO SHINE10 : −10% · EXPIRE LE 10.06.2026
+  <span class="pulse"></span>
+</div>
 
-        const daily = groupByDay(data.list);
-        renderCards(daily);
-        renderBestDay(daily);
-      } catch(e) {
-        document.getElementById('ai-reason').textContent = "Erreur de chargement";
-      }
-    }
+<!-- MARQUEE -->
 
-    function groupByDay(list) { /* même fonction que avant */ 
-      const days = {};
-      list.forEach(item => {
-        const date = new Date(item.dt * 1000);
-        const key = date.toISOString().split('T')[0];
-        if (!days[key]) {
-          days[key] = {
-            dayName: date.toLocaleDateString('fr-CA', {weekday: 'short'}),
-            temp: Math.round(item.main.temp),
-            rain: Math.round((item.pop || 0) * 100),
-            icon: item.weather[0].icon
-          };
-        }
-      });
-      return Object.values(days).slice(0,6);
-    }
+<div class="marquee-wrap" style="position:relative;z-index:20;">
+  <div class="marquee-inner">
+    <span class="mq-item">À PARTIR DE 40$ SEULEMENT</span>
+    <span class="mq-item mq-sep">◆</span>
+    <span class="mq-item">LAVAGE À DOMICILE</span>
+    <span class="mq-item mq-sep">◆</span>
+    <span class="mq-item">SHERBROOKE & ENVIRONS</span>
+    <span class="mq-item mq-sep">◆</span>
+    <span class="mq-item">100% ÉCOLOGIQUE</span>
+    <span class="mq-item mq-sep">◆</span>
+    <span class="mq-item">PROMO : SHINE10 → −10%</span>
+    <span class="mq-item mq-sep">◆</span>
+    <span class="mq-item">GARANTIE SATISFACTION</span>
+    <span class="mq-item mq-sep">◆</span>
+    <span class="mq-item">873-662-3813</span>
+    <span class="mq-item mq-sep">◆</span>
+    <span class="mq-item">À PARTIR DE 40$ SEULEMENT</span>
+    <span class="mq-item mq-sep">◆</span>
+    <span class="mq-item">LAVAGE À DOMICILE</span>
+    <span class="mq-item mq-sep">◆</span>
+    <span class="mq-item">SHERBROOKE & ENVIRONS</span>
+    <span class="mq-item mq-sep">◆</span>
+    <span class="mq-item">100% ÉCOLOGIQUE</span>
+    <span class="mq-item mq-sep">◆</span>
+    <span class="mq-item">PROMO : SHINE10 → −10%</span>
+    <span class="mq-item mq-sep">◆</span>
+    <span class="mq-item">GARANTIE SATISFACTION</span>
+    <span class="mq-item mq-sep">◆</span>
+    <span class="mq-item">873-662-3813</span>
+    <span class="mq-item mq-sep">◆</span>
+  </div>
+</div>
 
-    function renderCards(days) {
-      const container = document.getElementById('weather-grid');
-      container.innerHTML = days.map(day => `
-        <div class="weather-card ${day.rain < 20 ? 'best' : ''}">
-          <b>${day.dayName}</b><br>
-          <img src="https://openweathermap.org/img/wn/${day.icon}@2x.png"><br>
-          ${day.temp}°C • 💧 ${day.rain}%
+<!-- NAV -->
+
+<nav id="nav">
+  <div class="nav-brand">
+    <div class="nav-brand-txt">SHINE<span>★</span></div>
+  </div>
+  <div class="nav-price">À partir de <strong>&nbsp;40$</strong></div>
+  <div class="nav-links">
+    <a href="#vehicules" class="nlink">Services</a>
+    <a href="#forfaits" class="nlink">Forfaits</a>
+    <a href="#urgences" class="nlink">Urgences</a>
+    <a href="#apropos" class="nlink">À propos</a>
+    <a href="#contact" class="nlink">Contact</a>
+  </div>
+  <div class="nav-cta">
+    <a href="tel:8736623813" class="nav-tel">873-662-3813</a>
+    <a href="sms:8736623813" class="nav-sms">💬 SMS RAPIDE</a>
+    <a href="pageservice.html" target="_blank" class="nav-book">RÉSERVER →</a>
+    <button id="mob-btn" onclick="toggleMob()">☰</button>
+  </div>
+  <div id="mob-menu">
+    <a href="#vehicules" class="nlink" onclick="toggleMob()">Services</a>
+    <a href="#forfaits" class="nlink" onclick="toggleMob()">Forfaits</a>
+    <a href="#urgences" class="nlink" onclick="toggleMob()">Urgences</a>
+    <a href="#apropos" class="nlink" onclick="toggleMob()">À propos</a>
+    <a href="#contact" class="nlink" onclick="toggleMob()">Contact</a>
+    <a href="tel:8736623813" class="nlink" style="color:var(--yel)">873-662-3813</a>
+    <a href="pageservice.html" target="_blank" class="nlink" style="background:var(--yel);color:var(--blk)">RÉSERVER →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+
+<header class="hero">
+  <div class="hero-split">
+    <div class="hero-left">
+      <div class="avail-badge"><span class="avail-dot"></span> DISPONIBLE AUJOURD'HUI · SHERBROOKE</div>
+      <h1 class="hero-h1">
+        VOTRE<br>
+        <span class="outline">AUTO</span><br>
+        BRILLE<br>
+        <span class="yel">CHEZ VOUS.</span>
+      </h1>
+      <div class="hero-price-hook">
+        <div>
+          <div class="hero-price-from">À PARTIR DE</div>
+          <div class="hero-price-val">40$</div>
+          <div class="hero-price-tag">PAIEMENT SUR PLACE</div>
         </div>
-      `).join('');
-    }
+        <div style="width:2px;height:60px;background:var(--blk);opacity:.2;margin:0 8px;"></div>
+        <div>
+          <div class="hero-price-from">INTERVENTION</div>
+          <div class="hero-price-val" style="font-size:30px;">−60 MIN</div>
+          <div class="hero-price-tag">LIVRAISON RAPIDE</div>
+        </div>
+      </div>
+      <p class="hero-sub">
+        Lavage auto professionnel à domicile. Produits écologiques, intervention rapide, résultat garanti.
+      </p>
+      <div class="hero-actions">
+        <a href="pageservice.html" target="_blank" class="btn-solid">RÉSERVER MAINTENANT →</a>
+        <a href="sms:8736623813" class="btn-sms">💬 TEXTO 30 SEC</a>
+      </div>
+    </div>
+    <div class="hero-right">
+      <img src="Images/photo.jpeg" alt="Shine Automobile" class="hero-photo">
+      <div class="hero-photo-overlay"></div>
+      <div class="scan-line"></div>
+      <div class="hero-tag">
+        <div class="hero-tag-num">+500</div>
+        <div class="hero-tag-label">VOITURES LAVÉES</div>
+      </div>
+      <div class="hero-tag3">
+        <div class="hero-tag-num">−60 MIN</div>
+        <div class="hero-tag-label">INTERVENTION</div>
+      </div>
+      <div class="hero-tag2">
+        <div class="hero-tag-num">5★</div>
+        <div class="hero-tag-label">SATISFACTION</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="hst">
+      <div class="hst-n">40$</div>
+      <div class="hst-l">PRIX DE<br>DÉPART</div>
+    </div>
+    <div class="hst">
+      <div class="hst-n">100%</div>
+      <div class="hst-l">ÉCOLOGIQUE<br>CERTIFIÉ</div>
+    </div>
+    <div class="hst">
+      <div class="hst-n">5/5</div>
+      <div class="hst-l">NOTE<br>MOYENNE</div>
+    </div>
+    <div class="hst">
+      <div class="hst-n">15+</div>
+      <div class="hst-l">VILLES<br>DESSERVIES</div>
+    </div>
+  </div>
+</header>
 
-    function renderBestDay(days) {
-      let best = days[0];
-      days.forEach(d => {
-        if ((100 - d.rain) + d.temp > (100 - best.rain) + best.temp) best = d;
-      });
-      document.getElementById('ai-day').textContent = best.dayName + " - " + best.temp + "°C";
-      document.getElementById('ai-reason').textContent = "Conditions idéales pour un lavage !";
-    }
+<!-- QUICK RESERVE STRIP (desktop) -->
 
-    loadWeather();
-  </script>
+<div class="quick-reserve">
+  <div class="qr-inner">
+    <div class="qr-label">⚡ RÉSERVER EN 30 SECONDES</div>
+    <div class="qr-text">Choisissez votre canal — <strong>zéro friction, zéro attente.</strong></div>
+    <a href="sms:8736623813" class="qr-sms">💬 TEXTO RAPIDE</a>
+    <a href="pageservice.html" target="_blank" class="qr-book">RÉSERVER EN LIGNE →</a>
+  </div>
+</div>
+
+<!-- SOCIAL PROOF -->
+
+<div class="social-proof">
+  <div class="sp-item">
+    <span class="sp-ico">🚗</span>
+    <div class="sp-text">
+      <div class="sp-val">+500</div>
+      <div class="sp-label">VOITURES LAVÉES</div>
+    </div>
+  </div>
+  <div class="sp-item">
+    <span class="sp-ico">⭐</span>
+    <div class="sp-text">
+      <div class="sp-val">5★</div>
+      <div class="sp-label">NOTE GOOGLE</div>
+    </div>
+  </div>
+  <div class="sp-item">
+    <span class="sp-ico">⚡</span>
+    <div class="sp-text">
+      <div class="sp-val">−60 MIN</div>
+      <div class="sp-label">TEMPS D'INTERVENTION</div>
+    </div>
+  </div>
+  <div class="sp-item">
+    <span class="sp-ico">🌿</span>
+    <div class="sp-text">
+      <div class="sp-val">100%</div>
+      <div class="sp-label">PRODUITS ÉCOLOGIQUES</div>
+    </div>
+  </div>
+</div>
+
+<!-- PROCESS -->
+
+<section class="process-section">
+  <div class="process-head">
+    <div class="ph-left reveal-l">
+      <div class="s-label" data-n="01">Processus</div>
+      <h2 class="s-title">RÉSERVEZ EN<br><span class="yel">30 SECONDES</span></h2>
+    </div>
+    <div class="ph-right reveal-r">
+      <p class="s-body">Quatre étapes simples. Zéro déplacement, zéro hassle. Votre auto brille, vous ne bougez pas.</p>
+    </div>
+  </div>
+  <div class="process-grid">
+    <div class="step-box">
+      <div class="step-box-bg">1</div>
+      <div class="step-num">— 01 —</div>
+      <span class="step-ico">📱</span>
+      <div class="step-name">TEXTEZ "LAVAGE"</div>
+      <div class="step-desc">Envoyez "LAVAGE" au 873-662-3813. Réservation en 30 secondes chrono.</div>
+    </div>
+    <div class="step-box" style="transition-delay:.1s">
+      <div class="step-box-bg">2</div>
+      <div class="step-num">— 02 —</div>
+      <span class="step-ico">✅</span>
+      <div class="step-name">ON CONFIRME</div>
+      <div class="step-desc">Réponse rapide. On s'adapte à vos disponibilités.</div>
+    </div>
+    <div class="step-box" style="transition-delay:.2s">
+      <div class="step-box-bg">3</div>
+      <div class="step-num">— 03 —</div>
+      <span class="step-ico">🏠</span>
+      <div class="step-name">ON ARRIVE CHEZ VOUS</div>
+      <div class="step-desc">Sherbrooke & environs — intervention en moins de 60 min.</div>
+    </div>
+    <div class="step-box" style="transition-delay:.3s">
+      <div class="step-box-bg">4</div>
+      <div class="step-num">— 04 —</div>
+      <span class="step-ico">✨</span>
+      <div class="step-name">RÉSULTAT GARANTI</div>
+      <div class="step-desc">Paiement sur place. Satisfait ou on revient — sans question.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROMO -->
+
+<section class="promo-section">
+  <div class="promo-bg-text">SHINE10 — 10% OFF — SHINE10 — 10% OFF — SHINE10</div>
+  <div class="promo-inner">
+    <div class="promo-text reveal">
+      <div class="promo-eyebrow">OFFRE LIMITÉE · EXPIRE LE 10 JUIN 2026</div>
+      <div class="promo-headline">10% <em>DE RÉDUCTION</em><br>LAVAGE COMPLET</div>
+      <!-- Countdown -->
+      <div class="promo-countdown">
+        <div class="countdown-unit"><span class="countdown-num" id="cd-j">00</span><span class="countdown-lbl">JOURS</span></div>
+        <span class="countdown-sep">:</span>
+        <div class="countdown-unit"><span class="countdown-num" id="cd-h">00</span><span class="countdown-lbl">HEURES</span></div>
+        <span class="countdown-sep">:</span>
+        <div class="countdown-unit"><span class="countdown-num" id="cd-m">00</span><span class="countdown-lbl">MINUTES</span></div>
+        <span class="countdown-sep">:</span>
+        <div class="countdown-unit"><span class="countdown-num" id="cd-s">00</span><span class="countdown-lbl">SECONDES</span></div>
+      </div>
+    </div>
+    <div class="promo-code-block">
+      <div class="promo-code-label">VOTRE CODE PROMO</div>
+      <div class="promo-code-val">SHINE10</div>
+      <button class="promo-code-btn" onclick="copyCode()">COPIER LE CODE ↗</button>
+      <div class="promo-confirm" id="promo-confirm">✓ Copié dans le presse-papier</div>
+      <a href="pageservice.html" target="_blank" style="font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.2em;color:var(--blk);text-decoration:underline;margin-top:8px;">UTILISER MAINTENANT →</a>
+    </div>
+  </div>
+</section>
+
+<!-- VEHICLES -->
+
+<section id="vehicules" class="vehicles-section">
+  <div class="veh-header">
+    <div class="veh-hl reveal-l">
+      <div class="s-label" data-n="02">Véhicules</div>
+      <h2 class="s-title">CHOISISSEZ<br>VOTRE <span class="yel">TYPE</span></h2>
+    </div>
+    <div class="veh-hr reveal-r">
+      <p class="s-body">Sélectionnez votre véhicule. Prix transparents dès la sélection. Zéro surprise.</p>
+    </div>
+  </div>
+  <!-- Desktop -->
+  <div class="veh-grid">
+    <a href="sedan.html" class="veh-card">
+      <div class="veh-line"></div>
+      <img src="Images/sedan.jpeg" alt="Sedan" class="veh-img">
+      <div class="veh-overlay"></div>
+      <div class="veh-arrow">↗</div>
+      <div class="veh-price">À partir de 40$<span>BERLINE</span></div>
+      <div class="veh-info">
+        <div class="veh-cat">CATÉGORIE 01</div>
+        <div class="veh-name">SEDAN</div>
+        <div class="veh-sub">Berlines & compactes</div>
+      </div>
+    </a>
+    <a href="suv.html" class="veh-card">
+      <div class="veh-line"></div>
+      <img src="Images/vus.jpeg" alt="VUS" class="veh-img">
+      <div class="veh-overlay"></div>
+      <div class="veh-arrow">↗</div>
+      <div class="veh-price">À partir de 45$<span>VUS</span></div>
+      <div class="veh-info">
+        <div class="veh-cat">CATÉGORIE 02</div>
+        <div class="veh-name">VUS</div>
+        <div class="veh-sub">VUS & crossovers</div>
+      </div>
+    </a>
+    <a href="van.html" class="veh-card">
+      <div class="veh-line"></div>
+      <img src="Images/van.jpeg" alt="Van" class="veh-img">
+      <div class="veh-overlay"></div>
+      <div class="veh-arrow">↗</div>
+      <div class="veh-price">À partir de 50$<span>FOURGON</span></div>
+      <div class="veh-info">
+        <div class="veh-cat">CATÉGORIE 03</div>
+        <div class="veh-name">VAN</div>
+        <div class="veh-sub">Fourgonnettes & minivans</div>
+      </div>
+    </a>
+    <a href="pickup.html" class="veh-card">
+      <div class="veh-line"></div>
+      <img src="Images/pickup.jpeg" alt="Pickup" class="veh-img">
+      <div class="veh-overlay"></div>
+      <div class="veh-arrow">↗</div>
+      <div class="veh-price">À partir de 50$<span>PICKUP</span></div>
+      <div class="veh-info">
+        <div class="veh-cat">CATÉGORIE 04</div>
+        <div class="veh-name">PICKUP</div>
+        <div class="veh-sub">Camionnettes & camions</div>
+      </div>
+    </a>
+  </div>
+  <!-- Mobile -->
+  <div class="veh-mob">
+    <a href="sedan.html" class="veh-mob-card">
+      <img src="Images/sedan.jpeg" alt="Sedan">
+      <div class="veh-mob-info">
+        <div class="veh-mob-name">SEDAN</div>
+        <div class="veh-mob-sub">Berlines & compactes</div>
+        <div class="veh-mob-price">À partir de 40$</div>
+      </div>
+    </a>
+    <a href="suv.html" class="veh-mob-card">
+      <img src="Images/vus.jpeg" alt="VUS">
+      <div class="veh-mob-info">
+        <div class="veh-mob-name">VUS</div>
+        <div class="veh-mob-sub">VUS & crossovers</div>
+        <div class="veh-mob-price">À partir de 45$</div>
+      </div>
+    </a>
+    <a href="van.html" class="veh-mob-card">
+      <img src="Images/van.jpeg" alt="Van">
+      <div class="veh-mob-info">
+        <div class="veh-mob-name">VAN</div>
+        <div class="veh-mob-sub">Fourgonnettes</div>
+        <div class="veh-mob-price">À partir de 50$</div>
+      </div>
+    </a>
+    <a href="pickup.html" class="veh-mob-card">
+      <img src="Images/pickup.jpeg" alt="Pickup">
+      <div class="veh-mob-info">
+        <div class="veh-mob-name">PICKUP</div>
+        <div class="veh-mob-sub">Camionnettes</div>
+        <div class="veh-mob-price">À partir de 50$</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- BEFORE/AFTER -->
+
+<section class="ba-section">
+  <div class="ba-header reveal">
+    <div class="s-label" data-n="03" style="color:rgba(255,255,255,.3)">Résultats</div>
+    <h2 class="s-title" style="color:var(--wht)">AVANT / <span class="yel">APRÈS</span><br><span style="-webkit-text-stroke:2px rgba(255,255,255,.3);color:transparent;">NOS RÉSULTATS</span></h2>
+    <p class="s-body" style="color:rgba(255,255,255,.4)">Passez votre souris sur chaque photo pour voir la transformation.</p>
+  </div>
+  <div class="ba-grid">
+    <div class="ba-card">
+      <div class="ba-before">
+        <img class="ba-before-bg" src="Images/sedan.jpeg" alt="Avant">
+      </div>
+      <div class="ba-after">
+        <img class="ba-after-bg" src="Images/sedan.jpeg" alt="Après">
+      </div>
+      <div class="ba-label-before">AVANT</div>
+      <div class="ba-label-after">APRÈS ✨</div>
+      <div class="ba-divider"></div>
+      <div class="ba-car">SEDAN · Sherbrooke</div>
+      <div class="ba-hint">← PASSER LA SOURIS</div>
+    </div>
+    <div class="ba-card">
+      <div class="ba-before">
+        <img class="ba-before-bg" src="Images/vus.jpeg" alt="Avant">
+      </div>
+      <div class="ba-after">
+        <img class="ba-after-bg" src="Images/vus.jpeg" alt="Après">
+      </div>
+      <div class="ba-label-before">AVANT</div>
+      <div class="ba-label-after">APRÈS ✨</div>
+      <div class="ba-divider"></div>
+      <div class="ba-car">VUS · Magog</div>
+      <div class="ba-hint">← PASSER LA SOURIS</div>
+    </div>
+    <div class="ba-card">
+      <div class="ba-before">
+        <img class="ba-before-bg" src="Images/pickup.jpeg" alt="Avant">
+      </div>
+      <div class="ba-after">
+        <img class="ba-after-bg" src="Images/pickup.jpeg" alt="Après">
+      </div>
+      <div class="ba-label-before">AVANT</div>
+      <div class="ba-label-after">APRÈS ✨</div>
+      <div class="ba-divider"></div>
+      <div class="ba-car">PICKUP · Orford</div>
+      <div class="ba-hint">← PASSER LA SOURIS</div>
+    </div>
+  </div>
+</section>
+
+<!-- URGENCES -->
+
+<section id="urgences" class="urgences-section">
+  <div class="urg-header">
+    <div class="reveal-l">
+      <div class="s-label" data-n="04">Urgences</div>
+      <h2 class="s-title">SERVICES<br><span class="outline">D'URGENCE</span></h2>
+    </div>
+    <div class="reveal-r">
+      <p class="s-body">Intervention rapide à Sherbrooke et environs. Disponible maintenant — un appel suffit.</p>
+    </div>
+  </div>
+  <div class="urg-grid">
+    <div class="urg-card">
+      <div class="urg-big-num">01</div>
+      <span class="urg-ico">🔑</span>
+      <div class="urg-eta">⚡ INTERVENTION &lt; 60 MIN</div>
+      <div class="urg-num">— 01 —</div>
+      <div class="urg-title">DÉVERROUILLAGE AUTO D'URGENCE</div>
+      <div class="urg-price">50$</div>
+      <div class="urg-desc">Clés oubliées à l'intérieur ? Intervention rapide et sécurisée, sans endommager votre véhicule. Toute heure.</div>
+      <a href="tel:8736623813" class="urg-btn">📞 APPELER MAINTENANT</a>
+    </div>
+    <div class="urg-card" style="transition-delay:.15s">
+      <div class="urg-big-num">02</div>
+      <span class="urg-ico">🔋</span>
+      <div class="urg-eta">⚡ INTERVENTION &lt; 60 MIN</div>
+      <div class="urg-num">— 02 —</div>
+      <div class="urg-title">SURVOLTAGE / BOOST BATTERIE</div>
+      <div class="urg-price">40$</div>
+      <div class="urg-desc">Batterie à plat ? Nous venons sur place pour recharger rapidement et en toute sécurité. Garantie résultat.</div>
+      <a href="tel:8736623813" class="urg-btn">📞 APPELER MAINTENANT</a>
+    </div>
+  </div>
+</section>
+
+<!-- MÉTÉO -->
+
+<section class="weather-section" id="meteo">
+  <div class="wrap">
+    <div class="fade-up">
+      <div class="s-eye">Conditions Optimales</div>
+      <h2 class="s-title">MÉTÉO & <em>RECOMMANDATION IA</em></h2>
+      <p class="s-body">Analyse en temps réel pour Sherbrooke — réservez au bon moment.</p>
+    </div>
+    <div class="ai-reco">
+      <div class="ai-badge">✦ INTELLIGENCE ARTIFICIELLE SHINE</div>
+      <div class="ai-content">
+        <strong>Meilleur jour recommandé :</strong><br>
+        <span class="ai-day" id="ai-day">Chargement...</span>
+        <span class="ai-reason" id="ai-reason"></span>
+      </div>
+    </div>
+    <div class="weather-grid" id="weather-grid"></div>
+    <div class="weather-note">Données fournies par OpenWeatherMap · Mis à jour automatiquement</div>
+  </div>
+</section>
+
+<!-- FORFAITS -->
+
+<section id="forfaits" class="forfaits-section">
+  <div class="ff-header reveal">
+    <div class="s-label" data-n="05">Forfaits</div>
+    <h2 class="s-title">FORFAITS <span class="yel">MULTI</span><br><span class="outline">VOITURES</span></h2>
+    <p class="s-body">Plus vous réservez, plus vous économisez. Parfait pour familles, entreprises, flottes.</p>
+  </div>
+  <div class="ff-table">
+    <div class="ff-col">
+      <div class="ff-col-head">
+        <div class="ff-type">Extérieur seulement</div>
+        <div class="ff-name">LAVAGE EXTÉRIEUR RÉGULIER</div>
+      </div>
+      <div class="ff-row">
+        <div class="ff-tier">2 à 4 voitures</div>
+        <div class="ff-right">
+          <div class="ff-price">30$<sub>/voit.</sub></div>
+          <a href="pageservice.html?service=Forfait+Extérieur+2-4" target="_blank" class="ff-pick">Réserver</a>
+        </div>
+      </div>
+      <div class="ff-row">
+        <div class="ff-tier">5 à 10 voitures</div>
+        <div class="ff-right">
+          <div class="ff-price">25$<sub>/voit.</sub></div>
+          <a href="pageservice.html?service=Forfait+Extérieur+5-10" target="_blank" class="ff-pick">Réserver</a>
+        </div>
+      </div>
+    </div>
+    <div class="ff-col" style="transition-delay:.12s">
+      <div class="ff-col-head">
+        <div class="ff-type">Extérieur + Intérieur Régulier</div>
+        <div class="ff-name">LAVAGE COMPLET</div>
+      </div>
+      <div class="ff-row">
+        <div class="ff-tier">2 voitures</div>
+        <div class="ff-right">
+          <div class="ff-price">95$<sub>/voit.</sub></div>
+          <a href="pageservice.html?service=Forfait+Complet+2" target="_blank" class="ff-pick">Réserver</a>
+        </div>
+      </div>
+      <div class="ff-row">
+        <div class="ff-tier">3 à 4 voitures</div>
+        <div class="ff-right">
+          <div class="ff-price">90$<sub>/voit.</sub></div>
+          <a href="pageservice.html?service=Forfait+Complet+3-4" target="_blank" class="ff-pick">Réserver</a>
+        </div>
+      </div>
+      <div class="ff-row">
+        <div class="ff-tier">5 voitures et plus</div>
+        <div class="ff-right">
+          <div class="ff-price">80$<sub>/voit.</sub></div>
+          <a href="pageservice.html?service=Forfait+Complet+5+" target="_blank" class="ff-pick">Réserver</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ff-footnote">TARIFS DÉGRESSIFS · INTERVENTION À DOMICILE · PAIEMENT SUR PLACE · ZÉRO FRAIS CACHÉS</div>
+</section>
+
+<!-- LOYALTY / PROGRAMME FIDÉLITÉ -->
+
+<section class="loyalty-section">
+  <div class="ly-inner">
+    <div class="ly-left reveal-l">
+      <div class="s-label" data-n="06" style="color:rgba(0,0,0,.4)">Fidélité</div>
+      <h2 class="s-title">PROGRAMME<br>FIDÉLITÉ</h2>
+      <p class="s-body" style="color:rgba(0,0,0,.55)">Plus vous lavez, plus vous économisez. Un programme simple et transparent.</p>
+      <div class="ly-steps">
+        <div class="ly-step">
+          <div class="ly-step-num">01</div>
+          <div class="ly-step-txt">RÉSERVEZ VOTRE 1ER LAVAGE</div>
+        </div>
+        <div class="ly-step">
+          <div class="ly-step-num">02</div>
+          <div class="ly-step-txt">ACCUMULEZ VOS LAVAGES</div>
+        </div>
+        <div class="ly-step">
+          <div class="ly-step-num">03</div>
+          <div class="ly-step-txt">AU 5ÈME → LAVAGE GRATUIT</div>
+        </div>
+        <div class="ly-step">
+          <div class="ly-step-num">∞</div>
+          <div class="ly-step-txt">RECOMMENCEZ INDÉFINIMENT</div>
+        </div>
+      </div>
+    </div>
+    <div class="ly-right reveal-r">
+      <div class="ly-reward-badge">
+        <div class="ly-reward-val">5ÈME<br>= GRATUIT</div>
+        <div class="ly-reward-label">PROGRAMME FIDÉLITÉ SHINE</div>
+        <div class="ly-reward-desc">Chaque 5e lavage est offert. Notre façon de remercier nos clients réguliers de Sherbrooke.</div>
+      </div>
+      <a href="pageservice.html" target="_blank" class="btn-solid" style="margin-top:8px;">COMMENCER →</a>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+
+<section class="why-section">
+  <div class="why-header reveal">
+    <div class="s-label" data-n="07" style="color:rgba(255,255,255,.4)">Avantages</div>
+    <h2 class="s-title">POURQUOI <span class="yel">NOUS</span><br>CHOISIR</h2>
+  </div>
+  <div class="why-grid">
+    <div class="why-card">
+      <span class="why-ico">🌱</span>
+      <div class="why-t">100% ÉCOLOGIQUE</div>
+      <div class="why-d">Produits biodégradables certifiés, respectueux de l'environnement et de votre véhicule.</div>
+    </div>
+    <div class="why-card">
+      <span class="why-ico">⏱️</span>
+      <div class="why-t">GAIN DE TEMPS RÉEL</div>
+      <div class="why-d">Zéro déplacement, zéro attente. Vous restez chez vous — nous faisons le travail.</div>
+    </div>
+    <div class="why-card">
+      <span class="why-ico">⭐</span>
+      <div class="why-t">SATISFAIT OU ON REVIENT</div>
+      <div class="why-d">Résultat impeccable garanti. Si vous n'êtes pas satisfait, on revient sans question.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+
+<section id="apropos" class="about-section">
+  <div class="about-inner">
+    <div class="about-left reveal-l">
+      <div class="s-label" data-n="08">À propos</div>
+      <h2 class="s-title">ENTREPRISE<br><span class="outline">LOCALE</span><br>SHERBROOKE</h2>
+      <p class="s-body">Basés à Sherbrooke, nous offrons un service de lavage auto professionnel à domicile depuis 2040. Équipe locale, produits écologiques, résultat garanti.</p>
+      <div class="about-feats">
+        <div class="ab-feat"><span class="ab-ico">🌿</span><span class="ab-txt">Produits biodégradables</span><span class="ab-val">CERTIFIÉ</span></div>
+        <div class="ab-feat"><span class="ab-ico">📍</span><span class="ab-txt">Zone de service Sherbrooke</span><span class="ab-val">15+ VILLES</span></div>
+        <div class="ab-feat"><span class="ab-ico">⚡</span><span class="ab-txt">Urgences disponibles</span><span class="ab-val">DISPONIBLE</span></div>
+        <div class="ab-feat"><span class="ab-ico">💳</span><span class="ab-txt">Paiement sur place</span><span class="ab-val">ZÉRO AVANCE</span></div>
+        <div class="ab-feat"><span class="ab-ico">🏆</span><span class="ab-txt">Programme fidélité</span><span class="ab-val">5E GRATUIT</span></div>
+      </div>
+    </div>
+    <div class="about-right reveal-r">
+      <div class="ab-stat">
+        <div class="ab-stat-val">+500</div>
+        <div class="ab-stat-label">VOITURES LAVÉES</div>
+      </div>
+      <div class="ab-stat">
+        <div class="ab-stat-val">5★</div>
+        <div class="ab-stat-label">SATISFACTION GARANTIE</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+
+<section id="temoignages" class="reviews-section">
+  <div class="rv-header reveal">
+    <div class="s-label" data-n="09">Témoignages</div>
+    <h2 class="s-title">AVIS DE NOS<br><span class="yel">CLIENTS</span></h2>
+  </div>
+  <div class="rv-grid">
+    <div class="rv-card">
+      <div class="rv-stars"><span class="rv-star">★</span><span class="rv-star">★</span><span class="rv-star">★</span><span class="rv-star">★</span><span class="rv-star">★</span></div>
+      <div class="rv-verified">✓ CLIENT VÉRIFIÉ · SHERBROOKE</div>
+      <div class="rv-quote">Service très professionnel. Ma voiture est impeccable ! Je recommande à tout mon entourage sans hésitation.</div>
+      <div class="rv-author">— MARIE L. · SHERBROOKE</div>
+    </div>
+    <div class="rv-card" style="transition-delay:.1s">
+      <div class="rv-stars"><span class="rv-star">★</span><span class="rv-star">★</span><span class="rv-star">★</span><span class="rv-star">★</span><span class="rv-star">★</span></div>
+      <div class="rv-verified">✓ CLIENT VÉRIFIÉ · MAGOG</div>
+      <div class="rv-quote">Déverrouillage rapide et sans dommage. Intervention en moins de 20 minutes. Merci infiniment !</div>
+      <div class="rv-author">— JEAN T. · MAGOG</div>
+    </div>
+    <div class="rv-card" style="transition-delay:.2s">
+      <div class="rv-stars"><span class="rv-star">★</span><span class="rv-star">★</span><span class="rv-star">★</span><span class="rv-star">★</span><span class="rv-star">★</span></div>
+      <div class="rv-verified">✓ CLIENT VÉRIFIÉ · ORFORD</div>
+      <div class="rv-quote">Excellent lavage complet. L'équipe est ponctuelle, professionnelle et les résultats sont bluffants.</div>
+      <div class="rv-author">— SOPHIE D. · ORFORD</div>
+    </div>
+  </div>
+</section>
+
+<!-- PARTNER -->
+
+<section class="partner-section">
+  <div class="partner-inner">
+    <div class="partner-left reveal-l">
+      <div class="s-label" data-n="10" style="color:rgba(255,255,255,.3)">Partenaire</div>
+      <h2 class="s-title">EN COLLAB<br>AVEC <span class="yel">EUX</span></h2>
+      <p class="s-body">Nous travaillons avec Mon Auto Mécanique pour vous offrir un service complet — lavage et mécanique — à domicile.</p>
+    </div>
+    <div class="partner-right reveal-r">
+      <a href="https://monautomecanique.github.io/.com/index.html#categories" target="_blank" class="partner-card">
+        <img src="Images/logo-partenaire.jpeg" alt="Mon Auto Mécanique">
+        <p class="partner-desc">Service de mécanique automobile de qualité, <strong>directement chez vous.</strong></p>
+        <div class="partner-link">Visiter le site ↗</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+
+<section id="contact" class="contact-section">
+  <div class="ct-header reveal">
+    <div class="s-label" data-n="11">Contact</div>
+    <h2 class="s-title">RÉSERVEZ<br><span class="yel">MAINTENANT</span></h2>
+    <p class="s-body">Réponse garantie en moins de 10 minutes. Choisissez votre canal préféré.</p>
+  </div>
+  <div class="ct-grid">
+    <a href="tel:8736623813" class="ct-card">
+      <div class="ct-ico-wrap">📞</div>
+      <div class="ct-label">TÉLÉPHONE</div>
+      <div class="ct-hint">873-662-3813</div>
+    </a>
+    <a href="sms:8736623813" class="ct-card sms-featured">
+      <div class="ct-ico-wrap">💬</div>
+      <div class="ct-label">TEXTO 30 SEC</div>
+      <div class="ct-hint">Envoyez "LAVAGE"</div>
+      <div class="ct-badge">PLUS RAPIDE</div>
+    </a>
+    <a href="mailto:info.shineautomobile@gmail.com" class="ct-card">
+      <div class="ct-ico-wrap">✉️</div>
+      <div class="ct-label">EMAIL</div>
+      <div class="ct-hint">info.shineautomobile@gmail.com</div>
+    </a>
+    <a href="https://www.instagram.com/shineautomobile_" target="_blank" class="ct-card">
+      <div class="ct-ico-wrap"><img src="Images/instagram.jpeg" alt="Instagram" style="width:26px;height:26px;border-radius:4px;object-fit:cover;"></div>
+      <div class="ct-label">INSTAGRAM</div>
+      <div class="ct-hint">@shineautomobile_</div>
+    </a>
+  </div>
+</section>
+
+<!-- MAP -->
+
+<section class="map-section">
+  <div class="map-head">
+    <div class="map-title">Zone d'intervention</div>
+    <div class="map-tag">SHERBROOKE & ENVIRONS · ESTRIE · 15+ VILLES</div>
+  </div>
+  <div class="map-frame">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d45155.012057629!2d-71.9325!3d45.4000!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4cc92a5d9d8b0c0f%3A0x4b8f8e9f5d8e8f8e!2sSherbrooke%2C%20QC!5e0!3m2!1sfr!2sca!4v1744800000000"
+      width="100%" height="280" style="border:0;display:block;" allowfullscreen loading="lazy"></iframe>
+  </div>
+</section>
+
+<!-- ZONE -->
+
+<section class="zone-section">
+  <div class="zone-pills">
+    <span class="zpill">Sherbrooke</span><span class="zpill">Magog</span><span class="zpill">Bromptonville</span>
+    <span class="zpill">Windsor</span><span class="zpill">Waterville</span><span class="zpill">Saint-Denis-de-Brompton</span>
+    <span class="zpill">Orford</span><span class="zpill">Ascot Corner</span><span class="zpill">Ayer's Cliff</span>
+    <span class="zpill">Waterloo</span><span class="zpill">Coaticook</span><span class="zpill">Richmond</span>
+    <span class="zpill">Danville</span><span class="zpill">East Angus</span><span class="zpill">Cookshire-Eaton</span>
+  </div>
+</section>
+
+<!-- SMS FLOAT -->
+
+<a href="sms:18736623813" class="sms-float" title="SMS rapide">💬</a>
+
+<!-- STICKY MOBILE CTA -->
+
+<div class="sticky-mobile-cta">
+  <div class="sticky-mobile-inner">
+    <a href="tel:8736623813" class="smc-btn smc-call">📞 APPELER</a>
+    <a href="pageservice.html" target="_blank" class="smc-btn smc-book">RÉSERVER →</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+
+<footer>
+  <div class="footer-top">
+    <div class="ft-col">
+      <div class="footer-brand">SHINEAUTOMOBILE</div>
+      <div class="footer-tag">LAVAGE AUTO À DOMICILE · SHERBROOKE · DEPUIS 2040</div>
+      <div style="margin-top:16px;font-family:var(--mono);font-size:9px;letter-spacing:.15em;color:rgba(255,255,255,.25);">Entreprise locale · 100% écologique · Garantie satisfaction</div>
+    </div>
+    <div class="ft-col">
+      <div class="footer-tag" style="margin-bottom:6px">RÉSERVER MAINTENANT</div>
+      <a href="tel:8736623813" class="footer-phone">873-662-3813</a>
+      <a href="sms:8736623813" style="display:inline-flex;align-items:center;gap:8px;margin-top:16px;font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.15em;color:var(--grn);border:1px solid var(--grn);padding:8px 16px;transition:background .2s;">💬 TEXTO RAPIDE</a>
+    </div>
+    <div class="ft-col">
+      <div class="footer-links">
+        <a href="#vehicules" class="flink">Services →</a>
+        <a href="#forfaits" class="flink">Forfaits →</a>
+        <a href="#urgences" class="flink">Urgences →</a>
+        <a href="#contact" class="flink">Contact →</a>
+        <a href="https://www.instagram.com/shineautomobile_" target="_blank" class="flink">Instagram →</a>
+        <a href="pageservice.html" target="_blank" class="flink" style="color:var(--yel)">Réserver en ligne →</a>
+      </div>
+    </div>
+  </div>
+  <div class="footer-copy">
+    <span>© 2040 SHINEAUTOMOBILE</span>
+    <span>SHERBROOKE, QUÉBEC, CANADA</span>
+    <span class="hi">À PARTIR DE 40$</span>
+  </div>
+</footer>
+
+<script>
+/* CURSOR */
+const dot = document.getElementById('dot');
+document.addEventListener('mousemove', e => {
+  dot.style.left = e.clientX + 'px';
+  dot.style.top = e.clientY + 'px';
+});
+document.querySelectorAll('a, button, .hst, .why-card, .rv-card, .urg-card, .step-box, .ab-feat, .zpill, .ba-card, .ly-step').forEach(el => {
+  el.addEventListener('mouseenter', () => dot.classList.add('big'));
+  el.addEventListener('mouseleave', () => dot.classList.remove('big'));
+});
+
+/* LOADER */
+(function(){
+  const fill = document.getElementById('ldr-fill');
+  const pct  = document.getElementById('ldr-pct');
+  let p = 0;
+  const iv = setInterval(() => {
+    p += Math.random() * 6 + 2;
+    if(p >= 100) p = 100;
+    fill.style.width = p + '%';
+    pct.textContent = Math.round(p);
+    if(p >= 100){ clearInterval(iv); setTimeout(() => document.getElementById('ldr').classList.add('out'), 300); }
+  }, 30);
+})();
+
+/* NAV HIDE/SHOW */
+let lastY = 0;
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('nav');
+  const y = window.scrollY;
+  nav.classList.toggle('hidden', y > lastY && y > 120);
+  lastY = y;
+});
+
+/* SCROLL REVEAL */
+const obs = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if(e.isIntersecting){
+      const isCard = ['rv-card','ct-card','urg-card','ff-col','step-box'].some(c => e.target.classList.contains(c));
+      setTimeout(() => e.target.classList.add('in'), isCard ? i * 80 : 0);
+    }
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -50px 0px' });
+document.querySelectorAll('.reveal,.reveal-l,.reveal-r,.rv-card,.ct-card,.urg-card,.ff-col,.step-box').forEach(el => obs.observe(el));
+
+/* PROMO COPY */
+function copyCode(){
+  navigator.clipboard.writeText('SHINE10').then(() => {
+    const c = document.getElementById('promo-confirm');
+    c.classList.add('on');
+    setTimeout(() => c.classList.remove('on'), 3000);
+  });
+}
+
+/* MOBILE MENU */
+function toggleMob(){
+  const m = document.getElementById('mob-menu');
+  m.classList.toggle('open');
+  document.getElementById('mob-btn').textContent = m.classList.contains('open') ? '✕' : '☰';
+}
+
+/* VEHICLE PARALLAX */
+document.querySelectorAll('.veh-card').forEach(card => {
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    const x = ((e.clientX - r.left) / r.width - 0.5) * 16;
+    const y = ((e.clientY - r.top)  / r.height - 0.5) * 16;
+    const img = card.querySelector('.veh-img');
+    if(img) img.style.transform = `scale(1.1) translate(${x}px,${y}px)`;
+  });
+  card.addEventListener('mouseleave', () => {
+    const img = card.querySelector('.veh-img');
+    if(img) img.style.transform = '';
+  });
+});
+
+/* COUNTDOWN TIMER to June 10, 2026 */
+(function countdownTimer(){
+  const target = new Date('2026-06-10T23:59:59');
+  function update(){
+    const now = new Date();
+    const diff = target - now;
+    if(diff <= 0){ document.getElementById('cd-j').textContent='00'; return; }
+    const j = Math.floor(diff/86400000);
+    const h = Math.floor((diff%86400000)/3600000);
+    const m = Math.floor((diff%3600000)/60000);
+    const s = Math.floor((diff%60000)/1000);
+    document.getElementById('cd-j').textContent = String(j).padStart(2,'0');
+    document.getElementById('cd-h').textContent = String(h).padStart(2,'0');
+    document.getElementById('cd-m').textContent = String(m).padStart(2,'0');
+    document.getElementById('cd-s').textContent = String(s).padStart(2,'0');
+  }
+  update(); setInterval(update, 1000);
+})();
+
+/* WEATHER */
+const API_KEY = "c23a73717b8c4e49a19222057260205";
+const LAT = 45.40, LON = -71.89;
+async function loadWeather() {
+  try {
+    const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${LAT}&lon=${LON}&appid=${API_KEY}&units=metric&lang=fr`;
+    const response = await fetch(url);
+    const data = await response.json();
+    if (!data.list) throw new Error();
+    const daily = groupByDay(data.list);
+    renderWeatherCards(daily);
+    renderAIRecommendation(daily);
+  } catch (e) {
+    document.getElementById('ai-reason').textContent = "Impossible de charger la météo pour le moment.";
+  }
+}
+function groupByDay(list) {
+  const days = {};
+  list.forEach(item => {
+    const date = new Date(item.dt * 1000);
+    const key = date.toISOString().split('T')[0];
+    if (!days[key]) days[key] = { dayName: date.toLocaleDateString('fr-CA', {weekday:'short'}), date, icon: item.weather[0].icon, temp: Math.round(item.main.temp), rain: item.pop ? Math.round(item.pop*100) : 0, description: item.weather[0].description };
+  });
+  return Object.values(days).slice(0,6);
+}
+function renderWeatherCards(days) {
+  const c = document.getElementById('weather-grid'); c.innerHTML='';
+  days.forEach(day => {
+    const best = day.rain < 20 && day.temp >= 15;
+    const card = document.createElement('div');
+    card.className = `weather-card ${best?'best':''}`;
+    card.innerHTML = `<div class="weather-day">${day.dayName}${best?' ✦':''}</div><div class="weather-icon"><img src="https://openweathermap.org/img/wn/${day.icon}@2x.png" alt="" style="width:50px;margin:0 auto;"></div><div class="weather-temp">${day.temp}°C</div><div class="weather-rain">💧 ${day.rain}%</div>`;
+    c.appendChild(card);
+  });
+}
+function renderAIRecommendation(days) {
+  let best = days[0];
+  days.forEach(d => { if((100-d.rain)+(d.temp*2) > (100-best.rain)+(best.temp*2)) best=d; });
+  const name = best.date.toLocaleDateString('fr-CA', {weekday:'long', month:'long', day:'numeric'});
+  document.getElementById('ai-day').innerHTML = `${name} · <strong>${best.temp}°C</strong>`;
+  document.getElementById('ai-reason').textContent = best.rain<15 ? 'Conditions excellentes : faible risque de pluie et température idéale.' : 'Bonne journée pour un lavage complet.';
+}
+document.addEventListener('DOMContentLoaded', loadWeather);
+</script>
+
 </body>
 </html>
