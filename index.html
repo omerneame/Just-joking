@@ -2,11 +2,8 @@
 
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Mon Agenda Privé</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
   <title>Mon Agenda — ShineAutomobile</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet"/>
   <style>
@@ -14,21 +11,32 @@
 
 ```
 :root {
-  --bg: #0f0f11;
-  --surface: #18181c;
-  --surface2: #222228;
-  --border: #2e2e38;
-  --accent: #c8a96e;
-  --accent2: #7c6aaa;
-  --text: #e8e6e0;
-  --muted: #7a7880;
-  --danger: #c25f5f;
-  --green: #6aaa7c;
-  --radius: 12px;
+  --bg:        #f0f4ff;
+  --white:     #ffffff;
+  --blue:      #4f7ef8;
+  --blue-light:#eef2ff;
+  --blue-dark: #3a5fd6;
+  --purple:    #8b5cf6;
+  --purple-l:  #f3eeff;
+  --green:     #10b981;
+  --green-l:   #d1fae5;
+  --orange:    #f59e0b;
+  --orange-l:  #fef3c7;
+  --red:       #ef4444;
+  --red-l:     #fee2e2;
+  --teal:      #06b6d4;
+  --teal-l:    #cffafe;
+  --text:      #1e293b;
+  --text2:     #475569;
+  --muted:     #94a3b8;
+  --border:    #e2e8f0;
+  --shadow:    0 4px 24px rgba(79,126,248,0.10);
+  --shadow-lg: 0 12px 48px rgba(79,126,248,0.18);
+  --radius:    16px;
 }
 
 body {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Inter', sans-serif;
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
@@ -36,162 +44,214 @@ body {
   flex-direction: column;
 }
 
-/* HEADER */
 header {
-  padding: 24px 32px 16px;
-  border-bottom: 1px solid var(--border);
+  background: linear-gradient(135deg, #4f7ef8 0%, #8b5cf6 100%);
+  padding: 0 32px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: var(--surface);
+  height: 72px;
+  box-shadow: 0 4px 20px rgba(79,126,248,0.35);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+.header-left { display: flex; align-items: center; gap: 14px; }
+.header-logo {
+  width: 42px; height: 42px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem;
+  border: 1px solid rgba(255,255,255,0.3);
 }
 header h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.7rem;
-  color: var(--accent);
-  letter-spacing: 0.02em;
+  font-family: 'Sora', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fff;
 }
 header .subtitle {
-  font-size: 0.78rem;
-  color: var(--muted);
-  margin-top: 2px;
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.7);
+  margin-top: 1px;
 }
 .btn-add {
-  background: var(--accent);
-  color: #0f0f11;
+  background: #fff;
+  color: var(--blue);
   border: none;
-  border-radius: 8px;
-  padding: 10px 22px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.9rem;
-  font-weight: 500;
+  border-radius: 12px;
+  padding: 10px 20px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: opacity 0.15s, transform 0.15s;
+  transition: all 0.2s;
+  display: flex; align-items: center; gap: 8px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.12);
 }
-.btn-add:hover { opacity: 0.88; transform: translateY(-1px); }
+.btn-add:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
 
-/* TABS */
-.tabs {
-  display: flex;
-  gap: 0;
-  border-bottom: 1px solid var(--border);
-  background: var(--surface);
+.tabs-bar {
+  background: var(--white);
+  border-bottom: 2px solid var(--border);
   padding: 0 32px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 .tab {
-  padding: 12px 24px;
+  padding: 16px 22px;
   cursor: pointer;
   font-size: 0.88rem;
+  font-weight: 500;
   color: var(--muted);
-  border-bottom: 2px solid transparent;
-  transition: color 0.15s, border-color 0.15s;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  transition: all 0.2s;
   user-select: none;
+  display: flex; align-items: center; gap: 8px;
 }
-.tab.active {
-  color: var(--accent);
-  border-bottom-color: var(--accent);
-}
-.tab:hover:not(.active) { color: var(--text); }
+.tab:hover:not(.active) { color: var(--text2); background: var(--bg); }
+.tab.active { color: var(--blue); border-bottom-color: var(--blue); font-weight: 600; }
 
-/* MAIN LAYOUT */
 main {
   flex: 1;
   padding: 28px 32px;
-  max-width: 1100px;
+  max-width: 1160px;
   width: 100%;
   margin: 0 auto;
 }
 
-/* ===== CALENDAR VIEW ===== */
+.stats-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 24px;
+}
+.stat-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  transition: transform 0.2s;
+}
+.stat-card:hover { transform: translateY(-2px); }
+.stat-icon {
+  width: 46px; height: 46px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+.stat-icon.blue   { background: var(--blue-light); }
+.stat-icon.green  { background: var(--green-l); }
+.stat-icon.orange { background: var(--orange-l); }
+.stat-icon.purple { background: var(--purple-l); }
+.stat-val   { font-family: 'Sora', sans-serif; font-size: 1.6rem; font-weight: 800; color: var(--text); line-height: 1; }
+.stat-label { font-size: 0.72rem; color: var(--muted); margin-top: 3px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
+
 #view-calendar { display: none; }
 #view-calendar.active { display: block; }
 
+.cal-container {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
 .cal-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 20px;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(135deg, var(--blue-light), var(--purple-l));
 }
 .cal-month {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.35rem;
+  font-family: 'Sora', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
   color: var(--text);
   text-transform: capitalize;
 }
-.cal-nav {
-  display: flex;
-  gap: 8px;
-}
+.cal-nav { display: flex; gap: 8px; align-items: center; }
 .cal-nav button {
-  background: var(--surface2);
-  border: 1px solid var(--border);
+  background: var(--white);
+  border: 1.5px solid var(--border);
   color: var(--text);
-  border-radius: 8px;
-  width: 36px; height: 36px;
+  border-radius: 10px;
+  height: 36px;
+  padding: 0 14px;
   cursor: pointer;
-  font-size: 1rem;
-  transition: background 0.15s;
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.15s;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
 }
-.cal-nav button:hover { background: var(--border); }
+.cal-nav button:hover { background: var(--blue); color: #fff; border-color: var(--blue); }
 
-.cal-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 4px;
-}
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0; }
 .cal-day-name {
   text-align: center;
-  font-size: 0.72rem;
+  font-size: 0.7rem;
+  font-weight: 700;
   color: var(--muted);
-  padding: 6px 0;
+  padding: 12px 4px 8px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
+  border-bottom: 1px solid var(--border);
+  background: #f8faff;
 }
 .cal-cell {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  min-height: 80px;
-  padding: 6px;
+  background: var(--white);
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  min-height: 88px;
+  padding: 8px;
   cursor: pointer;
-  transition: border-color 0.15s, background 0.15s;
+  transition: background 0.15s;
   position: relative;
 }
-.cal-cell:hover { border-color: var(--accent); background: var(--surface2); }
-.cal-cell.other-month { opacity: 0.35; }
-.cal-cell.today {
-  border-color: var(--accent2);
-  background: rgba(124, 106, 170, 0.1);
-}
+.cal-cell:nth-child(7n) { border-right: none; }
+.cal-cell:hover { background: var(--blue-light); }
+.cal-cell.other-month { background: #fafbff; opacity: 0.55; }
+.cal-cell.today { background: linear-gradient(135deg, #eef2ff, #f3eeff); }
 .cal-day-num {
-  font-size: 0.8rem;
-  color: var(--muted);
-  font-weight: 500;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text2);
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  border-radius: 8px;
 }
-.cal-cell.today .cal-day-num {
-  color: var(--accent2);
-  font-weight: 700;
-}
+.cal-cell.today .cal-day-num { background: var(--blue); color: #fff; font-weight: 700; }
 .cal-rdv-dot {
-  margin-top: 4px;
-  font-size: 0.7rem;
-  background: var(--accent);
-  color: #0f0f11;
-  border-radius: 4px;
-  padding: 1px 5px;
+  margin-top: 3px;
+  font-size: 0.68rem;
+  font-weight: 500;
+  border-radius: 5px;
+  padding: 2px 6px;
   margin-bottom: 2px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 100%;
   display: block;
+  cursor: pointer;
 }
-.cal-rdv-dot.cat-perso { background: var(--accent2); color: #fff; }
-.cal-rdv-dot.cat-medical { background: var(--green); color: #0f0f11; }
-.cal-rdv-dot.cat-travail { background: #6aaec8; color: #0f0f11; }
-.cal-rdv-dot.cat-autre { background: var(--muted); color: #0f0f11; }
+.cal-rdv-dot.cat-professionnel { background: #dbeafe; color: #1d4ed8; }
+.cal-rdv-dot.cat-perso   { background: var(--purple-l); color: #6d28d9; }
+.cal-rdv-dot.cat-medical { background: var(--green-l);  color: #065f46; }
+.cal-rdv-dot.cat-travail { background: var(--teal-l);   color: #0e7490; }
+.cal-rdv-dot.cat-autre   { background: var(--orange-l); color: #92400e; }
 
-/* ===== LIST VIEW ===== */
 #view-list { display: none; }
 #view-list.active { display: block; }
 
@@ -203,803 +263,254 @@ main {
   align-items: center;
 }
 .filter-input {
-  background: var(--surface);
-  border: 1px solid var(--border);
+  background: var(--white);
+  border: 1.5px solid var(--border);
   color: var(--text);
-  border-radius: 8px;
-  padding: 8px 14px;
-  font-family: 'DM Sans', sans-serif;
+  border-radius: 10px;
+  padding: 9px 14px;
+  font-family: 'Inter', sans-serif;
   font-size: 0.88rem;
   outline: none;
-  transition: border-color 0.15s;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
 }
-.filter-input:focus { border-color: var(--accent); }
+.filter-input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(79,126,248,0.12); }
 .filter-input::placeholder { color: var(--muted); }
-select.filter-input option { background: var(--surface); }
 
-/* Section header in list */
 .list-section-header {
-  font-size: 0.72rem;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  padding: 4px 0 8px;
-  margin-top: 8px;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 4px;
-}
-.list-section-header.upcoming { color: var(--accent); }
-.list-section-header.past { color: var(--muted); opacity: 0.6; }
-
-.rdv-list { display: flex; flex-direction: column; gap: 8px; }
-.rdv-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 14px 18px;
-  display: flex;
-  align-items: flex-start;
-  gap: 14px;
-  transition: border-color 0.15s, transform 0.12s, opacity 0.3s;
-  animation: fadeIn 0.2s ease;
-}
-.rdv-card.past-card { opacity: 0.55; }
-.rdv-card.checked {
-  border-color: var(--green);
-  background: rgba(106,170,124,0.07);
-}
-.rdv-card.removing {
-  opacity: 0;
-  transform: translateX(30px);
-  transition: opacity 0.35s, transform 0.35s;
-}
-@keyframes fadeIn { from { opacity:0; transform: translateY(6px); } to { opacity:1; transform: translateY(0); } }
-.rdv-card:hover { border-color: var(--border); transform: translateX(2px); }
-
-/* Checkbox */
-.rdv-checkbox-wrap {
-  display: flex;
-  align-items: center;
-  padding-top: 4px;
-  flex-shrink: 0;
-}
-.rdv-checkbox {
-  appearance: none;
-  width: 20px; height: 20px;
-  border: 2px solid var(--border);
-  border-radius: 6px;
-  cursor: pointer;
-  background: var(--surface2);
-  transition: border-color 0.15s, background 0.15s;
-  display: flex; align-items: center; justify-content: center;
-  position: relative;
-}
-.rdv-checkbox:checked {
-  background: var(--green);
-  border-color: var(--green);
-}
-.rdv-checkbox:checked::after {
-  content: '✓';
-  position: absolute;
-  color: #0f0f11;
   font-size: 0.75rem;
   font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 8px 16px;
+  margin: 16px 0 8px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
+.list-section-header.upcoming { background: var(--blue-light); color: var(--blue-dark); }
+.list-section-header.past     { background: #f1f5f9; color: var(--muted); }
+
+.rdv-list { display: flex; flex-direction: column; gap: 10px; }
+
+.rdv-card {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-left: 4px solid var(--blue);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: var(--shadow);
+  transition: transform 0.15s, box-shadow 0.15s, opacity 0.3s;
+  animation: slideIn 0.22s ease;
+}
+@keyframes slideIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+.rdv-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.rdv-card.past-card { opacity: 0.48; background: #fafbff; }
+.rdv-card.checked   { border-left-color: var(--green) !important; background: #f0fdf4; border-color: #bbf7d0; }
+.rdv-card.removing  { opacity: 0; transform: translateX(40px); transition: all 0.35s ease; }
+
+.rdv-card.cat-bar-perso    { border-left-color: var(--purple); }
+.rdv-card.cat-bar-medical  { border-left-color: var(--green); }
+.rdv-card.cat-bar-travail  { border-left-color: var(--teal); }
+.rdv-card.cat-bar-autre    { border-left-color: var(--orange); }
+.rdv-card.cat-bar-professionnel { border-left-color: var(--blue); }
+
+.rdv-checkbox-wrap { flex-shrink: 0; }
+.rdv-checkbox {
+  appearance: none;
+  width: 22px; height: 22px;
+  border: 2px solid var(--border);
+  border-radius: 7px;
+  cursor: pointer;
+  background: var(--bg);
+  transition: all 0.15s;
+  position: relative;
+  display: block;
+}
+.rdv-checkbox:checked { background: var(--green); border-color: var(--green); }
+.rdv-checkbox:checked::after { content: '✓'; position: absolute; color: #fff; font-size: 0.8rem; font-weight: 700; top: 50%; left: 50%; transform: translate(-50%,-50%); }
 .rdv-checkbox:hover { border-color: var(--green); }
 
-/* Done button */
-.btn-done {
-  background: var(--green);
-  color: #0f0f11;
-  border: none;
-  border-radius: 7px;
-  padding: 5px 12px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
-  transition: opacity 0.15s, transform 0.15s;
-  white-space: nowrap;
-}
-.btn-done:hover { opacity: 0.85; transform: scale(1.04); }
-
 .rdv-date-badge {
-  background: var(--surface2);
-  border-radius: 8px;
-  padding: 8px 12px;
-  text-align: center;
   min-width: 52px;
+  background: linear-gradient(135deg, var(--blue), var(--purple));
+  border-radius: 12px;
+  padding: 9px 10px;
+  text-align: center;
   flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(79,126,248,0.25);
 }
-.rdv-date-day { font-size: 1.4rem; font-weight: 700; color: var(--accent); line-height: 1; }
-.rdv-date-month { font-size: 0.65rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
-.rdv-info { flex: 1; min-width: 0; }
-.rdv-title { font-size: 1rem; font-weight: 500; color: var(--text); }
-.rdv-meta { display: flex; gap: 8px; margin-top: 5px; flex-wrap: wrap; align-items: center; }
-.rdv-time { font-size: 0.78rem; color: var(--muted); }
+.rdv-card.past-card .rdv-date-badge { background: linear-gradient(135deg, #94a3b8, #cbd5e1); box-shadow: none; }
+.rdv-date-day   { font-family: 'Sora', sans-serif; font-size: 1.35rem; font-weight: 800; color: #fff; line-height: 1; }
+.rdv-date-month { font-size: 0.62rem; font-weight: 600; color: rgba(255,255,255,0.8); text-transform: uppercase; letter-spacing: 0.06em; }
+
+.rdv-info  { flex: 1; min-width: 0; }
+.rdv-title { font-size: 0.95rem; font-weight: 600; color: var(--text); }
+.rdv-meta  { display: flex; gap: 6px; margin-top: 5px; flex-wrap: wrap; align-items: center; }
+
+.rdv-time {
+  font-size: 0.74rem; font-weight: 500; color: var(--text2);
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 6px; padding: 2px 8px;
+}
 .rdv-service-tag {
-  font-size: 0.68rem;
-  padding: 2px 8px;
-  border-radius: 20px;
-  font-weight: 500;
-  background: rgba(34,211,242,0.1);
-  color: #6aaec8;
-  max-width: 200px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  font-size: 0.72rem; font-weight: 500;
+  background: #dbeafe; color: #1d4ed8;
+  border-radius: 6px; padding: 2px 8px;
+  max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 .rdv-cat {
-  font-size: 0.68rem;
-  padding: 2px 8px;
-  border-radius: 20px;
-  font-weight: 500;
-  background: rgba(200,169,110,0.15);
-  color: var(--accent);
+  font-size: 0.7rem; font-weight: 600;
+  border-radius: 20px; padding: 2px 10px;
+  text-transform: uppercase; letter-spacing: 0.04em;
 }
-.rdv-cat.cat-perso { background: rgba(124,106,170,0.15); color: var(--accent2); }
-.rdv-cat.cat-medical { background: rgba(106,170,124,0.15); color: var(--green); }
-.rdv-cat.cat-travail { background: rgba(106,174,200,0.15); color: #6aaec8; }
-.rdv-cat.cat-autre { background: rgba(122,120,128,0.15); color: var(--muted); }
-.rdv-notes { font-size: 0.78rem; color: var(--muted); margin-top: 5px; white-space: pre-wrap; }
+.rdv-cat.cat-professionnel { background: #dbeafe; color: #1d4ed8; }
+.rdv-cat.cat-perso   { background: var(--purple-l); color: #6d28d9; }
+.rdv-cat.cat-medical { background: var(--green-l);  color: #065f46; }
+.rdv-cat.cat-travail { background: var(--teal-l);   color: #0e7490; }
+.rdv-cat.cat-autre   { background: var(--orange-l); color: #92400e; }
+
+.rdv-notes { font-size: 0.76rem; color: var(--muted); margin-top: 5px; }
 .rdv-actions { display: flex; gap: 6px; align-items: center; flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end; }
+
+.btn-done {
+  background: var(--green); color: #fff; border: none;
+  border-radius: 8px; padding: 6px 14px;
+  font-size: 0.78rem; font-weight: 600;
+  cursor: pointer; font-family: 'Inter', sans-serif;
+  transition: all 0.15s;
+  box-shadow: 0 2px 8px rgba(16,185,129,0.3);
+}
+.btn-done:hover { background: #059669; transform: scale(1.05); }
+
 .btn-icon {
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  color: var(--muted);
-  border-radius: 7px;
-  width: 30px; height: 30px;
-  cursor: pointer;
-  font-size: 0.85rem;
-  display: flex; align-items: center; justify-content: center;
-  transition: background 0.15s, color 0.15s;
+  background: var(--bg); border: 1.5px solid var(--border); color: var(--muted);
+  border-radius: 8px; width: 32px; height: 32px; cursor: pointer; font-size: 0.85rem;
+  display: flex; align-items: center; justify-content: center; transition: all 0.15s;
 }
-.btn-icon:hover { background: var(--border); color: var(--text); }
-.btn-icon.danger:hover { background: rgba(194,95,95,0.15); color: var(--danger); border-color: var(--danger); }
+.btn-icon:hover        { background: var(--blue-light); color: var(--blue); border-color: var(--blue); }
+.btn-icon.danger:hover { background: var(--red-l); color: var(--red); border-color: var(--red); }
 
-.empty-state {
-  text-align: center;
-  padding: 64px 24px;
-  color: var(--muted);
-}
-.empty-state .icon { font-size: 2.5rem; margin-bottom: 12px; opacity: 0.5; }
-.empty-state p { font-size: 0.9rem; }
+.empty-state { text-align: center; padding: 64px 24px; color: var(--muted); }
+.empty-state .icon { font-size: 3rem; margin-bottom: 14px; display: block; }
+.empty-state p { font-size: 0.92rem; }
 
-/* ===== MODAL ===== */
 .modal-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
-  backdrop-filter: blur(4px);
-  z-index: 100;
-  align-items: center;
-  justify-content: center;
+  display: none; position: fixed; inset: 0;
+  background: rgba(15,23,42,0.55);
+  backdrop-filter: blur(6px);
+  z-index: 100; align-items: center; justify-content: center; padding: 16px;
 }
 .modal-overlay.open { display: flex; }
 .modal {
-  background: #ffffff;
-  border-radius: 16px;
-  padding: 32px;
-  width: 100%;
-  max-width: 500px;
-  max-height: 90vh;
-  overflow-y: auto;
-  animation: modalIn 0.2s ease;
-  box-shadow: 0 24px 80px rgba(0,0,0,0.35);
+  background: #ffffff; border-radius: 20px; padding: 0;
+  width: 100%; max-width: 520px; max-height: 92vh; overflow-y: auto;
+  animation: modalIn 0.22s cubic-bezier(0.34,1.56,0.64,1);
+  box-shadow: 0 32px 80px rgba(15,23,42,0.22);
 }
-@keyframes modalIn { from { opacity:0; transform: scale(0.96) translateY(10px); } to { opacity:1; transform: scale(1) translateY(0); } }
-.modal h2 {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.4rem;
-  color: #1a1a2e;
-  margin-bottom: 24px;
-  border-bottom: 2px solid #f0f0f0;
-  padding-bottom: 14px;
+@keyframes modalIn { from { opacity:0; transform:scale(0.9) translateY(20px); } to { opacity:1; transform:scale(1) translateY(0); } }
+
+.modal-header {
+  background: linear-gradient(135deg, var(--blue) 0%, var(--purple) 100%);
+  padding: 24px 28px 20px;
+  border-radius: 20px 20px 0 0;
+  position: relative;
 }
-.form-group { margin-bottom: 16px; }
+.modal-header h2 { font-family: 'Sora', sans-serif; font-size: 1.2rem; font-weight: 700; color: #fff; }
+.modal-header p  { font-size: 0.78rem; color: rgba(255,255,255,0.72); margin-top: 3px; }
+
+.modal-body { padding: 22px 28px 4px; }
+
+.form-section-title {
+  font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--muted);
+  margin: 18px 0 10px;
+  display: flex; align-items: center; gap: 8px;
+}
+.form-section-title::after { content:''; flex:1; height:1px; background:var(--border); }
+
+.form-group { margin-bottom: 14px; }
+.form-row   { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
 label {
-  display: block;
-  font-size: 0.78rem;
-  color: #555;
-  margin-bottom: 5px;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  font-weight: 600;
+  display: block; font-size: 0.75rem; font-weight: 600;
+  color: var(--text2); margin-bottom: 5px;
+  text-transform: uppercase; letter-spacing: 0.05em;
 }
 input, select, textarea {
-  width: 100%;
-  background: #f7f8fa;
-  border: 1.5px solid #dde1e9;
-  color: #1a1a2e;
-  border-radius: 8px;
-  padding: 10px 14px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.92rem;
-  outline: none;
-  transition: border-color 0.15s, box-shadow 0.15s;
+  width: 100%; background: var(--bg);
+  border: 1.5px solid var(--border); color: var(--text);
+  border-radius: 10px; padding: 10px 14px;
+  font-family: 'Inter', sans-serif; font-size: 0.9rem; outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
 }
 input:focus, select:focus, textarea:focus {
-  border-color: #c8a96e;
-  box-shadow: 0 0 0 3px rgba(200,169,110,0.15);
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px rgba(79,126,248,0.14);
   background: #fff;
 }
-input::placeholder { color: #aaa; }
-textarea { resize: vertical; min-height: 80px; }
-select option { background: #fff; color: #1a1a2e; }
+input::placeholder { color: var(--muted); }
+textarea { resize: vertical; min-height: 78px; }
+select option { background: #fff; color: var(--text); }
 
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-
-.modal-actions {
-  display: flex;
-  gap: 10px;
-  justify-content: flex-end;
-  margin-top: 24px;
-  padding-top: 16px;
-  border-top: 1px solid #f0f0f0;
+.modal-footer {
+  padding: 16px 28px 22px;
+  display: flex; gap: 10px; justify-content: flex-end;
+  border-top: 1px solid var(--border); margin-top: 16px;
 }
 .btn-cancel {
-  background: #f5f5f5;
-  border: 1.5px solid #e0e0e0;
-  color: #666;
-  border-radius: 8px;
-  padding: 10px 20px;
-  cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.88rem;
-  font-weight: 500;
-  transition: background 0.15s, color 0.15s;
+  background: var(--bg); border: 1.5px solid var(--border); color: var(--text2);
+  border-radius: 10px; padding: 10px 22px; cursor: pointer;
+  font-family: 'Inter', sans-serif; font-size: 0.9rem; font-weight: 500;
+  transition: all 0.15s;
 }
-.btn-cancel:hover { background: #eaeaea; color: #333; }
+.btn-cancel:hover { background: #e2e8f0; color: var(--text); }
 .btn-save {
-  background: #c8a96e;
-  border: none;
-  color: #fff;
-  border-radius: 8px;
-  padding: 10px 28px;
-  cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 0.92rem;
-  font-weight: 600;
-  transition: background 0.15s, transform 0.15s;
-  box-shadow: 0 4px 14px rgba(200,169,110,0.35);
+  background: linear-gradient(135deg, var(--blue), var(--purple));
+  border: none; color: #fff; border-radius: 10px;
+  padding: 10px 28px; cursor: pointer;
+  font-family: 'Inter', sans-serif; font-size: 0.9rem; font-weight: 600;
+  transition: all 0.15s;
+  box-shadow: 0 4px 16px rgba(79,126,248,0.35);
 }
-.btn-save:hover { background: #b8955a; transform: translateY(-1px); }
+.btn-save:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(79,126,248,0.45); }
 
-/* TOAST */
 .toast {
-  position: fixed;
-  bottom: 28px;
-  left: 50%;
+  position: fixed; bottom: 28px; left: 50%;
   transform: translateX(-50%) translateY(20px);
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  color: var(--text);
-  padding: 10px 24px;
-  border-radius: 40px;
-  font-size: 0.85rem;
-  opacity: 0;
-  pointer-events: none;
+  background: var(--text); color: #fff;
+  padding: 12px 24px; border-radius: 40px;
+  font-size: 0.85rem; font-weight: 500;
+  opacity: 0; pointer-events: none;
   transition: opacity 0.2s, transform 0.2s;
-  z-index: 999;
+  z-index: 999; box-shadow: 0 8px 32px rgba(0,0,0,0.2);
 }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-/* SCROLLBAR */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+@media (max-width: 700px) {
+  header { padding: 0 16px; }
+  main   { padding: 16px; }
+  .stats-bar { grid-template-columns: 1fr 1fr; }
+  .form-row  { grid-template-columns: 1fr; }
+  .tabs-bar  { padding: 0 8px; }
+  .tab { padding: 14px 12px; font-size: 0.8rem; }
+  .btn-add span:last-child { display: none; }
+}
 ```
-    :root {
-      --bg:        #f0f4ff;
-      --white:     #ffffff;
-      --blue:      #4f7ef8;
-      --blue-light:#eef2ff;
-      --blue-dark: #3a5fd6;
-      --purple:    #8b5cf6;
-      --purple-l:  #f3eeff;
-      --green:     #10b981;
-      --green-l:   #d1fae5;
-      --orange:    #f59e0b;
-      --orange-l:  #fef3c7;
-      --red:       #ef4444;
-      --red-l:     #fee2e2;
-      --teal:      #06b6d4;
-      --teal-l:    #cffafe;
-      --text:      #1e293b;
-      --text2:     #475569;
-      --muted:     #94a3b8;
-      --border:    #e2e8f0;
-      --shadow:    0 4px 24px rgba(79,126,248,0.10);
-      --shadow-lg: 0 12px 48px rgba(79,126,248,0.18);
-      --radius:    16px;
-    }
 
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* ══════════════ HEADER ══════════════ */
-    header {
-      background: linear-gradient(135deg, #4f7ef8 0%, #8b5cf6 100%);
-      padding: 0 32px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 72px;
-      box-shadow: 0 4px 20px rgba(79,126,248,0.35);
-      position: sticky;
-      top: 0;
-      z-index: 50;
-    }
-    .header-left { display: flex; align-items: center; gap: 14px; }
-    .header-logo {
-      width: 42px; height: 42px;
-      background: rgba(255,255,255,0.2);
-      border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.3rem;
-      border: 1px solid rgba(255,255,255,0.3);
-    }
-    header h1 {
-      font-family: 'Sora', sans-serif;
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: #fff;
-    }
-    header .subtitle {
-      font-size: 0.72rem;
-      color: rgba(255,255,255,0.7);
-      margin-top: 1px;
-    }
-    .btn-add {
-      background: #fff;
-      color: var(--blue);
-      border: none;
-      border-radius: 12px;
-      padding: 10px 20px;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.88rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-      display: flex; align-items: center; gap: 8px;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.12);
-    }
-    .btn-add:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.15); }
-
-    /* ══════════════ TABS ══════════════ */
-    .tabs-bar {
-      background: var(--white);
-      border-bottom: 2px solid var(--border);
-      padding: 0 32px;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-    .tab {
-      padding: 16px 22px;
-      cursor: pointer;
-      font-size: 0.88rem;
-      font-weight: 500;
-      color: var(--muted);
-      border-bottom: 3px solid transparent;
-      margin-bottom: -2px;
-      transition: all 0.2s;
-      user-select: none;
-      display: flex; align-items: center; gap: 8px;
-    }
-    .tab:hover:not(.active) { color: var(--text2); background: var(--bg); }
-    .tab.active { color: var(--blue); border-bottom-color: var(--blue); font-weight: 600; }
-
-    /* ══════════════ MAIN ══════════════ */
-    main {
-      flex: 1;
-      padding: 28px 32px;
-      max-width: 1160px;
-      width: 100%;
-      margin: 0 auto;
-    }
-
-    /* ══════════════ STATS BAR ══════════════ */
-    .stats-bar {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 14px;
-      margin-bottom: 24px;
-    }
-    .stat-card {
-      background: var(--white);
-      border-radius: var(--radius);
-      padding: 18px 20px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      box-shadow: var(--shadow);
-      border: 1px solid var(--border);
-      transition: transform 0.2s;
-    }
-    .stat-card:hover { transform: translateY(-2px); }
-    .stat-icon {
-      width: 46px; height: 46px;
-      border-radius: 12px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.3rem;
-      flex-shrink: 0;
-    }
-    .stat-icon.blue   { background: var(--blue-light); }
-    .stat-icon.green  { background: var(--green-l); }
-    .stat-icon.orange { background: var(--orange-l); }
-    .stat-icon.purple { background: var(--purple-l); }
-    .stat-val   { font-family: 'Sora', sans-serif; font-size: 1.6rem; font-weight: 800; color: var(--text); line-height: 1; }
-    .stat-label { font-size: 0.72rem; color: var(--muted); margin-top: 3px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
-
-    /* ══════════════ CALENDAR ══════════════ */
-    #view-calendar { display: none; }
-    #view-calendar.active { display: block; }
-
-    .cal-container {
-      background: var(--white);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      border: 1px solid var(--border);
-      overflow: hidden;
-    }
-    .cal-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 20px 24px;
-      border-bottom: 1px solid var(--border);
-      background: linear-gradient(135deg, var(--blue-light), var(--purple-l));
-    }
-    .cal-month {
-      font-family: 'Sora', sans-serif;
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--text);
-      text-transform: capitalize;
-    }
-    .cal-nav { display: flex; gap: 8px; align-items: center; }
-    .cal-nav button {
-      background: var(--white);
-      border: 1.5px solid var(--border);
-      color: var(--text);
-      border-radius: 10px;
-      height: 36px;
-      padding: 0 14px;
-      cursor: pointer;
-      font-size: 0.85rem;
-      font-weight: 600;
-      font-family: 'Inter', sans-serif;
-      transition: all 0.15s;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
-    }
-    .cal-nav button:hover { background: var(--blue); color: #fff; border-color: var(--blue); }
-
-    .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0; }
-    .cal-day-name {
-      text-align: center;
-      font-size: 0.7rem;
-      font-weight: 700;
-      color: var(--muted);
-      padding: 12px 4px 8px;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      border-bottom: 1px solid var(--border);
-      background: #f8faff;
-    }
-    .cal-cell {
-      background: var(--white);
-      border-right: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      min-height: 88px;
-      padding: 8px;
-      cursor: pointer;
-      transition: background 0.15s;
-      position: relative;
-    }
-    .cal-cell:nth-child(7n) { border-right: none; }
-    .cal-cell:hover { background: var(--blue-light); }
-    .cal-cell.other-month { background: #fafbff; opacity: 0.55; }
-    .cal-cell.today { background: linear-gradient(135deg, #eef2ff, #f3eeff); }
-    .cal-day-num {
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: var(--text2);
-      width: 28px; height: 28px;
-      display: flex; align-items: center; justify-content: center;
-      border-radius: 8px;
-    }
-    .cal-cell.today .cal-day-num { background: var(--blue); color: #fff; font-weight: 700; }
-    .cal-rdv-dot {
-      margin-top: 3px;
-      font-size: 0.68rem;
-      font-weight: 500;
-      border-radius: 5px;
-      padding: 2px 6px;
-      margin-bottom: 2px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      max-width: 100%;
-      display: block;
-      cursor: pointer;
-    }
-    .cal-rdv-dot.cat-professionnel { background: #dbeafe; color: #1d4ed8; }
-    .cal-rdv-dot.cat-perso   { background: var(--purple-l); color: #6d28d9; }
-    .cal-rdv-dot.cat-medical { background: var(--green-l);  color: #065f46; }
-    .cal-rdv-dot.cat-travail { background: var(--teal-l);   color: #0e7490; }
-    .cal-rdv-dot.cat-autre   { background: var(--orange-l); color: #92400e; }
-
-    /* ══════════════ LIST VIEW ══════════════ */
-    #view-list { display: none; }
-    #view-list.active { display: block; }
-
-    .list-filters {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-    .filter-input {
-      background: var(--white);
-      border: 1.5px solid var(--border);
-      color: var(--text);
-      border-radius: 10px;
-      padding: 9px 14px;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.88rem;
-      outline: none;
-      transition: border-color 0.15s, box-shadow 0.15s;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
-    }
-    .filter-input:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(79,126,248,0.12); }
-    .filter-input::placeholder { color: var(--muted); }
-
-    .list-section-header {
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      padding: 8px 16px;
-      margin: 16px 0 8px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .list-section-header.upcoming { background: var(--blue-light); color: var(--blue-dark); }
-    .list-section-header.past     { background: #f1f5f9; color: var(--muted); }
-
-    .rdv-list { display: flex; flex-direction: column; gap: 10px; }
-
-    .rdv-card {
-      background: var(--white);
-      border: 1.5px solid var(--border);
-      border-left: 4px solid var(--blue);
-      border-radius: var(--radius);
-      padding: 14px 16px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      box-shadow: var(--shadow);
-      transition: transform 0.15s, box-shadow 0.15s, opacity 0.3s;
-      animation: slideIn 0.22s ease;
-    }
-    @keyframes slideIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
-    .rdv-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
-    .rdv-card.past-card { opacity: 0.48; background: #fafbff; }
-    .rdv-card.checked   { border-left-color: var(--green) !important; background: #f0fdf4; border-color: #bbf7d0; }
-    .rdv-card.removing  { opacity: 0; transform: translateX(40px); transition: all 0.35s ease; }
-
-    .rdv-card.cat-bar-perso    { border-left-color: var(--purple); }
-    .rdv-card.cat-bar-medical  { border-left-color: var(--green); }
-    .rdv-card.cat-bar-travail  { border-left-color: var(--teal); }
-    .rdv-card.cat-bar-autre    { border-left-color: var(--orange); }
-    .rdv-card.cat-bar-professionnel { border-left-color: var(--blue); }
-
-    .rdv-checkbox-wrap { flex-shrink: 0; }
-    .rdv-checkbox {
-      appearance: none;
-      width: 22px; height: 22px;
-      border: 2px solid var(--border);
-      border-radius: 7px;
-      cursor: pointer;
-      background: var(--bg);
-      transition: all 0.15s;
-      position: relative;
-      display: block;
-    }
-    .rdv-checkbox:checked { background: var(--green); border-color: var(--green); }
-    .rdv-checkbox:checked::after { content: '✓'; position: absolute; color: #fff; font-size: 0.8rem; font-weight: 700; top: 50%; left: 50%; transform: translate(-50%,-50%); }
-    .rdv-checkbox:hover { border-color: var(--green); }
-
-    .rdv-date-badge {
-      min-width: 52px;
-      background: linear-gradient(135deg, var(--blue), var(--purple));
-      border-radius: 12px;
-      padding: 9px 10px;
-      text-align: center;
-      flex-shrink: 0;
-      box-shadow: 0 4px 12px rgba(79,126,248,0.25);
-    }
-    .rdv-card.past-card .rdv-date-badge { background: linear-gradient(135deg, #94a3b8, #cbd5e1); box-shadow: none; }
-    .rdv-date-day   { font-family: 'Sora', sans-serif; font-size: 1.35rem; font-weight: 800; color: #fff; line-height: 1; }
-    .rdv-date-month { font-size: 0.62rem; font-weight: 600; color: rgba(255,255,255,0.8); text-transform: uppercase; letter-spacing: 0.06em; }
-
-    .rdv-info  { flex: 1; min-width: 0; }
-    .rdv-title { font-size: 0.95rem; font-weight: 600; color: var(--text); }
-    .rdv-meta  { display: flex; gap: 6px; margin-top: 5px; flex-wrap: wrap; align-items: center; }
-
-    .rdv-time {
-      font-size: 0.74rem; font-weight: 500; color: var(--text2);
-      background: var(--bg); border: 1px solid var(--border);
-      border-radius: 6px; padding: 2px 8px;
-    }
-    .rdv-service-tag {
-      font-size: 0.72rem; font-weight: 500;
-      background: #dbeafe; color: #1d4ed8;
-      border-radius: 6px; padding: 2px 8px;
-      max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-    }
-    .rdv-cat {
-      font-size: 0.7rem; font-weight: 600;
-      border-radius: 20px; padding: 2px 10px;
-      text-transform: uppercase; letter-spacing: 0.04em;
-    }
-    .rdv-cat.cat-professionnel { background: #dbeafe; color: #1d4ed8; }
-    .rdv-cat.cat-perso   { background: var(--purple-l); color: #6d28d9; }
-    .rdv-cat.cat-medical { background: var(--green-l);  color: #065f46; }
-    .rdv-cat.cat-travail { background: var(--teal-l);   color: #0e7490; }
-    .rdv-cat.cat-autre   { background: var(--orange-l); color: #92400e; }
-
-    .rdv-notes { font-size: 0.76rem; color: var(--muted); margin-top: 5px; }
-    .rdv-actions { display: flex; gap: 6px; align-items: center; flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end; }
-
-    .btn-done {
-      background: var(--green); color: #fff; border: none;
-      border-radius: 8px; padding: 6px 14px;
-      font-size: 0.78rem; font-weight: 600;
-      cursor: pointer; font-family: 'Inter', sans-serif;
-      transition: all 0.15s;
-      box-shadow: 0 2px 8px rgba(16,185,129,0.3);
-    }
-    .btn-done:hover { background: #059669; transform: scale(1.05); }
-
-    .btn-icon {
-      background: var(--bg); border: 1.5px solid var(--border); color: var(--muted);
-      border-radius: 8px; width: 32px; height: 32px; cursor: pointer; font-size: 0.85rem;
-      display: flex; align-items: center; justify-content: center; transition: all 0.15s;
-    }
-    .btn-icon:hover        { background: var(--blue-light); color: var(--blue); border-color: var(--blue); }
-    .btn-icon.danger:hover { background: var(--red-l); color: var(--red); border-color: var(--red); }
-
-    .empty-state { text-align: center; padding: 64px 24px; color: var(--muted); }
-    .empty-state .icon { font-size: 3rem; margin-bottom: 14px; display: block; }
-    .empty-state p { font-size: 0.92rem; }
-
-    /* ══════════════ MODAL ══════════════ */
-    .modal-overlay {
-      display: none; position: fixed; inset: 0;
-      background: rgba(15,23,42,0.55);
-      backdrop-filter: blur(6px);
-      z-index: 100; align-items: center; justify-content: center; padding: 16px;
-    }
-    .modal-overlay.open { display: flex; }
-    .modal {
-      background: #ffffff; border-radius: 20px; padding: 0;
-      width: 100%; max-width: 520px; max-height: 92vh; overflow-y: auto;
-      animation: modalIn 0.22s cubic-bezier(0.34,1.56,0.64,1);
-      box-shadow: 0 32px 80px rgba(15,23,42,0.22);
-    }
-    @keyframes modalIn { from { opacity:0; transform:scale(0.9) translateY(20px); } to { opacity:1; transform:scale(1) translateY(0); } }
-
-    .modal-header {
-      background: linear-gradient(135deg, var(--blue) 0%, var(--purple) 100%);
-      padding: 24px 28px 20px;
-      border-radius: 20px 20px 0 0;
-      position: relative;
-    }
-    .modal-header h2 { font-family: 'Sora', sans-serif; font-size: 1.2rem; font-weight: 700; color: #fff; }
-    .modal-header p  { font-size: 0.78rem; color: rgba(255,255,255,0.72); margin-top: 3px; }
-
-    .modal-body { padding: 22px 28px 4px; }
-
-    .form-section-title {
-      font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
-      letter-spacing: 0.1em; color: var(--muted);
-      margin: 18px 0 10px;
-      display: flex; align-items: center; gap: 8px;
-    }
-    .form-section-title::after { content:''; flex:1; height:1px; background:var(--border); }
-
-    .form-group { margin-bottom: 14px; }
-    .form-row   { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-
-    label {
-      display: block; font-size: 0.75rem; font-weight: 600;
-      color: var(--text2); margin-bottom: 5px;
-      text-transform: uppercase; letter-spacing: 0.05em;
-    }
-    input, select, textarea {
-      width: 100%; background: var(--bg);
-      border: 1.5px solid var(--border); color: var(--text);
-      border-radius: 10px; padding: 10px 14px;
-      font-family: 'Inter', sans-serif; font-size: 0.9rem; outline: none;
-      transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
-    }
-    input:focus, select:focus, textarea:focus {
-      border-color: var(--blue);
-      box-shadow: 0 0 0 3px rgba(79,126,248,0.14);
-      background: #fff;
-    }
-    input::placeholder { color: var(--muted); }
-    textarea { resize: vertical; min-height: 78px; }
-    select option { background: #fff; color: var(--text); }
-
-    .modal-footer {
-      padding: 16px 28px 22px;
-      display: flex; gap: 10px; justify-content: flex-end;
-      border-top: 1px solid var(--border); margin-top: 16px;
-    }
-    .btn-cancel {
-      background: var(--bg); border: 1.5px solid var(--border); color: var(--text2);
-      border-radius: 10px; padding: 10px 22px; cursor: pointer;
-      font-family: 'Inter', sans-serif; font-size: 0.9rem; font-weight: 500;
-      transition: all 0.15s;
-    }
-    .btn-cancel:hover { background: #e2e8f0; color: var(--text); }
-    .btn-save {
-      background: linear-gradient(135deg, var(--blue), var(--purple));
-      border: none; color: #fff; border-radius: 10px;
-      padding: 10px 28px; cursor: pointer;
-      font-family: 'Inter', sans-serif; font-size: 0.9rem; font-weight: 600;
-      transition: all 0.15s;
-      box-shadow: 0 4px 16px rgba(79,126,248,0.35);
-    }
-    .btn-save:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(79,126,248,0.45); }
-
-    /* ══════════════ TOAST ══════════════ */
-    .toast {
-      position: fixed; bottom: 28px; left: 50%;
-      transform: translateX(-50%) translateY(20px);
-      background: var(--text); color: #fff;
-      padding: 12px 24px; border-radius: 40px;
-      font-size: 0.85rem; font-weight: 500;
-      opacity: 0; pointer-events: none;
-      transition: opacity 0.2s, transform 0.2s;
-      z-index: 999; box-shadow: 0 8px 32px rgba(0,0,0,0.2);
-    }
-    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-
-    @media (max-width: 700px) {
-      header { padding: 0 16px; }
-      main   { padding: 16px; }
-      .stats-bar { grid-template-columns: 1fr 1fr; }
-      .form-row  { grid-template-columns: 1fr; }
-      .tabs-bar  { padding: 0 8px; }
-      .tab { padding: 14px 12px; font-size: 0.8rem; }
-      .btn-add span:last-child { display: none; }
-    }
   </style>
 </head>
 <body>
 
 <header>
-  <div>
-    <h1>📅 Mon Agenda</h1>
-    <div class="subtitle">Privé · Données stockées localement</div>
   <div class="header-left">
     <div class="header-logo">🚗</div>
     <div>
@@ -1007,20 +518,17 @@ select option { background: #fff; color: #1a1a2e; }
       <div class="subtitle">ShineAutomobile · Privé</div>
     </div>
   </div>
-  <button class="btn-add" onclick="openModal()">+ Nouveau rendez-vous</button>
   <button class="btn-add" onclick="openModal()">
     <span>＋</span> <span>Nouveau rendez-vous</span>
   </button>
 </header>
 
-<div class="tabs">
 <div class="tabs-bar">
   <div class="tab active" onclick="switchTab('calendar')">📆 Calendrier</div>
   <div class="tab" onclick="switchTab('list')">📋 Liste</div>
 </div>
 
 <main>
-  <!-- CALENDAR VIEW -->
 
   <div class="stats-bar">
     <div class="stat-card">
@@ -1042,12 +550,8 @@ select option { background: #fff; color: #1a1a2e; }
   </div>
 
   <!-- CALENDAR -->
+
   <div id="view-calendar" class="active">
-    <div class="cal-header">
-      <div class="cal-month" id="cal-month-label"></div>
-      <div class="cal-nav">
-        <button onclick="changeMonth(-1)">‹</button>
-        <button onclick="changeMonth(1)">›</button>
     <div class="cal-container">
       <div class="cal-header">
         <div class="cal-month" id="cal-month-label"></div>
@@ -1059,23 +563,15 @@ select option { background: #fff; color: #1a1a2e; }
       </div>
       <div class="cal-grid" id="cal-grid"></div>
     </div>
-    <div class="cal-grid" id="cal-grid"></div>
   </div>
 
-  <!-- LIST VIEW -->
-
   <!-- LIST -->
+
   <div id="view-list">
     <div class="list-filters">
-      <input class="filter-input" type="text" id="search-input" placeholder="🔍 Rechercher…" oninput="renderList()">
       <input class="filter-input" type="text" id="search-input" placeholder="🔍 Rechercher…" oninput="renderList()" style="flex:1;min-width:180px;">
       <select class="filter-input" id="filter-cat" onchange="renderList()">
         <option value="">Toutes catégories</option>
-        <option value="professionnel">Professionnel</option>
-        <option value="perso">Personnel</option>
-        <option value="medical">Médical</option>
-        <option value="travail">Travail</option>
-        <option value="autre">Autre</option>
         <option value="professionnel">💼 Professionnel</option>
         <option value="perso">👤 Personnel</option>
         <option value="medical">🏥 Médical</option>
@@ -1083,9 +579,6 @@ select option { background: #fff; color: #1a1a2e; }
         <option value="autre">📌 Autre</option>
       </select>
       <select class="filter-input" id="filter-period" onchange="renderList()">
-        <option value="upcoming">À venir</option>
-        <option value="all">Tous</option>
-        <option value="past">Passés</option>
         <option value="upcoming">📅 À venir</option>
         <option value="all">🔄 Tous</option>
         <option value="past">🕓 Passés</option>
@@ -1100,206 +593,123 @@ select option { background: #fff; color: #1a1a2e; }
 
 <div class="modal-overlay" id="modal-overlay" onclick="closeModalOnOverlay(event)">
   <div class="modal">
-    <h2 id="modal-title">Nouveau rendez-vous</h2>
-    <div class="form-group">
-      <label>Titre *</label>
-      <input type="text" id="f-title" placeholder="Ex: Rendez-vous lavage, Client…">
-    </div>
-    <div class="form-group">
-      <label>Service (ShineAutomobile)</label>
-      <select id="f-service">
-        <option value="">— Aucun service —</option>
-        <optgroup label="🚗 Sedan — Lavage Extérieur">
-          <option value="Sedan · Extérieur Régulier">Extérieur Régulier</option>
-          <option value="Sedan · Extérieur Premium">Extérieur Premium</option>
-        </optgroup>
-        <optgroup label="🚗 Sedan — Lavage Complet">
-          <option value="Sedan · Complet Régulier">Complet Régulier</option>
-          <option value="Sedan · Complet Premium">Complet Premium</option>
-          <option value="Sedan · Complet Deluxe">Complet Deluxe</option>
-        </optgroup>
-        <optgroup label="🚙 VUS — Lavage Extérieur">
-          <option value="VUS · Extérieur Régulier">Extérieur Régulier</option>
-          <option value="VUS · Extérieur Premium">Extérieur Premium</option>
-        </optgroup>
-        <optgroup label="🚙 VUS — Lavage Complet">
-          <option value="VUS · Complet Régulier">Complet Régulier</option>
-          <option value="VUS · Complet Premium">Complet Premium</option>
-          <option value="VUS · Complet Deluxe">Complet Deluxe</option>
-        </optgroup>
-        <optgroup label="🚐 Van — Lavage Extérieur">
-          <option value="Van · Extérieur Régulier">Extérieur Régulier</option>
-          <option value="Van · Extérieur Premium">Extérieur Premium</option>
-        </optgroup>
-        <optgroup label="🚐 Van — Lavage Complet">
-          <option value="Van · Complet Régulier">Complet Régulier</option>
-          <option value="Van · Complet Premium">Complet Premium</option>
-          <option value="Van · Complet Deluxe">Complet Deluxe</option>
-        </optgroup>
-        <optgroup label="🛻 Pickup — Lavage Extérieur">
-          <option value="Pickup · Extérieur Régulier">Extérieur Régulier</option>
-          <option value="Pickup · Extérieur Premium">Extérieur Premium</option>
-        </optgroup>
-        <optgroup label="🛻 Pickup — Lavage Complet">
-          <option value="Pickup · Complet Régulier">Complet Régulier</option>
-          <option value="Pickup · Complet Premium">Complet Premium</option>
-          <option value="Pickup · Complet Deluxe">Complet Deluxe</option>
-        </optgroup>
-        <optgroup label="⚡ Urgences">
-          <option value="Urgence · Déverrouillage auto — 50$">Déverrouillage auto — 50$</option>
-          <option value="Urgence · Survoltage batterie — 40$">Survoltage / Boost batterie — 40$</option>
-        </optgroup>
-        <optgroup label="📦 Forfaits Multi-Voitures">
-          <option value="Forfait Extérieur 2-4 voitures — 30$/voit.">Extérieur 2-4 voitures — 30$/voit.</option>
-          <option value="Forfait Extérieur 5-10 voitures — 25$/voit.">Extérieur 5-10 voitures — 25$/voit.</option>
-          <option value="Forfait Complet 2 voitures — 95$/voit.">Complet 2 voitures — 95$/voit.</option>
-          <option value="Forfait Complet 3-4 voitures — 90$/voit.">Complet 3-4 voitures — 90$/voit.</option>
-          <option value="Forfait Complet 5+ voitures — 80$/voit.">Complet 5+ voitures — 80$/voit.</option>
-        </optgroup>
-      </select>
     <div class="modal-header">
       <h2 id="modal-title">➕ Nouveau rendez-vous</h2>
       <p>Remplissez les informations ci-dessous</p>
     </div>
-    <div class="form-row">
     <div class="modal-body">
 
-      <div class="form-group">
-        <label>Date *</label>
-        <input type="date" id="f-date">
-        <label>👤 Nom du client / Titre *</label>
-        <input type="text" id="f-title" placeholder="Ex: Marie Tremblay, Réunion équipe…">
-      </div>
+```
+  <div class="form-group">
+    <label>👤 Nom du client / Titre *</label>
+    <input type="text" id="f-title" placeholder="Ex: Marie Tremblay, Réunion équipe…">
+  </div>
 
-      <div class="form-group">
-        <label>Heure</label>
-        <input type="time" id="f-time">
-        <label>🚗 Service ShineAutomobile</label>
-        <select id="f-service">
-          <option value="">— Aucun service spécifique —</option>
-          <optgroup label="🚗 Sedan — Extérieur">
-            <option value="Sedan · Extérieur Régulier">Extérieur Régulier</option>
-            <option value="Sedan · Extérieur Premium">Extérieur Premium</option>
-          </optgroup>
-          <optgroup label="🚗 Sedan — Complet">
-            <option value="Sedan · Complet Régulier">Complet Régulier</option>
-            <option value="Sedan · Complet Premium">Complet Premium</option>
-            <option value="Sedan · Complet Deluxe">Complet Deluxe</option>
-          </optgroup>
-          <optgroup label="🚙 VUS — Extérieur">
-            <option value="VUS · Extérieur Régulier">Extérieur Régulier</option>
-            <option value="VUS · Extérieur Premium">Extérieur Premium</option>
-          </optgroup>
-          <optgroup label="🚙 VUS — Complet">
-            <option value="VUS · Complet Régulier">Complet Régulier</option>
-            <option value="VUS · Complet Premium">Complet Premium</option>
-            <option value="VUS · Complet Deluxe">Complet Deluxe</option>
-          </optgroup>
-          <optgroup label="🚐 Van — Extérieur">
-            <option value="Van · Extérieur Régulier">Extérieur Régulier</option>
-            <option value="Van · Extérieur Premium">Extérieur Premium</option>
-          </optgroup>
-          <optgroup label="🚐 Van — Complet">
-            <option value="Van · Complet Régulier">Complet Régulier</option>
-            <option value="Van · Complet Premium">Complet Premium</option>
-            <option value="Van · Complet Deluxe">Complet Deluxe</option>
-          </optgroup>
-          <optgroup label="🛻 Pickup — Extérieur">
-            <option value="Pickup · Extérieur Régulier">Extérieur Régulier</option>
-            <option value="Pickup · Extérieur Premium">Extérieur Premium</option>
-          </optgroup>
-          <optgroup label="🛻 Pickup — Complet">
-            <option value="Pickup · Complet Régulier">Complet Régulier</option>
-            <option value="Pickup · Complet Premium">Complet Premium</option>
-            <option value="Pickup · Complet Deluxe">Complet Deluxe</option>
-          </optgroup>
-          <optgroup label="⚡ Urgences">
-            <option value="Urgence · Déverrouillage auto — 50$">🔑 Déverrouillage auto — 50$</option>
-            <option value="Urgence · Survoltage batterie — 40$">🔋 Survoltage batterie — 40$</option>
-          </optgroup>
-          <optgroup label="📦 Forfaits Multi-Voitures">
-            <option value="Forfait · Extérieur 2-4 voitures — 30$/voit.">Extérieur 2-4 voitures — 30$/voit.</option>
-            <option value="Forfait · Extérieur 5-10 voitures — 25$/voit.">Extérieur 5-10 voitures — 25$/voit.</option>
-            <option value="Forfait · Complet 2 voitures — 95$/voit.">Complet 2 voitures — 95$/voit.</option>
-            <option value="Forfait · Complet 3-4 voitures — 90$/voit.">Complet 3-4 voitures — 90$/voit.</option>
-            <option value="Forfait · Complet 5+ voitures — 80$/voit.">Complet 5+ voitures — 80$/voit.</option>
-          </optgroup>
-        </select>
-      </div>
-    </div>
-    <div class="form-row">
+  <div class="form-group">
+    <label>🚗 Service ShineAutomobile</label>
+    <select id="f-service">
+      <option value="">— Aucun service spécifique —</option>
+      <optgroup label="🚗 Sedan — Extérieur">
+        <option value="Sedan · Extérieur Régulier">Extérieur Régulier</option>
+        <option value="Sedan · Extérieur Premium">Extérieur Premium</option>
+      </optgroup>
+      <optgroup label="🚗 Sedan — Complet">
+        <option value="Sedan · Complet Régulier">Complet Régulier</option>
+        <option value="Sedan · Complet Premium">Complet Premium</option>
+        <option value="Sedan · Complet Deluxe">Complet Deluxe</option>
+      </optgroup>
+      <optgroup label="🚙 VUS — Extérieur">
+        <option value="VUS · Extérieur Régulier">Extérieur Régulier</option>
+        <option value="VUS · Extérieur Premium">Extérieur Premium</option>
+      </optgroup>
+      <optgroup label="🚙 VUS — Complet">
+        <option value="VUS · Complet Régulier">Complet Régulier</option>
+        <option value="VUS · Complet Premium">Complet Premium</option>
+        <option value="VUS · Complet Deluxe">Complet Deluxe</option>
+      </optgroup>
+      <optgroup label="🚐 Van — Extérieur">
+        <option value="Van · Extérieur Régulier">Extérieur Régulier</option>
+        <option value="Van · Extérieur Premium">Extérieur Premium</option>
+      </optgroup>
+      <optgroup label="🚐 Van — Complet">
+        <option value="Van · Complet Régulier">Complet Régulier</option>
+        <option value="Van · Complet Premium">Complet Premium</option>
+        <option value="Van · Complet Deluxe">Complet Deluxe</option>
+      </optgroup>
+      <optgroup label="🛻 Pickup — Extérieur">
+        <option value="Pickup · Extérieur Régulier">Extérieur Régulier</option>
+        <option value="Pickup · Extérieur Premium">Extérieur Premium</option>
+      </optgroup>
+      <optgroup label="🛻 Pickup — Complet">
+        <option value="Pickup · Complet Régulier">Complet Régulier</option>
+        <option value="Pickup · Complet Premium">Complet Premium</option>
+        <option value="Pickup · Complet Deluxe">Complet Deluxe</option>
+      </optgroup>
+      <optgroup label="⚡ Urgences">
+        <option value="Urgence · Déverrouillage auto — 50$">🔑 Déverrouillage auto — 50$</option>
+        <option value="Urgence · Survoltage batterie — 40$">🔋 Survoltage batterie — 40$</option>
+      </optgroup>
+      <optgroup label="📦 Forfaits Multi-Voitures">
+        <option value="Forfait · Extérieur 2-4 voitures — 30$/voit.">Extérieur 2-4 voitures — 30$/voit.</option>
+        <option value="Forfait · Extérieur 5-10 voitures — 25$/voit.">Extérieur 5-10 voitures — 25$/voit.</option>
+        <option value="Forfait · Complet 2 voitures — 95$/voit.">Complet 2 voitures — 95$/voit.</option>
+        <option value="Forfait · Complet 3-4 voitures — 90$/voit.">Complet 3-4 voitures — 90$/voit.</option>
+        <option value="Forfait · Complet 5+ voitures — 80$/voit.">Complet 5+ voitures — 80$/voit.</option>
+      </optgroup>
+    </select>
+  </div>
 
-      <div class="form-section-title">📅 Date &amp; Heure</div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>📅 Date *</label>
-          <input type="date" id="f-date">
-        </div>
-        <div class="form-group">
-          <label>🕐 Heure</label>
-          <input type="time" id="f-time">
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>⏱ Durée (min)</label>
-          <input type="number" id="f-duration" placeholder="60" min="5" step="5">
-        </div>
-        <div class="form-group">
-          <label>🏷 Catégorie</label>
-          <select id="f-cat">
-            <option value="professionnel">💼 Professionnel</option>
-            <option value="perso">👤 Personnel</option>
-            <option value="medical">🏥 Médical</option>
-            <option value="travail">🔧 Travail</option>
-            <option value="autre">📌 Autre</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="form-section-title">📍 Détails</div>
-      <div class="form-group">
-        <label>Durée (min)</label>
-        <input type="number" id="f-duration" placeholder="60" min="5" step="5">
-        <label>📍 Lieu / Adresse</label>
-        <input type="text" id="f-lieu" placeholder="Ex: 123 rue King, Sherbrooke…">
-      </div>
-      <div class="form-group">
-        <label>Catégorie</label>
-        <select id="f-cat">
-          <option value="professionnel">Professionnel</option>
-          <option value="perso">Personnel</option>
-          <option value="medical">Médical</option>
-          <option value="travail">Travail</option>
-          <option value="autre">Autre</option>
-        </select>
-        <label>📝 Notes</label>
-        <textarea id="f-notes" placeholder="Informations supplémentaires, instructions spéciales…"></textarea>
-      </div>
-
+  <div class="form-section-title">📅 Date &amp; Heure</div>
+  <div class="form-row">
+    <div class="form-group">
+      <label>📅 Date *</label>
+      <input type="date" id="f-date">
     </div>
     <div class="form-group">
-      <label>Lieu</label>
-      <input type="text" id="f-lieu" placeholder="Adresse, lien visio…">
+      <label>🕐 Heure</label>
+      <input type="time" id="f-time">
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group">
+      <label>⏱ Durée (min)</label>
+      <input type="number" id="f-duration" placeholder="60" min="5" step="5">
     </div>
     <div class="form-group">
-      <label>Notes</label>
-      <textarea id="f-notes" placeholder="Informations supplémentaires…"></textarea>
+      <label>🏷 Catégorie</label>
+      <select id="f-cat">
+        <option value="professionnel">💼 Professionnel</option>
+        <option value="perso">👤 Personnel</option>
+        <option value="medical">🏥 Médical</option>
+        <option value="travail">🔧 Travail</option>
+        <option value="autre">📌 Autre</option>
+      </select>
     </div>
-    <div class="modal-actions">
-    <div class="modal-footer">
-      <button class="btn-cancel" onclick="closeModal()">Annuler</button>
-      <button class="btn-save" onclick="saveRdv()">Enregistrer</button>
-      <button class="btn-save" onclick="saveRdv()">💾 Enregistrer</button>
-    </div>
+  </div>
+
+  <div class="form-section-title">📍 Détails</div>
+  <div class="form-group">
+    <label>📍 Lieu / Adresse</label>
+    <input type="text" id="f-lieu" placeholder="Ex: 123 rue King, Sherbrooke…">
+  </div>
+  <div class="form-group">
+    <label>📝 Notes</label>
+    <textarea id="f-notes" placeholder="Informations supplémentaires, instructions spéciales…"></textarea>
+  </div>
+
+</div>
+<div class="modal-footer">
+  <button class="btn-cancel" onclick="closeModal()">Annuler</button>
+  <button class="btn-save" onclick="saveRdv()">💾 Enregistrer</button>
+</div>
+```
+
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-  // ---- STORAGE ----
-  const STORAGE_KEY = 'mon_agenda_rdvs';
   const STORAGE_KEY = 'shine_agenda_v2';
   let rdvs = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
   let editingId = null;
@@ -1308,8 +718,6 @@ select option { background: #fff; color: #1a1a2e; }
 
   function save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(rdvs)); }
 
-  function save() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(rdvs));
   function updateStats() {
     const today = toDateStr(new Date());
     document.getElementById('stat-total').textContent    = rdvs.length;
@@ -1318,42 +726,33 @@ select option { background: #fff; color: #1a1a2e; }
     document.getElementById('stat-past').textContent     = rdvs.filter(r => r.date < today).length;
   }
 
-  // ---- TABS ----
   function switchTab(tab) {
-    document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', (tab === 'calendar' && i === 0) || (tab === 'list' && i === 1)));
+    document.querySelectorAll('.tab').forEach((t, i) =>
+      t.classList.toggle('active', (tab === 'calendar' && i === 0) || (tab === 'list' && i === 1)));
     document.getElementById('view-calendar').classList.toggle('active', tab === 'calendar');
     document.getElementById('view-list').classList.toggle('active', tab === 'list');
-    if (tab === 'calendar') renderCalendar();
-    else renderList();
-    document.querySelectorAll('.tab').forEach((t,i) =>
-      t.classList.toggle('active', (tab==='calendar'&&i===0)||(tab==='list'&&i===1)));
-    document.getElementById('view-calendar').classList.toggle('active', tab==='calendar');
-    document.getElementById('view-list').classList.toggle('active', tab==='list');
-    tab==='calendar' ? renderCalendar() : renderList();
+    tab === 'calendar' ? renderCalendar() : renderList();
   }
 
-  // ---- CALENDAR ----
   const MONTHS = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
-  const DAYS = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
   const DAYS   = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
 
   function initCalendar() {
     const now = new Date();
     currentYear = now.getFullYear();
     currentMonth = now.getMonth();
-    currentYear = now.getFullYear(); currentMonth = now.getMonth();
     renderCalendar();
   }
 
   function changeMonth(dir) {
-    currentMonth += dir;
-    if (currentMonth < 0) { currentMonth = 11; currentYear--; }
-    if (currentMonth > 11) { currentMonth = 0; currentYear++; }
-    if (dir===0) { const n=new Date(); currentYear=n.getFullYear(); currentMonth=n.getMonth(); }
-    else {
-      currentMonth+=dir;
-      if(currentMonth<0){currentMonth=11;currentYear--;}
-      if(currentMonth>11){currentMonth=0;currentYear++;}
+    if (dir === 0) {
+      const n = new Date();
+      currentYear = n.getFullYear();
+      currentMonth = n.getMonth();
+    } else {
+      currentMonth += dir;
+      if (currentMonth < 0)  { currentMonth = 11; currentYear--; }
+      if (currentMonth > 11) { currentMonth = 0;  currentYear++; }
     }
     renderCalendar();
   }
@@ -1368,42 +767,26 @@ select option { background: #fff; color: #1a1a2e; }
       el.textContent = d;
       grid.appendChild(el);
     });
-
     const firstDay = new Date(currentYear, currentMonth, 1);
-    const lastDay = new Date(currentYear, currentMonth + 1, 0);
-    const startDow = (firstDay.getDay() + 6) % 7; // Monday-based
-    const today = new Date(); today.setHours(0,0,0,0);
+    const lastDay  = new Date(currentYear, currentMonth + 1, 0);
+    const startDow = (firstDay.getDay() + 6) % 7;
+    const today = new Date(); today.setHours(0, 0, 0, 0);
 
-    // Previous month padding
     for (let i = 0; i < startDow; i++) {
       const d = new Date(currentYear, currentMonth, -startDow + 1 + i);
       grid.appendChild(makeCell(d, true));
     }
-    // Current month
     for (let d = 1; d <= lastDay.getDate(); d++) {
       const date = new Date(currentYear, currentMonth, d);
       const cell = makeCell(date, false);
-      const isToday = date.getTime() === today.getTime();
-      if (isToday) cell.classList.add('today');
+      if (date.getTime() === today.getTime()) cell.classList.add('today');
       grid.appendChild(cell);
     }
-    // Next month padding
     const remaining = (7 - (startDow + lastDay.getDate()) % 7) % 7;
     for (let i = 1; i <= remaining; i++) {
       const d = new Date(currentYear, currentMonth + 1, i);
       grid.appendChild(makeCell(d, true));
     }
-    const grid=document.getElementById('cal-grid');
-    grid.innerHTML='';
-    DAYS.forEach(d=>{const el=document.createElement('div');el.className='cal-day-name';el.textContent=d;grid.appendChild(el);});
-    const firstDay=new Date(currentYear,currentMonth,1);
-    const lastDay=new Date(currentYear,currentMonth+1,0);
-    const startDow=(firstDay.getDay()+6)%7;
-    const today=new Date();today.setHours(0,0,0,0);
-    for(let i=0;i<startDow;i++){const d=new Date(currentYear,currentMonth,-startDow+1+i);grid.appendChild(makeCell(d,true));}
-    for(let d=1;d<=lastDay.getDate();d++){const date=new Date(currentYear,currentMonth,d);const cell=makeCell(date,false);if(date.getTime()===today.getTime())cell.classList.add('today');grid.appendChild(cell);}
-    const remaining=(7-(startDow+lastDay.getDate())%7)%7;
-    for(let i=1;i<=remaining;i++){const d=new Date(currentYear,currentMonth+1,i);grid.appendChild(makeCell(d,true));}
   }
 
   function makeCell(date, otherMonth) {
@@ -1413,192 +796,99 @@ select option { background: #fff; color: #1a1a2e; }
     num.className = 'cal-day-num';
     num.textContent = date.getDate();
     cell.appendChild(num);
-
     const dateStr = toDateStr(date);
-    const dayRdvs = rdvs.filter(r => r.date === dateStr).sort((a,b) => (a.time||'').localeCompare(b.time||''));
+    const dayRdvs = rdvs.filter(r => r.date === dateStr).sort((a, b) => (a.time || '').localeCompare(b.time || ''));
     dayRdvs.slice(0, 3).forEach(r => {
       const dot = document.createElement('span');
       dot.className = `cal-rdv-dot cat-${r.cat}`;
       dot.textContent = (r.time ? r.time + ' ' : '') + r.title;
-      dot.onclick = (e) => { e.stopPropagation(); openModal(r.id); };
-  function makeCell(date,otherMonth){
-    const cell=document.createElement('div');
-    cell.className='cal-cell'+(otherMonth?' other-month':'');
-    const num=document.createElement('div');num.className='cal-day-num';num.textContent=date.getDate();cell.appendChild(num);
-    const dateStr=toDateStr(date);
-    const dayRdvs=rdvs.filter(r=>r.date===dateStr).sort((a,b)=>(a.time||'').localeCompare(b.time||''));
-    dayRdvs.slice(0,3).forEach(r=>{
-      const dot=document.createElement('span');
-      dot.className=`cal-rdv-dot cat-${r.cat}`;
-      dot.textContent=(r.time?r.time+' ':'')+r.title;
-      dot.onclick=e=>{e.stopPropagation();openModal(r.id);};
+      dot.onclick = e => { e.stopPropagation(); openModal(r.id); };
       cell.appendChild(dot);
     });
     if (dayRdvs.length > 3) {
       const more = document.createElement('span');
-      more.style.cssText = 'font-size:0.65rem;color:var(--muted);display:block;margin-top:2px;';
+      more.style.cssText = 'font-size:0.6rem;color:var(--muted);display:block;margin-top:2px;';
       more.textContent = `+${dayRdvs.length - 3} de plus`;
       cell.appendChild(more);
     }
     cell.onclick = () => openModal(null, dateStr);
-    if(dayRdvs.length>3){const more=document.createElement('span');more.style.cssText='font-size:0.6rem;color:var(--muted);display:block;margin-top:2px;';more.textContent=`+${dayRdvs.length-3} de plus`;cell.appendChild(more);}
-    cell.onclick=()=>openModal(null,dateStr);
     return cell;
   }
 
-  function toDateStr(date) {
-    return date.toISOString().split('T')[0];
-  }
-
-  // ---- LIST ----
-  let checkedIds = new Set();
+  function toDateStr(date) { return date.toISOString().split('T')[0]; }
 
   function renderList() {
-    const search = document.getElementById('search-input').value.toLowerCase();
-    const cat = document.getElementById('filter-cat').value;
-    const period = document.getElementById('filter-period').value;
-    const today = toDateStr(new Date());
-
+    const search  = document.getElementById('search-input').value.toLowerCase();
+    const cat     = document.getElementById('filter-cat').value;
+    const period  = document.getElementById('filter-period').value;
+    const today   = toDateStr(new Date());
     let list = rdvs.filter(r => {
-      if (search && !r.title.toLowerCase().includes(search) && !(r.notes||'').toLowerCase().includes(search) && !(r.lieu||'').toLowerCase().includes(search) && !(r.service||'').toLowerCase().includes(search)) return false;
+      if (search && ![r.title, r.notes || '', r.lieu || '', r.service || ''].some(s => s.toLowerCase().includes(search))) return false;
       if (cat && r.cat !== cat) return false;
       if (period === 'upcoming' && r.date < today) return false;
       if (period === 'past' && r.date >= today) return false;
-  function toDateStr(date){return date.toISOString().split('T')[0];}
-
-  function renderList(){
-    const search=document.getElementById('search-input').value.toLowerCase();
-    const cat=document.getElementById('filter-cat').value;
-    const period=document.getElementById('filter-period').value;
-    const today=toDateStr(new Date());
-    let list=rdvs.filter(r=>{
-      if(search&&![r.title,r.notes||'',r.lieu||'',r.service||''].some(s=>s.toLowerCase().includes(search)))return false;
-      if(cat&&r.cat!==cat)return false;
-      if(period==='upcoming'&&r.date<today)return false;
-      if(period==='past'&&r.date>=today)return false;
       return true;
     });
-    list.sort((a,b) => (a.date + (a.time||'')).localeCompare(b.date + (b.time||'')));
-
+    list.sort((a, b) => (a.date + (a.time || '')).localeCompare(b.date + (b.time || '')));
     const container = document.getElementById('rdv-list');
     if (list.length === 0) {
-      container.innerHTML = `<div class="empty-state"><div class="icon">📭</div><p>Aucun rendez-vous trouvé.</p></div>`;
+      container.innerHTML = `<div class="empty-state"><span class="icon">📭</span><p>Aucun rendez-vous trouvé.</p></div>`;
       return;
     }
-
-    // Split upcoming vs past
     const upcoming = list.filter(r => r.date >= today);
-    const past = list.filter(r => r.date < today);
-
+    const past     = list.filter(r => r.date < today);
     let html = '';
-
     if (upcoming.length > 0) {
-      if (period === 'all') html += `<div class="list-section-header upcoming">📅 À venir — ${upcoming.length} rendez-vous</div>`;
+      if (period !== 'past') html += `<div class="list-section-header upcoming">📅 À venir &nbsp;·&nbsp; ${upcoming.length} rendez-vous</div>`;
       html += upcoming.map(r => makeCardHtml(r, false)).join('');
-    list.sort((a,b)=>(a.date+(a.time||'')).localeCompare(b.date+(b.time||'')));
-    const container=document.getElementById('rdv-list');
-    if(list.length===0){container.innerHTML=`<div class="empty-state"><span class="icon">📭</span><p>Aucun rendez-vous trouvé.</p></div>`;return;}
-    const upcoming=list.filter(r=>r.date>=today);
-    const past=list.filter(r=>r.date<today);
-    let html='';
-    if(upcoming.length>0){
-      if(period!=='past')html+=`<div class="list-section-header upcoming">📅 À venir &nbsp;·&nbsp; ${upcoming.length} rendez-vous</div>`;
-      html+=upcoming.map(r=>makeCardHtml(r,false)).join('');
     }
-
     if (past.length > 0) {
-      if (period === 'all' || period === 'past') html += `<div class="list-section-header past" style="margin-top:16px">🕓 Passés — ${past.length} rendez-vous</div>`;
+      if (period !== 'upcoming') html += `<div class="list-section-header past">🕓 Passés &nbsp;·&nbsp; ${past.length} rendez-vous</div>`;
       html += past.map(r => makeCardHtml(r, true)).join('');
-    if(past.length>0){
-      if(period!=='upcoming')html+=`<div class="list-section-header past">🕓 Passés &nbsp;·&nbsp; ${past.length} rendez-vous</div>`;
-      html+=past.map(r=>makeCardHtml(r,true)).join('');
     }
-
     container.innerHTML = html;
-
-    // Restore checked state
     checkedIds.forEach(id => {
       const card = container.querySelector(`[data-rdv-id="${id}"]`);
       if (card) {
         card.classList.add('checked');
         const cb = card.querySelector('.rdv-checkbox');
         if (cb) cb.checked = true;
-        const doneBtn = card.querySelector('.btn-done');
-        if (doneBtn) doneBtn.style.display = 'inline-flex';
       }
-    container.innerHTML=html;
-    checkedIds.forEach(id=>{
-      const card=container.querySelector(`[data-rdv-id="${id}"]`);
-      if(card){card.classList.add('checked');const cb=card.querySelector('.rdv-checkbox');if(cb)cb.checked=true;}
     });
+  }
+
+  function catBar(cat) {
+    const m = { professionnel: 'cat-bar-professionnel', perso: 'cat-bar-perso', medical: 'cat-bar-medical', travail: 'cat-bar-travail', autre: 'cat-bar-autre' };
+    return m[cat] || '';
   }
 
   function makeCardHtml(r, isPast) {
     const d = new Date(r.date + 'T12:00:00');
-    const day = d.getDate();
-    const month = MONTHS[d.getMonth()].slice(0,3);
-    const catLabel = {professionnel:'Professionnel',perso:'Personnel',medical:'Médical',travail:'Travail',autre:'Autre'}[r.cat]||r.cat;
+    const day = d.getDate(), month = MONTHS[d.getMonth()].slice(0, 3);
     const isChecked = checkedIds.has(r.id);
-    return `
-      <div class="rdv-card${isPast ? ' past-card' : ''}${isChecked ? ' checked' : ''}" data-rdv-id="${r.id}">
-        ${!isPast ? `<div class="rdv-checkbox-wrap">
-          <input type="checkbox" class="rdv-checkbox" ${isChecked ? 'checked' : ''} onchange="toggleCheck('${r.id}', this)">
-        </div>` : ''}
-        <div class="rdv-date-badge">
-          <div class="rdv-date-day">${day}</div>
-          <div class="rdv-date-month">${month}</div>
-        </div>
-        <div class="rdv-info">
-          <div class="rdv-title">${escHtml(r.title)}</div>
-          <div class="rdv-meta">
-            ${r.time ? `<span class="rdv-time">🕐 ${r.time}${r.duration ? ' · '+r.duration+'min' : ''}</span>` : ''}
-            ${r.service ? `<span class="rdv-service-tag">🚗 ${escHtml(r.service)}</span>` : ''}
-            ${r.lieu ? `<span class="rdv-time">📍 ${escHtml(r.lieu)}</span>` : ''}
-            <span class="rdv-cat cat-${r.cat}">${catLabel}</span>
-          </div>
-          ${r.notes ? `<div class="rdv-notes">${escHtml(r.notes)}</div>` : ''}
-  function catBar(cat){const m={professionnel:'cat-bar-professionnel',perso:'cat-bar-perso',medical:'cat-bar-medical',travail:'cat-bar-travail',autre:'cat-bar-autre'};return m[cat]||'';}
-
-  function makeCardHtml(r,isPast){
-    const d=new Date(r.date+'T12:00:00');
-    const day=d.getDate(),month=MONTHS[d.getMonth()].slice(0,3);
-    const isChecked=checkedIds.has(r.id);
-    const catLabels={professionnel:'💼 Pro',perso:'👤 Personnel',medical:'🏥 Médical',travail:'🔧 Travail',autre:'📌 Autre'};
-    return `<div class="rdv-card ${catBar(r.cat)}${isPast?' past-card':''}${isChecked?' checked':''}" data-rdv-id="${r.id}">
-      ${!isPast?`<div class="rdv-checkbox-wrap"><input type="checkbox" class="rdv-checkbox"${isChecked?' checked':''} onchange="toggleCheck('${r.id}',this)"></div>`:''}
+    const catLabels = { professionnel: '💼 Pro', perso: '👤 Personnel', medical: '🏥 Médical', travail: '🔧 Travail', autre: '📌 Autre' };
+    return `<div class="rdv-card ${catBar(r.cat)}${isPast ? ' past-card' : ''}${isChecked ? ' checked' : ''}" data-rdv-id="${r.id}">
+      ${!isPast ? `<div class="rdv-checkbox-wrap"><input type="checkbox" class="rdv-checkbox"${isChecked ? ' checked' : ''} onchange="toggleCheck('${r.id}',this)"></div>` : ''}
       <div class="rdv-date-badge"><div class="rdv-date-day">${day}</div><div class="rdv-date-month">${month}</div></div>
       <div class="rdv-info">
         <div class="rdv-title">${escHtml(r.title)}</div>
         <div class="rdv-meta">
-          ${r.time?`<span class="rdv-time">🕐 ${r.time}${r.duration?' · '+r.duration+'min':''}</span>`:''}
-          ${r.service?`<span class="rdv-service-tag">🚗 ${escHtml(r.service)}</span>`:''}
-          ${r.lieu?`<span class="rdv-time">📍 ${escHtml(r.lieu)}</span>`:''}
-          <span class="rdv-cat cat-${r.cat}">${catLabels[r.cat]||r.cat}</span>
+          ${r.time ? `<span class="rdv-time">🕐 ${r.time}${r.duration ? ' · ' + r.duration + 'min' : ''}</span>` : ''}
+          ${r.service ? `<span class="rdv-service-tag">🚗 ${escHtml(r.service)}</span>` : ''}
+          ${r.lieu ? `<span class="rdv-time">📍 ${escHtml(r.lieu)}</span>` : ''}
+          <span class="rdv-cat cat-${r.cat}">${catLabels[r.cat] || r.cat}</span>
         </div>
-        <div class="rdv-actions">
-          ${!isPast && isChecked ? `<button class="btn-done" onclick="markDone('${r.id}')">✅ Fait</button>` : ''}
-          <button class="btn-icon" onclick="openModal('${r.id}')" title="Modifier">✏️</button>
-          <button class="btn-icon danger" onclick="deleteRdv('${r.id}')" title="Supprimer">🗑️</button>
-        </div>
-      </div>`;
-  }
-
-  function toggleCheck(id, checkbox) {
-    if (checkbox.checked) {
-      checkedIds.add(id);
-    } else {
-      checkedIds.delete(id);
-    }
-    renderList();
-        ${r.notes?`<div class="rdv-notes">📝 ${escHtml(r.notes)}</div>`:''}
+        ${r.notes ? `<div class="rdv-notes">📝 ${escHtml(r.notes)}</div>` : ''}
       </div>
       <div class="rdv-actions">
-        ${!isPast&&isChecked?`<button class="btn-done" onclick="markDone('${r.id}')">✅ Fait</button>`:''}
+        ${!isPast && isChecked ? `<button class="btn-done" onclick="markDone('${r.id}')">✅ Fait</button>` : ''}
         <button class="btn-icon" onclick="openModal('${r.id}')" title="Modifier">✏️</button>
         <button class="btn-icon danger" onclick="deleteRdv('${r.id}')" title="Supprimer">🗑️</button>
       </div>
     </div>`;
   }
+
+  function toggleCheck(id, cb) { cb.checked ? checkedIds.add(id) : checkedIds.delete(id); renderList(); }
 
   function markDone(id) {
     const card = document.querySelector(`[data-rdv-id="${id}"]`);
@@ -1607,148 +897,78 @@ select option { background: #fff; color: #1a1a2e; }
       setTimeout(() => {
         checkedIds.delete(id);
         rdvs = rdvs.filter(r => r.id !== id);
-        save();
-        renderCalendar();
-        renderList();
-        showToast('✅ Rendez-vous marqué comme fait et retiré.');
-      }, 350);
+        save(); updateStats(); renderCalendar(); renderList();
+        showToast('✅ Rendez-vous terminé !');
+      }, 360);
     }
   }
-  function toggleCheck(id,cb){cb.checked?checkedIds.add(id):checkedIds.delete(id);renderList();}
 
   function escHtml(s) {
-    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-  function markDone(id){
-    const card=document.querySelector(`[data-rdv-id="${id}"]`);
-    if(card){card.classList.add('removing');setTimeout(()=>{checkedIds.delete(id);rdvs=rdvs.filter(r=>r.id!==id);save();updateStats();renderCalendar();renderList();showToast('✅ Rendez-vous terminé !');},360);}
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
-  // ---- MODAL ----
   function openModal(id = null, prefillDate = null) {
     editingId = id;
     const rdv = id ? rdvs.find(r => r.id === id) : null;
-    document.getElementById('modal-title').textContent = rdv ? 'Modifier le rendez-vous' : 'Nouveau rendez-vous';
-    document.getElementById('f-title').value = rdv ? rdv.title : '';
-    document.getElementById('f-date').value = rdv ? rdv.date : (prefillDate || toDateStr(new Date()));
-    document.getElementById('f-time').value = rdv ? (rdv.time || '') : '';
+    document.getElementById('modal-title').textContent = rdv ? '✏️ Modifier le rendez-vous' : '➕ Nouveau rendez-vous';
+    document.getElementById('f-title').value    = rdv ? rdv.title : '';
+    document.getElementById('f-date').value     = rdv ? rdv.date : (prefillDate || toDateStr(new Date()));
+    document.getElementById('f-time').value     = rdv ? (rdv.time || '') : '';
     document.getElementById('f-duration').value = rdv ? (rdv.duration || '') : '';
-    document.getElementById('f-cat').value = rdv ? rdv.cat : 'professionnel';
-    document.getElementById('f-service').value = rdv ? (rdv.service || '') : '';
-    document.getElementById('f-lieu').value = rdv ? (rdv.lieu || '') : '';
-    document.getElementById('f-notes').value = rdv ? (rdv.notes || '') : '';
-  function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-
-  function openModal(id=null,prefillDate=null){
-    editingId=id;
-    const rdv=id?rdvs.find(r=>r.id===id):null;
-    document.getElementById('modal-title').textContent=rdv?'✏️ Modifier le rendez-vous':'➕ Nouveau rendez-vous';
-    document.getElementById('f-title').value=rdv?rdv.title:'';
-    document.getElementById('f-date').value=rdv?rdv.date:(prefillDate||toDateStr(new Date()));
-    document.getElementById('f-time').value=rdv?(rdv.time||')':'';
-    document.getElementById('f-duration').value=rdv?(rdv.duration||''):'';
-    document.getElementById('f-cat').value=rdv?rdv.cat:'professionnel';
-    document.getElementById('f-service').value=rdv?(rdv.service||''):'';
-    document.getElementById('f-lieu').value=rdv?(rdv.lieu||'):'';
-    document.getElementById('f-notes').value=rdv?(rdv.notes||''):'';
+    document.getElementById('f-cat').value      = rdv ? rdv.cat : 'professionnel';
+    document.getElementById('f-service').value  = rdv ? (rdv.service || '') : '';
+    document.getElementById('f-lieu').value     = rdv ? (rdv.lieu || '') : '';
+    document.getElementById('f-notes').value    = rdv ? (rdv.notes || '') : '';
     document.getElementById('modal-overlay').classList.add('open');
-    setTimeout(() => document.getElementById('f-title').focus(), 100);
+    setTimeout(() => document.getElementById('f-title').focus(), 120);
   }
 
-  function closeModal() {
-    document.getElementById('modal-overlay').classList.remove('open');
-    editingId = null;
-  }
-
-  function closeModalOnOverlay(e) {
-    if (e.target === document.getElementById('modal-overlay')) closeModal();
-    setTimeout(()=>document.getElementById('f-title').focus(),120);
-  }
+  function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); editingId = null; }
+  function closeModalOnOverlay(e) { if (e.target === document.getElementById('modal-overlay')) closeModal(); }
 
   function saveRdv() {
     const title = document.getElementById('f-title').value.trim();
-    const date = document.getElementById('f-date').value;
-    if (!title || !date) { showToast('⚠️ Titre et date requis.'); return; }
-
+    const date  = document.getElementById('f-date').value;
+    if (!title || !date) { showToast('⚠️ Le titre et la date sont requis.'); return; }
     const data = {
-      id: editingId || Date.now().toString(),
-      title,
-      date,
-      time: document.getElementById('f-time').value,
+      id:       editingId || Date.now().toString(),
+      title, date,
+      time:     document.getElementById('f-time').value,
       duration: document.getElementById('f-duration').value,
-      cat: document.getElementById('f-cat').value,
-      service: document.getElementById('f-service').value,
-      lieu: document.getElementById('f-lieu').value.trim(),
-      notes: document.getElementById('f-notes').value.trim(),
-  function closeModal(){document.getElementById('modal-overlay').classList.remove('open');editingId=null;}
-  function closeModalOnOverlay(e){if(e.target===document.getElementById('modal-overlay'))closeModal();}
-
-  function saveRdv(){
-    const title=document.getElementById('f-title').value.trim();
-    const date=document.getElementById('f-date').value;
-    if(!title||!date){showToast('⚠️ Le titre et la date sont requis.');return;}
-    const data={
-      id:editingId||Date.now().toString(),title,date,
-      time:document.getElementById('f-time').value,
-      duration:document.getElementById('f-duration').value,
-      cat:document.getElementById('f-cat').value,
-      service:document.getElementById('f-service').value,
-      lieu:document.getElementById('f-lieu').value.trim(),
-      notes:document.getElementById('f-notes').value.trim(),
+      cat:      document.getElementById('f-cat').value,
+      service:  document.getElementById('f-service').value,
+      lieu:     document.getElementById('f-lieu').value.trim(),
+      notes:    document.getElementById('f-notes').value.trim(),
     };
-
     if (editingId) {
-      const idx = rdvs.findIndex(r => r.id === editingId);
-      rdvs[idx] = data;
-      showToast('✅ Rendez-vous modifié.');
+      rdvs[rdvs.findIndex(r => r.id === editingId)] = data;
+      showToast('✅ Rendez-vous modifié !');
     } else {
       rdvs.push(data);
-      showToast('✅ Rendez-vous ajouté.');
+      showToast('🎉 Rendez-vous ajouté !');
     }
-
-    save();
-    closeModal();
-    renderCalendar();
-    renderList();
-    if(editingId){rdvs[rdvs.findIndex(r=>r.id===editingId)]=data;showToast('✅ Rendez-vous modifié !');}
-    else{rdvs.push(data);showToast('🎉 Rendez-vous ajouté !');}
-    save();closeModal();updateStats();renderCalendar();renderList();
+    save(); closeModal(); updateStats(); renderCalendar(); renderList();
   }
 
   function deleteRdv(id) {
     if (!confirm('Supprimer ce rendez-vous ?')) return;
     rdvs = rdvs.filter(r => r.id !== id);
-    save();
-    renderCalendar();
-    renderList();
-    showToast('🗑️ Rendez-vous supprimé.');
-  function deleteRdv(id){
-    if(!confirm('Supprimer ce rendez-vous ?'))return;
-    rdvs=rdvs.filter(r=>r.id!==id);save();updateStats();renderCalendar();renderList();showToast('🗑️ Supprimé.');
+    save(); updateStats(); renderCalendar(); renderList();
+    showToast('🗑️ Supprimé.');
   }
 
-  // ---- TOAST ----
   function showToast(msg) {
     const t = document.getElementById('toast');
     t.textContent = msg;
     t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 2500);
-  function showToast(msg){
-    const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');
-    setTimeout(()=>t.classList.remove('show'),2800);
+    setTimeout(() => t.classList.remove('show'), 2800);
   }
 
-  // ---- KEYBOARD ----
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') closeModal();
-    if (e.key === 'Enter' && document.getElementById('modal-overlay').classList.contains('open')) {
-      if (e.target.tagName !== 'TEXTAREA') saveRdv();
-    }
-  document.addEventListener('keydown',e=>{
-    if(e.key==='Escape')closeModal();
-    if(e.key==='Enter'&&document.getElementById('modal-overlay').classList.contains('open')&&e.target.tagName!=='TEXTAREA')saveRdv();
+    if (e.key === 'Enter' && document.getElementById('modal-overlay').classList.contains('open') && e.target.tagName !== 'TEXTAREA') saveRdv();
   });
 
-  // ---- INIT ----
   initCalendar();
   updateStats();
 </script>
