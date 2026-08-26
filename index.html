@@ -1,1 +1,728 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Peinture Estrie — Peinture intérieure résidentielle</title>
+<meta name="description" content="Peinture Estrie — Service professionnel de peinture intérieure résidentielle à Sherbrooke et partout en Estrie. Soumission gratuite.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1C2B3A;
+    --navy-2:#243a4e;
+    --ivory:#F7F4EE;
+    --ivory-2:#EFEAE0;
+    --brass:#A8783C;
+    --brass-light:#C9A15F;
+    --slate:#5B6672;
+    --charcoal:#14181D;
+    --white:#FFFFFF;
+    --line: rgba(28,43,58,0.12);
+    --radius: 6px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Inter', sans-serif;
+    color:var(--navy);
+    background:var(--ivory);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,h4{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    line-height:1.12;
+    letter-spacing:-0.01em;
+    color:var(--navy);
+  }
+  a{color:inherit;text-decoration:none;}
+  img{max-width:100%;display:block;}
+  .wrap{max-width:1140px;margin:0 auto;padding:0 28px;}
+  .eyebrow{
+    font-size:0.72rem;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--brass);
+    font-weight:700;
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:14px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:22px;height:2px;
+    background:var(--brass);
+    display:inline-block;
+  }
+  button, .btn{
+    cursor:pointer;
+    border:none;
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:0.95rem;
+  }
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:14px 26px;
+    border-radius:3px;
+    transition:transform .15s ease, box-shadow .15s ease, background .15s ease;
+  }
+  .btn-primary{
+    background:var(--brass);
+    color:var(--white);
+    box-shadow:0 6px 18px rgba(168,120,60,0.28);
+  }
+  .btn-primary:hover{background:var(--brass-light); transform:translateY(-1px);}
+  .btn-outline{
+    background:transparent;
+    color:var(--white);
+    border:1.5px solid rgba(255,255,255,0.55);
+  }
+  .btn-outline:hover{border-color:#fff; background:rgba(255,255,255,0.08);}
+  .btn-outline-dark{
+    background:transparent;
+    color:var(--navy);
+    border:1.5px solid var(--line);
+  }
+  .btn-outline-dark:hover{border-color:var(--navy);}
+  :focus-visible{outline:3px solid var(--brass); outline-offset:2px;}
+
+  /* ---------- HEADER ---------- */
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    background:rgba(247,244,238,0.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 28px;
+    max-width:1140px; margin:0 auto;
+  }
+  .logo{
+    font-family:'Fraunces',serif;
+    font-weight:700;
+    font-size:1.25rem;
+    display:flex; align-items:center; gap:10px;
+  }
+  .logo-chip{
+    width:14px;height:14px;border-radius:3px;
+    background:linear-gradient(135deg, var(--brass), var(--navy));
+    display:inline-block;
+  }
+  .nav-links{display:flex; align-items:center; gap:34px;}
+  .nav-links a{font-size:0.92rem; font-weight:500; color:var(--navy); opacity:0.85;}
+  .nav-links a:hover{opacity:1; color:var(--brass);}
+  .nav-cta{display:flex; align-items:center; gap:18px;}
+  .nav-phone{font-size:0.9rem; font-weight:600; color:var(--navy);}
+  .nav-toggle{display:none; background:none; border:none; font-size:1.5rem;}
+
+  @media (max-width:860px){
+    .nav-links{
+      position:fixed; top:64px; left:0; right:0;
+      background:var(--ivory);
+      flex-direction:column; align-items:flex-start;
+      padding:20px 28px 28px; gap:18px;
+      border-bottom:1px solid var(--line);
+      transform:translateY(-130%);
+      transition:transform .25s ease;
+    }
+    .nav-links.open{transform:translateY(0);}
+    .nav-toggle{display:block;}
+    .nav-phone{display:none;}
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    background:var(--navy);
+    color:var(--white);
+    padding:168px 0 110px;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero .wrap{
+    display:grid;
+    grid-template-columns:1.1fr 0.9fr;
+    gap:60px;
+    align-items:center;
+  }
+  .hero h1{
+    color:var(--white);
+    font-size:clamp(2.3rem, 4.2vw, 3.4rem);
+    max-width:11ch;
+  }
+  .hero p.lead{
+    margin-top:22px;
+    font-size:1.1rem;
+    color:rgba(255,255,255,0.78);
+    max-width:46ch;
+  }
+  .hero-actions{
+    margin-top:34px;
+    display:flex; gap:16px; flex-wrap:wrap;
+  }
+  .hero-trust{
+    margin-top:44px;
+    display:flex; gap:32px; flex-wrap:wrap;
+  }
+  .hero-trust div{font-size:0.85rem; color:rgba(255,255,255,0.65);}
+  .hero-trust strong{
+    display:block; font-family:'Fraunces',serif; font-size:1.6rem; color:#fff; font-weight:600;
+  }
+
+  /* swatch fan signature */
+  .swatch-fan{
+    position:relative;
+    height:380px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .chip{
+    position:absolute;
+    width:132px; height:290px;
+    border-radius:8px;
+    box-shadow:0 20px 45px rgba(0,0,0,0.35);
+    transform-origin:bottom center;
+    display:flex; align-items:flex-end;
+    padding:16px;
+    font-family:'Fraunces',serif;
+    font-size:0.72rem;
+    letter-spacing:0.03em;
+  }
+  .chip span{color:rgba(0,0,0,0.55);}
+  .chip.c1{background:#EFE7D8; transform:rotate(-22deg) translateX(-96px); color:#3a3226;}
+  .chip.c2{background:#A9B79E; transform:rotate(-11deg) translateX(-48px); color:#2c3327;}
+  .chip.c3{background:#7C93A3; transform:rotate(0deg); color:#1c2833; z-index:2; box-shadow:0 24px 50px rgba(0,0,0,0.4);}
+  .chip.c4{background:#C9A15F; transform:rotate(11deg) translateX(48px); color:#3a2c14;}
+  .chip.c5{background:#2F4356; transform:rotate(22deg) translateX(96px); color:#dfe6ec;}
+  @media (max-width:860px){
+    .hero .wrap{grid-template-columns:1fr; text-align:left;}
+    .swatch-fan{height:230px; margin-top:10px;}
+    .chip{width:88px; height:190px;}
+    .chip.c1{transform:rotate(-22deg) translateX(-64px);}
+    .chip.c2{transform:rotate(-11deg) translateX(-32px);}
+    .chip.c4{transform:rotate(11deg) translateX(32px);}
+    .chip.c5{transform:rotate(22deg) translateX(64px);}
+  }
+
+  /* ---------- SECTION GENERIC ---------- */
+  section{padding:100px 0;}
+  .section-head{max-width:640px; margin-bottom:56px;}
+  .section-head h2{font-size:clamp(1.7rem,3vw,2.3rem);}
+  .section-head p{margin-top:16px; color:var(--slate); font-size:1.02rem;}
+  .bg-alt{background:var(--ivory-2);}
+
+  /* ---------- SERVICES ---------- */
+  .services-grid{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:22px;
+  }
+  .service-card{
+    background:var(--white);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:30px 26px 26px;
+    position:relative;
+    transition:transform .18s ease, box-shadow .18s ease;
+  }
+  .service-card:hover{transform:translateY(-4px); box-shadow:0 16px 32px rgba(28,43,58,0.08);}
+  .service-card::before{
+    content:"";
+    position:absolute; top:0; left:26px;
+    width:34px; height:8px;
+    border-radius:0 0 4px 4px;
+    background:var(--swatch, var(--brass));
+  }
+  .service-card h3{font-size:1.12rem; margin-top:14px;}
+  .service-card p{margin-top:10px; color:var(--slate); font-size:0.94rem;}
+  @media (max-width:860px){.services-grid{grid-template-columns:1fr 1fr;}}
+  @media (max-width:560px){.services-grid{grid-template-columns:1fr;}}
+
+  /* ---------- GALLERY ---------- */
+  .gallery-grid{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:16px;
+  }
+  .gallery-tile{
+    aspect-ratio:3/4;
+    border-radius:var(--radius);
+    position:relative;
+    overflow:hidden;
+    display:flex;
+    align-items:flex-end;
+    padding:16px;
+    color:#fff;
+  }
+  .gallery-tile span{position:relative; font-size:0.82rem; font-weight:600; opacity:0.9;}
+  .gallery-tile::after{
+    content:"";
+    position:absolute; inset:0;
+    background:linear-gradient(180deg, rgba(0,0,0,0) 45%, rgba(0,0,0,0.55) 100%);
+  }
+  .gallery-tile svg{position:absolute; top:18px; left:18px; opacity:0.85;}
+  @media (max-width:860px){.gallery-grid{grid-template-columns:1fr 1fr;}}
+  .gallery-note{
+    margin-top:22px;
+    font-size:0.85rem;
+    color:var(--slate);
+    display:flex; gap:10px; align-items:flex-start;
+  }
+
+  /* ---------- ZONE ---------- */
+  .zone-layout{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:48px;
+    align-items:start;
+  }
+  .map-frame{
+    border-radius:var(--radius);
+    overflow:hidden;
+    border:1px solid var(--line);
+    box-shadow:0 20px 40px rgba(28,43,58,0.08);
+  }
+  .map-frame iframe{width:100%; height:360px; border:0; display:block;}
+  .city-list{
+    display:flex; flex-wrap:wrap; gap:10px;
+  }
+  .city-chip{
+    padding:8px 16px;
+    border:1px solid var(--line);
+    border-radius:20px;
+    font-size:0.86rem;
+    font-weight:500;
+    background:var(--white);
+  }
+  .city-chip.main{
+    background:var(--navy); color:#fff; border-color:var(--navy); font-weight:600;
+  }
+  @media (max-width:860px){.zone-layout{grid-template-columns:1fr;}}
+
+  /* ---------- TESTIMONIALS ---------- */
+  .testi-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:24px;
+  }
+  .testi-card{
+    background:var(--white);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:28px;
+  }
+  .stars{color:var(--brass); letter-spacing:2px; margin-bottom:14px; font-size:0.95rem;}
+  .testi-card p.quote{font-size:0.98rem; color:var(--navy); font-style:italic;}
+  .testi-name{margin-top:18px; font-size:0.88rem; font-weight:600; color:var(--slate);}
+  @media (max-width:860px){.testi-grid{grid-template-columns:1fr;}}
+
+  /* ---------- QUOTE FORM ---------- */
+  .quote-section{
+    background:var(--navy);
+    color:#fff;
+  }
+  .quote-section .section-head p{color:rgba(255,255,255,0.7);}
+  .quote-section .section-head h2{color:#fff;}
+  .quote-layout{
+    display:grid;
+    grid-template-columns:0.9fr 1.1fr;
+    gap:56px;
+  }
+  .quote-info-item{
+    display:flex; gap:14px; margin-bottom:26px;
+  }
+  .quote-info-item .num{
+    font-family:'Fraunces',serif; color:var(--brass-light); font-weight:600; font-size:1.1rem;
+  }
+  .quote-info-item h4{color:#fff; font-size:1rem; margin-bottom:4px;}
+  .quote-info-item p{color:rgba(255,255,255,0.65); font-size:0.9rem;}
+
+  form.quote-form{
+    background:var(--white);
+    border-radius:var(--radius);
+    padding:34px;
+  }
+  .form-row{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  .field{margin-bottom:18px;}
+  .field label{
+    display:block; font-size:0.8rem; font-weight:600; color:var(--navy);
+    margin-bottom:7px; text-transform:uppercase; letter-spacing:0.04em;
+  }
+  .field input, .field select, .field textarea{
+    width:100%;
+    padding:12px 14px;
+    border:1px solid var(--line);
+    border-radius:4px;
+    font-family:'Inter',sans-serif;
+    font-size:0.95rem;
+    background:var(--ivory);
+    color:var(--navy);
+  }
+  .field textarea{resize:vertical; min-height:100px;}
+  .field input:focus, .field select:focus, .field textarea:focus{
+    outline:none; border-color:var(--brass); background:#fff;
+  }
+  @media (max-width:860px){
+    .quote-layout{grid-template-columns:1fr;}
+    .form-row{grid-template-columns:1fr;}
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    background:var(--charcoal);
+    color:rgba(255,255,255,0.7);
+    padding:60px 0 30px;
+  }
+  .footer-grid{
+    display:grid;
+    grid-template-columns:1.4fr 1fr 1fr;
+    gap:40px;
+    padding-bottom:40px;
+    border-bottom:1px solid rgba(255,255,255,0.1);
+  }
+  footer h4{color:#fff; font-size:0.95rem; margin-bottom:16px; font-family:'Inter',sans-serif; font-weight:600;}
+  footer .logo{color:#fff;}
+  footer p.tag{margin-top:14px; font-size:0.88rem; max-width:34ch;}
+  footer ul{list-style:none;}
+  footer ul li{margin-bottom:10px; font-size:0.9rem;}
+  footer ul li a:hover{color:var(--brass-light);}
+  .footer-bottom{
+    padding-top:24px;
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;
+    font-size:0.82rem;
+  }
+  @media (max-width:860px){.footer-grid{grid-template-columns:1fr;}}
+
+  .reveal{opacity:0; transform:translateY(18px); transition:opacity .6s ease, transform .6s ease;}
+  .reveal.in{opacity:1; transform:translateY(0);}
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important;}
+    html{scroll-behavior:auto;}
+    .reveal{opacity:1; transform:none;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="nav">
+    <a href="#" class="logo"><span class="logo-chip"></span>Peinture Estrie</a>
+    <div class="nav-links" id="navLinks">
+      <a href="#services">Services</a>
+      <a href="#realisations">Réalisations</a>
+      <a href="#zone">Zone desservie</a>
+      <a href="#temoignages">Témoignages</a>
+      <a href="#soumission" class="btn btn-outline-dark">Soumission gratuite</a>
+    </div>
+    <div class="nav-cta">
+      <a href="tel:+18736623813" class="nav-phone">873&nbsp;662&nbsp;3813</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Menu">☰</button>
+    </div>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <div class="eyebrow" style="color:var(--brass-light)">Peinture intérieure résidentielle · Estrie</div>
+      <h1>Un fini impeccable, du premier coup.</h1>
+      <p class="lead">Peinture Estrie prépare, protège et peint l'intérieur de votre maison avec la rigueur d'une entreprise établie à Sherbrooke — et le souci du détail d'un travail fait pour durer.</p>
+      <div class="hero-actions">
+        <a href="#soumission" class="btn btn-primary">Demander une soumission gratuite →</a>
+        <a href="tel:+18736623813" class="btn btn-outline">📞 873 662 3813</a>
+      </div>
+      <div class="hero-trust">
+        <div><strong>100%</strong>Intérieur uniquement</div>
+        <div><strong>Estrie</strong>Toute la région desservie</div>
+        <div><strong>Soumission</strong>Gratuite et sans engagement</div>
+      </div>
+    </div>
+    <div class="swatch-fan" aria-hidden="true">
+      <div class="chip c1"><span>Lin</span></div>
+      <div class="chip c2"><span>Sauge</span></div>
+      <div class="chip c3"><span>Ardoise</span></div>
+      <div class="chip c4"><span>Laiton</span></div>
+      <div class="chip c5"><span>Marine</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="services">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Services</div>
+      <h2>Tout ce qu'il faut peindre à l'intérieur, sauf les armoires</h2>
+      <p>Chaque projet commence par une préparation soignée des surfaces — c'est ce qui fait toute la différence dans le résultat final.</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card reveal" style="--swatch:#7C93A3">
+        <h3>Murs et plafonds</h3>
+        <p>Une ou plusieurs pièces, couleur unie ou changement complet de palette — application uniforme, sans traces ni surcharge.</p>
+      </div>
+      <div class="service-card reveal" style="--swatch:#A9B79E">
+        <h3>Boiseries et moulures</h3>
+        <p>Plinthes, cadrages, moulures et garde-corps peints avec précision pour des lignes nettes et durables.</p>
+      </div>
+      <div class="service-card reveal" style="--swatch:#C9A15F">
+        <h3>Portes et cadres</h3>
+        <p>Portes intérieures, cadres de portes et fenêtres — finition lisse résistante aux marques et à l'usure quotidienne.</p>
+      </div>
+      <div class="service-card reveal" style="--swatch:#2F4356">
+        <h3>Préparation des surfaces</h3>
+        <p>Rebouchage, ponçage, calfeutrage et apprêt — chaque surface est corrigée avant la première couche de peinture.</p>
+      </div>
+      <div class="service-card reveal" style="--swatch:#B5734A">
+        <h3>Retouches et réparations</h3>
+        <p>Trous, fissures, dégâts d'eau ou marques : réparation et harmonisation de la couleur existante.</p>
+      </div>
+      <div class="service-card reveal" style="--swatch:#8C7A63">
+        <h3>Résidences multi-pièces</h3>
+        <p>Sous-sols, escaliers, corridors et étages complets — coordination du chantier du début à la fin.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bg-alt" id="realisations">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Réalisations</div>
+      <h2>Un aperçu des chantiers en Estrie</h2>
+      <p>Une sélection de projets récents. La galerie est mise à jour au fur et à mesure des chantiers complétés.</p>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-tile reveal" style="background:linear-gradient(155deg,#7C93A3,#2F4356)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><rect x="3" y="6" width="18" height="13" rx="2"/><circle cx="12" cy="12.5" r="3.4"/><path d="M9 6l1.5-2h3L15 6"/></svg>
+        <span>Salon — sauge &amp; blanc</span>
+      </div>
+      <div class="gallery-tile reveal" style="background:linear-gradient(155deg,#C9A15F,#8C6A2F)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><rect x="3" y="6" width="18" height="13" rx="2"/><circle cx="12" cy="12.5" r="3.4"/><path d="M9 6l1.5-2h3L15 6"/></svg>
+        <span>Cuisine — murs &amp; boiseries</span>
+      </div>
+      <div class="gallery-tile reveal" style="background:linear-gradient(155deg,#A9B79E,#5C6B54)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><rect x="3" y="6" width="18" height="13" rx="2"/><circle cx="12" cy="12.5" r="3.4"/><path d="M9 6l1.5-2h3L15 6"/></svg>
+        <span>Chambre principale</span>
+      </div>
+      <div class="gallery-tile reveal" style="background:linear-gradient(155deg,#B5734A,#6B3A22)">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><rect x="3" y="6" width="18" height="13" rx="2"/><circle cx="12" cy="12.5" r="3.4"/><path d="M9 6l1.5-2h3L15 6"/></svg>
+        <span>Escalier &amp; corridor</span>
+      </div>
+    </div>
+    <p class="gallery-note">🖌️ Espaces réservés pour vos vraies photos avant/après — remplace ces quatre blocs par des photos de chantiers dès que tu en as (voir note dans le code, section "gallery-grid").</p>
+  </div>
+</section>
+
+<section id="zone">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Zone desservie</div>
+      <h2>Basé à Sherbrooke, actif partout en Estrie</h2>
+      <p>Peinture Estrie se déplace dans l'ensemble de la région pour vos projets résidentiels.</p>
+    </div>
+    <div class="zone-layout">
+      <div class="map-frame reveal">
+        <iframe src="https://maps.google.com/maps?q=Estrie%2C+Qu%C3%A9bec&z=9&output=embed" loading="lazy" title="Carte de la zone de service — Estrie"></iframe>
+      </div>
+      <div class="reveal">
+        <div class="city-list">
+          <span class="city-chip main">Sherbrooke</span>
+          <span class="city-chip">Magog</span>
+          <span class="city-chip">Coaticook</span>
+          <span class="city-chip">Granby</span>
+          <span class="city-chip">Cowansville</span>
+          <span class="city-chip">Lac-Mégantic</span>
+          <span class="city-chip">Windsor</span>
+          <span class="city-chip">Richmond</span>
+          <span class="city-chip">Val-des-Sources</span>
+          <span class="city-chip">Weedon</span>
+          <span class="city-chip">East Angus</span>
+          <span class="city-chip">Ayer's Cliff</span>
+          <span class="city-chip">North Hatley</span>
+          <span class="city-chip">Waterville</span>
+          <span class="city-chip">Stanstead</span>
+          <span class="city-chip">Bromont</span>
+          <span class="city-chip">Valcourt</span>
+          <span class="city-chip">Danville</span>
+          <span class="city-chip">Lennoxville</span>
+          <span class="city-chip">Fleurimont</span>
+          <span class="city-chip">Rock Forest</span>
+        </div>
+        <p style="margin-top:20px; color:var(--slate); font-size:0.92rem;">Votre ville n'apparaît pas dans la liste ? <a href="#soumission" style="color:var(--brass); font-weight:600;">Contactez-nous</a> — il y a de bonnes chances que le secteur soit tout de même desservi.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bg-alt" id="temoignages">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Témoignages</div>
+      <h2>Ce que disent nos clients</h2>
+      <p style="max-width:640px;">Exemples de témoignages à titre indicatif — à remplacer par de vrais avis de clients avant la mise en ligne.</p>
+    </div>
+    <div class="testi-grid">
+      <div class="testi-card reveal">
+        <div class="stars">★★★★★</div>
+        <p class="quote">"Travail soigné, propreté impeccable sur le chantier et respect des délais. Le résultat dépasse ce qu'on attendait."</p>
+        <div class="testi-name">— Client de Sherbrooke (exemple)</div>
+      </div>
+      <div class="testi-card reveal">
+        <div class="stars">★★★★★</div>
+        <p class="quote">"Bonne communication du début à la fin, prix honnête et finition très professionnelle sur les boiseries."</p>
+        <div class="testi-name">— Client de Magog (exemple)</div>
+      </div>
+      <div class="testi-card reveal">
+        <div class="stars">★★★★★</div>
+        <p class="quote">"On a fait peindre trois chambres et le sous-sol : rapide, minutieux, et aucun dégât à nettoyer après."</p>
+        <div class="testi-name">— Client de Granby (exemple)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="quote-section" id="soumission">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow" style="color:var(--brass-light)">Soumission</div>
+      <h2>Demandez votre soumission gratuite</h2>
+      <p>Décrivez votre projet — nous vous recontactons rapidement avec une estimation.</p>
+    </div>
+    <div class="quote-layout">
+      <div class="reveal">
+        <div class="quote-info-item">
+          <div class="num">01</div>
+          <div><h4>Vous décrivez le projet</h4><p>Pièces à peindre, superficie approximative, état actuel des surfaces.</p></div>
+        </div>
+        <div class="quote-info-item">
+          <div class="num">02</div>
+          <div><h4>Nous vous recontactons</h4><p>Par téléphone pour préciser les détails et, au besoin, planifier une visite.</p></div>
+        </div>
+        <div class="quote-info-item">
+          <div class="num">03</div>
+          <div><h4>Vous recevez votre soumission</h4><p>Prix clair, sans surprise, avant le début des travaux.</p></div>
+        </div>
+        <div class="quote-info-item">
+          <div class="num">☎</div>
+          <div><h4>873 662 3813</h4><p>Courriel — bientôt disponible</p></div>
+        </div>
+      </div>
+
+      <form class="quote-form" id="quoteForm">
+        <div class="form-row">
+          <div class="field">
+            <label for="name">Nom complet</label>
+            <input id="name" name="name" type="text" required>
+          </div>
+          <div class="field">
+            <label for="phone">Téléphone</label>
+            <input id="phone" name="phone" type="tel" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label for="city">Ville</label>
+            <input id="city" name="city" type="text" placeholder="Ex. Sherbrooke">
+          </div>
+          <div class="field">
+            <label for="rooms">Nombre de pièces</label>
+            <select id="rooms" name="rooms">
+              <option>1 pièce</option>
+              <option>2 à 3 pièces</option>
+              <option>4 à 6 pièces</option>
+              <option>Maison complète</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="type">Type de travaux</label>
+          <select id="type" name="type">
+            <option>Murs et plafonds</option>
+            <option>Boiseries et moulures</option>
+            <option>Portes et cadres</option>
+            <option>Retouches / réparations</option>
+            <option>Autre</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="message">Détails du projet</label>
+          <textarea id="message" name="message" placeholder="Décrivez les pièces, l'état des surfaces, l'échéancier souhaité..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center;">Envoyer ma demande →</button>
+        <p style="margin-top:14px; font-size:0.8rem; color:var(--slate);">En cliquant sur envoyer, votre application de courriel s'ouvrira avec les détails pré-remplis (le formulaire n'est pas encore branché à une adresse courriel).</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <a href="#" class="logo"><span class="logo-chip"></span>Peinture Estrie</a>
+        <p class="tag">Peinture intérieure résidentielle, professionnelle et soignée, partout en Estrie.</p>
+      </div>
+      <div>
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#realisations">Réalisations</a></li>
+          <li><a href="#zone">Zone desservie</a></li>
+          <li><a href="#temoignages">Témoignages</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="tel:+18736623813">873 662 3813</a></li>
+          <li>Courriel — bientôt disponible</li>
+          <li>Sherbrooke, Québec</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year"></span> Peinture Estrie. Tous droits réservés.</span>
+      <span>Peinture intérieure résidentielle · Estrie, Québec</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+  // scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    revealEls.forEach(el => io.observe(el));
+  } else {
+    revealEls.forEach(el => el.classList.add('in'));
+  }
+
+  // quote form -> mailto fallback (no backend yet; replace with a real form handler once l'adresse courriel est prête)
+  document.getElementById('quoteForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    const f = new FormData(this);
+    const body = `Nom: ${f.get('name')}\nTéléphone: ${f.get('phone')}\nVille: ${f.get('city')}\nNombre de pièces: ${f.get('rooms')}\nType de travaux: ${f.get('type')}\nDétails: ${f.get('message')}`;
+    const mailto = `mailto:?subject=${encodeURIComponent('Demande de soumission — Peinture Estrie')}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailto;
+  });
+</script>
+
+</body>
+</html>
 
